@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>blockLAB Member Management</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+</head>
+<body>
+  <h1>blockLAB Member Management</h1>
+  
+  <h2>Your Status</h2>
+  <p>Name: <input type="text" name="name" id="name"/></p>
+  <p>Status: <span id="currentStatus"></span></p>
+  <button onclick="App.submitApplication()">Send Application</button>
+  <button onclick="App.changeName()">Save Name</button>
+  
+  
+  <h2>All Members (<span id="memberCount"></span>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="memberElements">
+
+    </tbody>
+  </table>
+
+  
+</body>
+</html>
