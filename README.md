@@ -9,4 +9,4 @@
 
 ### Start web app in second terminal session
 `npm run dev` to start the web app -> load the app in Chrome with MetaMask using `http://localhost:8081/`
-Configure accounts in MetaMask and have fun
+Configure the custom RPC `http://localhost:9545` as well as some of the test accounts in MetaMask and have fun
