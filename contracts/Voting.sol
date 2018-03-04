@@ -44,25 +44,24 @@ contract Voting {
     }
 
     function initiateBoardMemberVote(string name, bytes32 documentHash, address[] newBoardMembers) public onlyMember returns (uint) {
-        address[] emptyVoters;
-        votes.push(Vote({name: name, 
-            documentHash: documentHash, 
-            status: VoteStatus.OPEN, 
-            newBoardMembers: newBoardMembers, 
-            voters: emptyVoters}));
+        votes.push(Vote({name: name,
+            documentHash: documentHash,
+            status: VoteStatus.OPEN,
+            newBoardMembers: newBoardMembers,
+            voters: new address[](0)}));
 
         return votes.length - 1;
     }
 
-    function castVote(uint voteId, bool vote) public onlyMember onlyOpenVote(voteId) {
-        Vote v = votes[voteId];
-        require(v.outcome[msg.sender] == VoteOutcome.NONE);
-        if (vote == true) {
-            v.outcome[msg.sender] = VoteOutcome.YES;
+    function castVote(uint voteId, bool decision) public onlyMember onlyOpenVote(voteId) {
+        var vote = votes[voteId];
+        require(vote.outcome[msg.sender] == VoteOutcome.NONE);
+        if (decision == true) {
+            vote.outcome[msg.sender] = VoteOutcome.YES;
         } else {
-            v.outcome[msg.sender] = VoteOutcome.NO;
+            vote.outcome[msg.sender] = VoteOutcome.NO;
         }
-        v.voters.push(msg.sender);
+        vote.voters.push(msg.sender);
     }
 
 // TODO:
