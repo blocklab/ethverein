@@ -65,14 +65,7 @@ contract Voting {
     }
 
 // TODO:
-
     // getStatusOfVote()
-    // closeVote()
-
-// Overall:
-    // getAllVotes()
-    // getStatusOfVote()
-
-// + tests
+    // closeVote() --> instantiate results: new board members
 
 }

@@ -112,6 +112,17 @@ window.App = {
     }).catch(function(err) {
       console.log("Error during name change: " + err);
     });
+  },
+
+  resign: function() {
+    Members.deployed().then(function(membersContract) {
+      return membersContract.resignOwnMembership({from: account});
+    }).then(function (res) {
+      console.log("Resigned from membership");
+      location.reload();
+    }).catch(function(err) {
+      console.log("Error during resigning from membership: " + err);
+    });
   }
 };
 

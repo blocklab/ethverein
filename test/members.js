@@ -89,5 +89,51 @@ contract('Members', function(accounts) {
       assert.equal(appliedMember[1], STATUS_BOARD, "Wrong status for founder");
     })
   });
-  
+
+  it("should delete member from membership list", function() {
+    let membersContract;
+    return Members.deployed().then(function(instance) {
+      membersContract = instance;
+      return instance.resignOwnMembership({from: accounts[0]});
+     }).then(function() {
+      return membersContract.isRegularOrBoardMember.call(accounts[0]);
+    }).then(function(isStillAMember) {
+      assert.isFalse(isStillAMember, "Should not be a member anymore");
+      return membersContract.getNumberOfMembers.call();
+    }).then(function(count) {
+      assert.equal(count.toNumber(), 3, "Wrong count of members");
+      return membersContract.memberAddresses.call(0);
+    }).then(function(firstAddressInList) {
+      assert.notEqual(firstAddressInList, accounts[0], "Address should not be in list of addresses anymore after deletion");
+    })
+  });
+
+  it("should not be able to resign if you are not a member", function() {
+    let membersContract;
+    return Members.deployed().then(function(instance) {
+      membersContract = instance;
+      return instance.resignOwnMembership({from: accounts[0]});
+    }).then(function(res) {
+      assert(false, "Supposed to throw");
+    }).catch(function(err) {
+      assertException(err);
+    })
+  });
+
+  it("last member should not be able to resign", function() {
+    let membersContract;
+    return Members.deployed().then(function(instance) {
+      membersContract = instance;
+      return instance.resignOwnMembership({from: accounts[1]});
+    }).then(function() {
+      return membersContract.resignOwnMembership({from: accounts[2]});
+    }).then(function() {
+      return membersContract.resignOwnMembership({from: accounts[3]});
+    }).then(function(res) {
+      assert(false, "Supposed to throw - Last member resigned membership and it was not detected.");
+    }).catch(function(err) {
+      assertException(err);
+    })
+  });
+
 });

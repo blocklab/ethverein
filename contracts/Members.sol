@@ -75,4 +75,31 @@ contract Members {
 		return status == MemberStatus.REGULAR || status == MemberStatus.BOARD;
 	}
 
+	/**
+	 * Resign membership - Deletes sender address from list of members 
+	 * (as long as it is not the last remaining member)
+	 */
+	function resignOwnMembership() public {
+		require(isRegularOrBoardMember(msg.sender));
+	
+		// don't allow last man standing to resign
+		if (getNumberOfMembers() == 1) {
+			revert();
+		}
+
+		// reset membership status
+		members[msg.sender].status = MemberStatus.NONE;
+		
+		// delete address of (ex) member from list of member addresses
+		uint numberOfMembers = getNumberOfMembers();
+		for (uint index = 0; index < numberOfMembers; index++) {
+			address memberAddress = memberAddresses[index];
+			if (memberAddress == msg.sender) {
+				// delete by replacing item with last element of the array
+				memberAddresses[index] = memberAddresses[numberOfMembers-1];
+				memberAddresses.length--;
+				break;
+			}
+		}
+	}
 }
