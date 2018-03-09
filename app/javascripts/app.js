@@ -68,7 +68,8 @@ window.App = {
             var tableElement = document.createElement("tr");
             tableElement.innerHTML = "<td>" + res[0] + "</td><td>" + memberAddress + "</td><td>" 
               + statusNames[new Number(res[1])] + "</td><td>" 
-              + ((res[1] == 1) ? "<button type=\"button\" value=\"Confirm\" onclick=\"App.confirmApplication('" + memberAddress + "')\">Confirm</button>" : "")
+              + ((res[1] == 1 && document.getElementById("currentStatus").innerHTML == statusNames[3]) 
+                ? "<button type=\"button\" value=\"Confirm\" onclick=\"App.confirmApplication('" + memberAddress + "')\">Confirm</button>" : "")
               + "</td>";
             document.getElementById("memberElements").appendChild(tableElement);
           });

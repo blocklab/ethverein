@@ -23,7 +23,7 @@ contract('Voting', function(accounts) {
   it("prepare members", async function () {
     let membersContract = await Members.deployed();
     // regular member
-    await membersContract.applyForMembership("John Nomember", {from: ACCOUNT_REGULAR_MEMBER})
+    await membersContract.applyForMembership("John Confirmed", {from: ACCOUNT_REGULAR_MEMBER})
     await membersContract.confirmApplication(ACCOUNT_REGULAR_MEMBER, {from: accounts[0]});
     await membersContract.confirmApplication(ACCOUNT_REGULAR_MEMBER, {from: accounts[1]});
     await membersContract.confirmApplication(ACCOUNT_REGULAR_MEMBER, {from: accounts[2]});
