@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity 0.4.23;
 import "./Members.sol";
 
 contract Voting {
@@ -80,9 +80,18 @@ contract Voting {
     function getNumberOfVotes() public view returns (uint) {
         return votes.length;
     }
-    
-    // TODO:
-    // getStatusOfVote()
-    // closeVote() --> instantiate results: new board members
 
+    /**
+     * Returns vote details:
+     *   name
+     *   documentHash
+     *   status (true if OPEN, false if CLOSED or NONE)
+     *   board member addresses (if board member vote)
+     *   address of voters
+     */
+    function getVoteDetails(uint voteId) public view returns (string, bytes32, bool, address[], address[]) {
+        Vote storage vote = votes[voteId];
+        bool voteStatus = vote.status == VoteStatus.OPEN ? true : false;
+        return (vote.name, vote.documentHash, voteStatus, vote.newBoardMembers, vote.voters);
+    }
 }
