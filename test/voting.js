@@ -74,7 +74,7 @@ contract('Voting', function(accounts) {
     })
   });
 
-  it("regular member can create a vote", function() {
+  it("only regular member can create a board member vote", function() {
     let votingContract;
     return Voting.deployed().then(function(instance) {
       votingContract = instance;
@@ -85,6 +85,22 @@ contract('Voting', function(accounts) {
     }).then(function() {
       return votingContract.initiateBoardMemberVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH,
         [accounts[0], accounts[1]], { from: ACCOUNT_REGULAR_MEMBER });
+    }).then(function(res) {
+      assert(true, "Transaction failed initiating board member vote");
+    })
+  });
+
+  it("only regular member can create a regular vote", function() {
+    let votingContract;
+    return Voting.deployed().then(function(instance) {
+      votingContract = instance;
+      return votingContract.initiateVote.call(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH,
+        { from: ACCOUNT_REGULAR_MEMBER });
+    }).then(function(newId) {
+      assert.equal(newId.toNumber(), 2, "Wrong id of new vote");
+    }).then(function() {
+      return votingContract.initiateVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, 
+        { from: ACCOUNT_REGULAR_MEMBER });
     }).then(function(res) {
       assert(true, "Transaction failed initiating board member vote");
     })

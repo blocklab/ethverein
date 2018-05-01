@@ -53,6 +53,17 @@ contract Voting {
         return votes.length - 1;
     }
 
+    // create a "regular" vote (i.e., a vote in which there are no new board members)
+    function initiateVote(string name, bytes32 documentHash) public onlyMember returns (uint) {
+        votes.push(Vote({name: name,
+            documentHash: documentHash,
+            status: VoteStatus.OPEN,
+            newBoardMembers: new address[](0),
+            voters: new address[](0)}));
+
+        return votes.length - 1;
+    }
+
     function castVote(uint voteId, bool decision) public onlyMember onlyOpenVote(voteId) {
         var vote = votes[voteId];
         require(vote.outcome[msg.sender] == VoteOutcome.NONE);
