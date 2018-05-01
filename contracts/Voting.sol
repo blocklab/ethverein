@@ -1,4 +1,4 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.4.23;
 import "./Members.sol";
 
 contract Voting {
@@ -17,14 +17,14 @@ contract Voting {
         NO
     }
 
-	struct Vote {
-		string name;
+    struct Vote {
+        string name;
         bytes32 documentHash;
-		VoteStatus status;
+        VoteStatus status;
         address[] newBoardMembers;
         mapping (address => VoteOutcome) outcome;
-    	address[] voters;
-	}
+        address[] voters;
+    }
 
     Vote[] private votes;
 
@@ -39,12 +39,13 @@ contract Voting {
     }
 
     // Instantiate voting contract with members contract address
-	function Voting(address membersContractAddress) public {
+    constructor(address membersContractAddress) public {
         membersContract = Members(membersContractAddress); 
     }
 
     function initiateBoardMemberVote(string name, bytes32 documentHash, address[] newBoardMembers) public onlyMember returns (uint) {
-        votes.push(Vote({name: name,
+        votes.push(Vote(
+            { name: name,
             documentHash: documentHash,
             status: VoteStatus.OPEN,
             newBoardMembers: newBoardMembers,
@@ -55,7 +56,8 @@ contract Voting {
 
     // create a "regular" vote (i.e., a vote in which there are no new board members)
     function initiateVote(string name, bytes32 documentHash) public onlyMember returns (uint) {
-        votes.push(Vote({name: name,
+        votes.push(Vote(
+            { name: name,
             documentHash: documentHash,
             status: VoteStatus.OPEN,
             newBoardMembers: new address[](0),
@@ -65,7 +67,7 @@ contract Voting {
     }
 
     function castVote(uint voteId, bool decision) public onlyMember onlyOpenVote(voteId) {
-        var vote = votes[voteId];
+        Vote storage vote = votes[voteId];
         require(vote.outcome[msg.sender] == VoteOutcome.NONE);
         if (decision == true) {
             vote.outcome[msg.sender] = VoteOutcome.YES;
@@ -75,7 +77,11 @@ contract Voting {
         vote.voters.push(msg.sender);
     }
 
-// TODO:
+    function getNumberOfVotes() public view returns (uint) {
+        return votes.length;
+    }
+    
+    // TODO:
     // getStatusOfVote()
     // closeVote() --> instantiate results: new board members
 

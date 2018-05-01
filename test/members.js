@@ -135,5 +135,4 @@ contract('Members', function(accounts) {
       assertException(err);
     })
   });
-
 });

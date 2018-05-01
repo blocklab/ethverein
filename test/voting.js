@@ -106,6 +106,16 @@ contract('Voting', function(accounts) {
     })
   });
 
+  it("should return correct number of votes", function() {
+    let votingContract;
+    return Voting.deployed().then(function(instance) {
+      votingContract = instance;
+      return votingContract.getNumberOfVotes.call();
+    }).then(function(numVotes) {
+      assert.equal(numVotes, 3, "Wrong number of votes");
+    })
+  });
+
   it("should throw if member casts vote for non-existing vote", function() {
     return Voting.deployed().then(function(instance) {
       return instance.castVote(100, false);
