@@ -85,13 +85,13 @@ contract Voting {
      * Returns vote details:
      *   name
      *   documentHash
-     *   status (true if OPEN, false if CLOSED or NONE)
+     *   status (0: NONE, 1: OPEN, 2: CLOSED)
      *   board member addresses (if board member vote)
      *   address of voters
      */
-    function getVoteDetails(uint voteId) public view returns (string, bytes32, bool, address[], address[]) {
+    function getVoteDetails(uint voteId) public view returns (string, bytes32, uint, address[], address[]) {
         Vote storage vote = votes[voteId];
-        bool voteStatus = vote.status == VoteStatus.OPEN ? true : false;
-        return (vote.name, vote.documentHash, voteStatus, vote.newBoardMembers, vote.voters);
+        //bool voteStatus = vote.status == VoteStatus.OPEN ? true : false;
+        return (vote.name, vote.documentHash, uint(vote.status), vote.newBoardMembers, vote.voters);
     }
 }
