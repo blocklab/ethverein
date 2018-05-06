@@ -38,6 +38,11 @@ contract Voting {
         _;
     }
 
+    modifier onlyClosedVote(uint voteId) {
+        require(votes[voteId].status == VoteStatus.CLOSED);
+        _;
+    }
+
     // Instantiate voting contract with members contract address
     constructor(address membersContractAddress) public {
         membersContract = Members(membersContractAddress); 
@@ -94,4 +99,57 @@ contract Voting {
         //bool voteStatus = vote.status == VoteStatus.OPEN ? true : false;
         return (vote.name, vote.documentHash, uint(vote.status), vote.newBoardMembers, vote.voters);
     }
+
+    /**
+     * Closes vote (if result exists)
+     * TODO: Tests
+     */
+    function closeVote(uint voteId) public onlyMember onlyOpenVote(voteId) {
+        Vote storage vote = votes[voteId];
+        VoteOutcome outcome = computeCurrentVoteResult(vote);
+
+        // only close vote if result exists
+        if (outcome == VoteOutcome.NONE) {
+            return;
+        }          
+
+        vote.status = VoteStatus.CLOSED;
+
+        // instantiate board members in case of board member vote
+        if (outcome == VoteOutcome.YES && vote.newBoardMembers.length != 0) {
+            membersContract.replaceBoardMembers(vote.newBoardMembers);
+        } 
+    }
+
+    /**
+     * TODO: Tests
+     */
+    function computeCurrentVoteResult(uint voteId) public view returns (uint) {
+        VoteOutcome outcome = computeCurrentVoteResult(votes[voteId]);
+        return uint(outcome);
+    }
+
+    /**
+     * TODO: Tests
+     */
+    function computeCurrentVoteResult(Vote storage vote) private view returns (VoteOutcome) {
+        uint positiveVotes = 0;
+        uint negativeVotes = 0;
+        uint totalVotes = vote.voters.length;
+        for (uint i = 0; i != totalVotes; ++i) {
+            VoteOutcome outcome = vote.outcome[vote.voters[i]];
+            if (outcome == VoteOutcome.YES) {
+                ++positiveVotes;
+            } else if (outcome == VoteOutcome.NO) {
+                ++negativeVotes;
+            }
+        }
+        if (positiveVotes + negativeVotes >= totalVotes/2) {
+            if (positiveVotes > negativeVotes) {
+                return VoteOutcome.YES;
+            }
+        }
+        return VoteOutcome.NO;
+    }
+
 }

@@ -102,4 +102,38 @@ contract Members {
             }
         }
     }
+
+    /**
+     * Returns true if new board members have been instantiated successfully
+     * TODO: This can be called from anyone - should only be callable from Voting contract
+     * TODO: Tests
+     */
+    function replaceBoardMembers(address[] newBoardMembers) public returns (bool) {
+
+        if (newBoardMembers.length == 0) {
+            return false;
+        }
+
+        // check if new board members are already a member.
+        for (uint i = 0; i != newBoardMembers.length; ++i) {
+            if (isRegularOrBoardMember(newBoardMembers[i]) == false) {
+                return false;
+            }
+        }
+
+        // reset board members to regular members
+        for (i = 0; i != memberAddresses.length; ++i) {
+            Member storage member = members[memberAddresses[i]];
+            if (member.status == MemberStatus.BOARD) {
+                member.status = MemberStatus.REGULAR;
+            }
+        }   
+
+        // instantiate new board members
+        for (i = 0; i != newBoardMembers.length; ++i) {
+            members[newBoardMembers[i]].status = MemberStatus.BOARD;
+        }
+        
+        return true;
+    } 
 }
