@@ -136,4 +136,17 @@ contract Members {
         
         return true;
     } 
+
+    /**
+     * Eligible members are members allowed to vote: board members or regular members
+     */
+    function getNumberOfEligibleMembers() public view returns (uint) {
+        uint numberOfMembers = 0;
+        for (uint i = 0; i != memberAddresses.length; ++i) {
+            if (isRegularOrBoardMember(memberAddresses[i])) {
+                ++numberOfMembers;
+            }
+        }
+        return numberOfMembers;
+    }
 }

@@ -130,13 +130,22 @@ contract Voting {
     }
 
     /**
+     * Eligible voters: E (i.e., regular or board members)
+     * Positive votes: Y
+     * Negative votes: N
+     * Open votes: O
+     * Y > E/2 --> Vote positive
+     * N > E/2 --> Vote negative
+     * Elsewise: Vote still open
      * TODO: Tests
+     * TODO: Vote should be able to officially close if YES or NO, otherwise newly changing members may change a vote.
      */
     function computeCurrentVoteResult(Vote storage vote) private view returns (VoteOutcome) {
         uint positiveVotes = 0;
         uint negativeVotes = 0;
-        uint totalVotes = vote.voters.length;
-        for (uint i = 0; i != totalVotes; ++i) {
+
+        // count votes: iterate through all members
+        for (uint i = 0; i != membersContract.getNumberOfMembers(); ++i) {
             VoteOutcome outcome = vote.outcome[vote.voters[i]];
             if (outcome == VoteOutcome.YES) {
                 ++positiveVotes;
@@ -144,12 +153,15 @@ contract Voting {
                 ++negativeVotes;
             }
         }
-        if (positiveVotes + negativeVotes >= totalVotes/2) {
-            if (positiveVotes > negativeVotes) {
-                return VoteOutcome.YES;
-            }
-        }
-        return VoteOutcome.NO;
-    }
 
+        // process result
+        uint eligibleVoters = membersContract.getNumberOfEligibleMembers();
+        if (positiveVotes > eligibleVoters/2) {
+            return VoteOutcome.YES;
+        } else if (negativeVotes >= eligibleVoters/2) {
+            return VoteOutcome.NO;
+        } else {
+            return VoteOutcome.NONE;
+        }
+    }
 }

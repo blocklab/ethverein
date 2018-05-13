@@ -54,6 +54,16 @@ contract('Members', function(accounts) {
     })
   });
 
+  it("Number of eligible members should be board members and regular members", function() {
+    let membersContract;
+    return Members.deployed().then(function(instance) {
+      membersContract = instance;
+      return instance.getNumberOfEligibleMembers();
+    }).then(function(res) {
+      assert.equal(res, 3, "Wrong number of eligible members");
+    });
+  });
+
   it("should take 3 founders to confirm Michael", function() {
     let membersContract;
     return Members.deployed().then(function(instance) {
@@ -135,4 +145,5 @@ contract('Members', function(accounts) {
       assertException(err);
     })
   });
+
 });
