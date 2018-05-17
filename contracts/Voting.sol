@@ -102,9 +102,9 @@ contract Voting {
 
     /**
      * Closes vote (if result exists)
-     * TODO: Tests
+     * TODO: Tests (only exists for "onlyMember" by now)
      */
-    function closeVote(uint voteId) public onlyMember onlyOpenVote(voteId) {
+    function closeVote(uint voteId) public onlyMember onlyOpenVote(voteId) { 
         Vote storage vote = votes[voteId];
         VoteOutcome outcome = computeCurrentVoteResult(vote);
 
@@ -138,14 +138,13 @@ contract Voting {
      * N > E/2 --> Vote negative
      * Elsewise: Vote still open
      * TODO: Tests
-     * TODO: Vote should be able to officially close if YES or NO, otherwise newly changing members may change a vote.
      */
     function computeCurrentVoteResult(Vote storage vote) private view returns (VoteOutcome) {
         uint positiveVotes = 0;
         uint negativeVotes = 0;
 
         // count votes: iterate through all members
-        for (uint i = 0; i != membersContract.getNumberOfMembers(); ++i) {
+        for (uint i = 0; i != vote.voters.length; ++i) {
             VoteOutcome outcome = vote.outcome[vote.voters[i]];
             if (outcome == VoteOutcome.YES) {
                 ++positiveVotes;
