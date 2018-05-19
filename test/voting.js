@@ -343,6 +343,33 @@ contract('Voting', function(accounts) {
     });
   });
 
+  it("A vote with outcome YES should be closed.", function() {
+    let votingContract;
+    let voteId;
+    return Voting.deployed().then(function(instance) {
+      votingContract = instance;
+      return votingContract.initiateVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+    }).then(function(res) {
+      // create a new vote
+      voteId = res;
+      return votingContract.initiateVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+    }).then(function() {
+      // vote 3x YES
+      return votingContract.castVote(voteId, true, { from: ACCOUNT_REGULAR_MEMBER }).then(function() {
+        return votingContract.castVote(voteId, true, { from: ACCOUNT_FIRST_BOARD_MEMBER }).then(function() {
+          return votingContract.castVote(voteId, true, { from: ACCOUNT_SECOND_BOARD_MEMBER });
+        });
+      });
+    }).then(function() {
+      // close vote
+      return votingContract.closeVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+    }).then(function() {
+      return votingContract.getVoteDetails(voteId);
+    }).then(function(vote) {
+      assert.equal(vote[2], 2, "Vote should be closed when it has outcome YES.");
+    });
+  }); 
+
   it("A vote with <=50% NO votes should have outcome NO", function() {
     let votingContract;
     let membersContract; // used during development to test number of members; to be deleted.
@@ -374,8 +401,37 @@ contract('Voting', function(accounts) {
     });
   });
 
-  // positive vote closed
-// negative vote closed
+  it("A vote with outcome NO should be closed.", function() {
+    let votingContract;
+    let voteId;
+    return Voting.deployed().then(function(instance) {
+      votingContract = instance;
+      return votingContract.initiateVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+    }).then(function(res) {
+      // create a new vote
+      voteId = res;
+      return votingContract.initiateVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+    }).then(function() {
+      // vote 2x NO and 2x YES
+      return votingContract.castVote(voteId, false, { from: ACCOUNT_REGULAR_MEMBER }).then(function() {
+        return votingContract.castVote(voteId, false, { from: ACCOUNT_FIRST_BOARD_MEMBER }).then(function() {
+          return votingContract.castVote(voteId, true, { from: ACCOUNT_SECOND_BOARD_MEMBER }).then(function() {
+            return votingContract.castVote(voteId, true, { from: ACCOUNT_THIRD_BOARD_MEMBER });
+          });
+        });
+      });
+    }).then(function() {
+      // close vote
+      return votingContract.closeVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+    }).then(function() {
+      return votingContract.getVoteDetails(voteId);
+    }).then(function(vote) {
+      assert.equal(vote[2], 2, "Vote should be closed when it has outcome NO.");
+    });
+  }); 
+
+
+
 // board members have been replaced
 
 });
