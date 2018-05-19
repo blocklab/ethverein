@@ -16,6 +16,7 @@ contract Members {
     struct Member {
         string name;
         MemberStatus status;
+        uint entryBlock;
     }
 
     mapping (address => Member) public members;
@@ -25,7 +26,7 @@ contract Members {
     constructor(address[] initialMemberAddresses) public {
         for (uint index = 0; index < initialMemberAddresses.length; index++) {
             // all initial members are board members
-            members[initialMemberAddresses[index]] = Member({name: "???", status: MemberStatus.BOARD});
+            members[initialMemberAddresses[index]] = Member({name: "???", status: MemberStatus.BOARD, entryBlock: block.number});
             memberAddresses.push(initialMemberAddresses[index]);
         }
     }
@@ -36,7 +37,7 @@ contract Members {
 
     function applyForMembership(string memberName) public {
         require (members[msg.sender].status == MemberStatus.NONE);
-        members[msg.sender] = Member({name: memberName, status: MemberStatus.APPLIED});
+        members[msg.sender] = Member({name: memberName, status: MemberStatus.APPLIED, entryBlock: 0});
         memberAddresses.push(msg.sender);
     }
 
@@ -54,6 +55,7 @@ contract Members {
         }
         if (allBoardMembersConfirmed) {
             members[applicant].status = MemberStatus.REGULAR;
+            members[applicant].entryBlock = block.number;
             delete confirmations[applicant];
         }
     }
@@ -106,7 +108,6 @@ contract Members {
     /**
      * Instantiates new board members.
      * TODO: This can be called from anyone - should only be callable from Voting contract
-     * TODO: Tests
      */
     function replaceBoardMembers(address[] newBoardMembers) public {
 

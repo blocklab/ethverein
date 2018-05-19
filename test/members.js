@@ -17,6 +17,7 @@ contract('Members', function(accounts) {
     }).then(function(member) {
       assert.equal(member[0], "???", "Wrong name for founder");
       assert.equal(member[1], STATUS_BOARD, "Wrong status for founder");
+      assert.isTrue(member[2] > 0, "Entry block not initialized");
     });
   });
 
@@ -84,6 +85,7 @@ contract('Members', function(accounts) {
       return membersContract.members.call(accounts[3]);
     }).then(function(afterThirdConfirmation) {
       assert.equal(afterThirdConfirmation[1], STATUS_REGULAR, "Wrong status for applicant");
+      assert.isTrue(afterThirdConfirmation[2] > 0, "Entry block not initialized");
     })
   });
 
