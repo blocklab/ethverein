@@ -76,6 +76,15 @@ contract('Voting', function(accounts) {
     });
   });
 
+  it("should throw if board member vote is instantiated without new board members", async function() {
+    try {
+      await votingContract.initiateBoardMemberVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [], { from: ACCOUNT_REGULAR_MEMBER });
+      assert(false, "Supposed to throw");
+    } catch (e) {
+      assertException(e);
+    }
+  });
+
   it("only regular member can create a board member vote", function() {
     return votingContract.initiateBoardMemberVote.call(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_SECOND_BOARD_MEMBER], { from: ACCOUNT_REGULAR_MEMBER }).then(function(newId) {
       assert.equal(newId.toNumber(), 1, "Wrong id of new vote");
@@ -343,6 +352,58 @@ contract('Voting', function(accounts) {
     });
   }); 
 
-// remaining: board members have been replaced
+  it("New board members should be instantiated.", async function() {
+    // create a new board member vote
+    let voteId = await votingContract.initiateBoardMemberVote.call(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_SECOND_BOARD_MEMBER], { from: ACCOUNT_REGULAR_MEMBER });
+    await votingContract.initiateBoardMemberVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_REGULAR_MEMBER, ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_SECOND_BOARD_MEMBER], { from: ACCOUNT_REGULAR_MEMBER });
+    // vote 3x YES
+    await votingContract.castVote(voteId, true, { from: ACCOUNT_REGULAR_MEMBER });
+    await votingContract.castVote(voteId, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
+    await votingContract.castVote(voteId, true, { from: ACCOUNT_SECOND_BOARD_MEMBER });
+    // close vote
+    await votingContract.closeVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+    // check if new board members have been instatiated and third board member has been "downgraded"
+    let newBoardMember = await membersContract.members.call(ACCOUNT_REGULAR_MEMBER);
+    let stillBoardMember1 = await membersContract.members.call(ACCOUNT_FIRST_BOARD_MEMBER);
+    let stillBoardMember2 = await membersContract.members.call(ACCOUNT_SECOND_BOARD_MEMBER);
+    let notBoardMemberAnymore = await membersContract.members.call(ACCOUNT_THIRD_BOARD_MEMBER);
+    assert.equal(newBoardMember[1], 3, "Should now be a board member.");
+    assert.equal(stillBoardMember1[1], 3, "Should still be a board member.");
+    assert.equal(stillBoardMember2[1], 3, "Should still be a board member.");
+    assert.equal(notBoardMemberAnymore[1], 2, "Should not be a board member anymore.");
+  }); 
 
+  it("Should throw if applied member should be instantiated as board member.", async function() {
+    // create a new board member vote
+    let voteId = await votingContract.initiateBoardMemberVote.call(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_REGULAR_MEMBER, ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_APPLIED_MEMBER], { from: ACCOUNT_REGULAR_MEMBER });
+    await votingContract.initiateBoardMemberVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_REGULAR_MEMBER, ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_APPLIED_MEMBER], { from: ACCOUNT_REGULAR_MEMBER });
+    // vote 3x YES
+    await votingContract.castVote(voteId, true, { from: ACCOUNT_REGULAR_MEMBER });
+    await votingContract.castVote(voteId, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
+    await votingContract.castVote(voteId, true, { from: ACCOUNT_SECOND_BOARD_MEMBER });
+    // close vote
+    try {
+      await votingContract.closeVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+      assert(false, "Supposed to throw");
+    } catch (e) {
+      assertException(e);
+    }
+  });
+
+  it("Should throw if non member should be instantiated as board member.", async function() {
+    // create a new board member vote
+    let voteId = await votingContract.initiateBoardMemberVote.call(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_REGULAR_MEMBER, ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_NONE_MEMBER], { from: ACCOUNT_REGULAR_MEMBER });
+    await votingContract.initiateBoardMemberVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_REGULAR_MEMBER, ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_NONE_MEMBER], { from: ACCOUNT_REGULAR_MEMBER });
+    // vote 3x YES
+    await votingContract.castVote(voteId, true, { from: ACCOUNT_REGULAR_MEMBER });
+    await votingContract.castVote(voteId, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
+    await votingContract.castVote(voteId, true, { from: ACCOUNT_SECOND_BOARD_MEMBER });
+    // close vote
+    try {
+      await votingContract.closeVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+      assert(false, "Supposed to throw");
+    } catch (e) {
+      assertException(e);
+    }
+  });
 });

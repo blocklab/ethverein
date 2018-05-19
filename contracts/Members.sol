@@ -104,20 +104,22 @@ contract Members {
     }
 
     /**
-     * Returns true if new board members have been instantiated successfully
+     * Instantiates new board members.
      * TODO: This can be called from anyone - should only be callable from Voting contract
      * TODO: Tests
      */
-    function replaceBoardMembers(address[] newBoardMembers) public returns (bool) {
+    function replaceBoardMembers(address[] newBoardMembers) public {
 
+        // this is redundant:
+        // It should not even be possible to have a board member vote with no board members to be instantiated
         if (newBoardMembers.length == 0) {
-            return false;
+            revert();
         }
 
         // check if new board members are already a member.
         for (uint i = 0; i != newBoardMembers.length; ++i) {
             if (isRegularOrBoardMember(newBoardMembers[i]) == false) {
-                return false;
+                revert();
             }
         }
 
@@ -133,8 +135,6 @@ contract Members {
         for (i = 0; i != newBoardMembers.length; ++i) {
             members[newBoardMembers[i]].status = MemberStatus.BOARD;
         }
-        
-        return true;
     } 
 
     /**

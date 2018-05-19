@@ -49,6 +49,10 @@ contract Voting {
     }
 
     function initiateBoardMemberVote(string name, bytes32 documentHash, address[] newBoardMembers) public onlyMember returns (uint) {
+        if (newBoardMembers.length == 0) {
+            revert();
+        }
+
         votes.push(Vote(
             { name: name,
             documentHash: documentHash,
@@ -102,7 +106,6 @@ contract Voting {
 
     /**
      * Closes vote (if result exists)
-     * TODO: Tests (only exists for "onlyMember" by now)
      */
     function closeVote(uint voteId) public onlyMember onlyOpenVote(voteId) { 
         Vote storage vote = votes[voteId];
