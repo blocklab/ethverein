@@ -106,7 +106,7 @@ contract Voting {
      */
     function closeVote(uint voteId) public onlyMember onlyOpenVote(voteId) { 
         Vote storage vote = votes[voteId];
-        VoteOutcome outcome = computeCurrentVoteResult(vote);
+        VoteOutcome outcome = computeVoteOutcome(vote);
 
         // only close vote if result exists
         if (outcome == VoteOutcome.NONE) {
@@ -121,11 +121,8 @@ contract Voting {
         } 
     }
 
-    /**
-     * TODO: Tests
-     */
-    function computeCurrentVoteResult(uint voteId) public view returns (uint) {
-        VoteOutcome outcome = computeCurrentVoteResult(votes[voteId]);
+    function computeVoteOutcome(uint voteId) public view returns (uint) {
+        VoteOutcome outcome = computeVoteOutcome(votes[voteId]);
         return uint(outcome);
     }
 
@@ -137,9 +134,8 @@ contract Voting {
      * Y > E/2 --> Vote positive
      * N > E/2 --> Vote negative
      * Elsewise: Vote still open
-     * TODO: Tests
      */
-    function computeCurrentVoteResult(Vote storage vote) private view returns (VoteOutcome) {
+    function computeVoteOutcome(Vote storage vote) private view returns (VoteOutcome) {
         uint positiveVotes = 0;
         uint negativeVotes = 0;
 
