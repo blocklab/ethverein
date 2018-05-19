@@ -113,7 +113,7 @@ contract Voting {
 
         // only close vote if result exists
         if (outcome == VoteOutcome.NONE) {
-            return;
+            revert();
         }          
 
         vote.status = VoteStatus.CLOSED;
