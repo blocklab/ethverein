@@ -21,7 +21,10 @@ contract Members {
 
     mapping (address => Member) public members;
     address[] public memberAddresses;
+
     mapping (address => address[]) confirmations;
+
+    address votingContractAddress;
 
     constructor(address[] initialMemberAddresses) public {
         for (uint index = 0; index < initialMemberAddresses.length; index++) {
@@ -29,6 +32,11 @@ contract Members {
             members[initialMemberAddresses[index]] = Member({name: "???", status: MemberStatus.BOARD, entryBlock: block.number});
             memberAddresses.push(initialMemberAddresses[index]);
         }
+    }
+
+    modifier onlyVotingContract() {
+        require (votingContractAddress == msg.sender);
+        _;
     }
 
     function getNumberOfMembers() public view returns (uint) {
@@ -107,9 +115,8 @@ contract Members {
 
     /**
      * Instantiates new board members.
-     * TODO: This can be called from anyone - should only be callable from Voting contract
      */
-    function replaceBoardMembers(address[] newBoardMembers) public {
+    function replaceBoardMembers(address[] newBoardMembers) public onlyVotingContract {
 
         // this is redundant:
         // It should not even be possible to have a board member vote with no board members to be instantiated
@@ -149,5 +156,16 @@ contract Members {
             }
         }
         return numberOfMembers;
+    }
+
+    /**
+     * Initially set contract address
+     */
+    function setVotingContractAddress(address newAddress) public {
+        if (votingContractAddress == address(0)) {
+            votingContractAddress = newAddress;
+        } else {
+            revert();
+        }
     }
 }
