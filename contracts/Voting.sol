@@ -17,13 +17,22 @@ contract Voting {
         NO
     }
 
+    enum VoteType {
+        NONE,
+        DOCUMENT,
+        BOARD_MEMBER,
+        VOTING_CONTRACT_UPDATE
+    }
+
     struct Vote {
         string name;
+        VoteType voteType;
         bytes32 documentHash;
         VoteStatus status;
-        address[] newBoardMembers;
         mapping (address => VoteOutcome) outcome;
         address[] voters;
+        address[] newBoardMembers;
+        address newVotingContractAddress;
     }
 
     Vote[] private votes;
@@ -55,21 +64,43 @@ contract Voting {
 
         votes.push(Vote(
             { name: name,
+            voteType: VoteType.BOARD_MEMBER,
             documentHash: documentHash,
             status: VoteStatus.OPEN,
             newBoardMembers: newBoardMembers,
+            newVotingContractAddress: address(0),
             voters: new address[](0)}));
 
         return votes.length - 1;
     }
 
-    // create a "regular" vote (i.e., a vote in which there are no new board members)
-    function initiateVote(string name, bytes32 documentHash) public onlyMember returns (uint) {
+    // create a document vote
+    function initiateDocumentVote(string name, bytes32 documentHash) public onlyMember returns (uint) {
         votes.push(Vote(
             { name: name,
+            voteType: VoteType.DOCUMENT,
             documentHash: documentHash,
             status: VoteStatus.OPEN,
             newBoardMembers: new address[](0),
+            newVotingContractAddress: address(0),
+            voters: new address[](0)}));
+
+        return votes.length - 1;
+    }
+
+    // create a contract update vote
+    function initiateVotingContractUpdateVote(string name, address newContractAddress) public onlyMember returns (uint) {
+        if (newContractAddress == address(0)) {
+            revert();
+        }
+        
+        votes.push(Vote(
+            { name: name,
+            voteType: VoteType.VOTING_CONTRACT_UPDATE,
+            documentHash: 0,
+            status: VoteStatus.OPEN,
+            newBoardMembers: new address[](0),
+            newVotingContractAddress: newContractAddress,
             voters: new address[](0)}));
 
         return votes.length - 1;
@@ -93,15 +124,22 @@ contract Voting {
     /**
      * Returns vote details:
      *   name
-     *   documentHash
+     *   type (0: NONE, 1: DOCUMENT, 2: BOARD_MEMBER, 3: VOTING_CONTRACT_UPDATE)
+     *   documentHash (if board member vote or contract update vote)
      *   status (0: NONE, 1: OPEN, 2: CLOSED)
      *   board member addresses (if board member vote)
-     *   address of voters
+     *   address of new voting contract (if contract update vote)
+     *   addresses of voters
      */
-    function getVoteDetails(uint voteId) public view returns (string, bytes32, uint, address[], address[]) {
+    function getVoteDetails(uint voteId) public view returns (string, uint, bytes32, uint, address[], address, address[]) {
         Vote storage vote = votes[voteId];
-        //bool voteStatus = vote.status == VoteStatus.OPEN ? true : false;
-        return (vote.name, vote.documentHash, uint(vote.status), vote.newBoardMembers, vote.voters);
+        return (vote.name, 
+            uint(vote.voteType),
+            vote.documentHash,
+            uint(vote.status),
+            vote.newBoardMembers,
+            vote.newVotingContractAddress,
+            vote.voters);
     }
 
     /**
@@ -119,9 +157,14 @@ contract Voting {
         vote.status = VoteStatus.CLOSED;
 
         // instantiate board members in case of board member vote
-        if (outcome == VoteOutcome.YES && vote.newBoardMembers.length != 0) {
+        if (outcome == VoteOutcome.YES && vote.voteType == VoteType.BOARD_MEMBER) {
             membersContract.replaceBoardMembers(vote.newBoardMembers);
         } 
+
+        // set new contract address in case of contract address vote
+        if (outcome == VoteOutcome.YES && vote.voteType == VoteType.VOTING_CONTRACT_UPDATE) {
+            membersContract.updateVotingContractAddress(vote.newVotingContractAddress);
+        }
     }
 
     function computeVoteOutcome(uint voteId) public view returns (uint) {

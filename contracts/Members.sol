@@ -24,7 +24,7 @@ contract Members {
 
     mapping (address => address[]) confirmations;
 
-    address votingContractAddress;
+    address public votingContractAddress;
 
     constructor(address[] initialMemberAddresses) public {
         for (uint index = 0; index < initialMemberAddresses.length; index++) {
@@ -167,5 +167,12 @@ contract Members {
         } else {
             revert();
         }
+    }
+
+    /**
+     * Voting contract can update its address after a vote.
+     */
+    function updateVotingContractAddress(address newAddress) public onlyVotingContract {
+        votingContractAddress = newAddress;
     }
 }
