@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
   address;
   alias;
   applyBTNDisabled;
-  changeBTNDisabled;
+  changeBTNDisabled = true;
   resignBTNDisabled;
   aliasInputDisabled;
   isCopied;
@@ -71,8 +71,7 @@ export class DashboardComponent implements OnInit {
   }
 
   unlockChangeBTN() {
-    console.log(this.status);
-    if (this.status === ('member' || 'board')) {
+    if (this.status === 'member' || this.status === 'board') {
       this.changeBTNDisabled = false;
     }
   }

@@ -8,7 +8,7 @@
         <input #box matInput (ngModelChange)="unlockChangeBTN()" disabled="{{ aliasInputDisabled }}" (keyup.enter)="changeAlias(box.value)" placeholder="Alias" name="aliasInput"
           [(ngModel)]="alias">
         <mat-hint>Your alias will be
-          <b>permantly</b> stored on the Blockchain!</mat-hint>
+          <b>permanently</b> stored on the Blockchain!</mat-hint>
       </mat-form-field>
     </form>
     <br>
@@ -18,8 +18,7 @@
           (cbOnSuccess)="isCopied = true" (click)="copyAddress()">
           <input matInput placeholder="ETH-Address" name="address" disabled [(ngModel)]="address">
         </div>
-        <mat-hint>Can only be changed in MetaMask (
-          <b>Reload required</b>)
+        <mat-hint>Can only be changed in MetaMask (<b>Page reload required</b>)
         </mat-hint>
       </mat-form-field>
     </form>
