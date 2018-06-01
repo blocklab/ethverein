@@ -1,0 +1,195 @@
+<div class="row">
+  <div class="col-sm">
+    <!-- Grid 1.1 -->
+    <h3>My Membership </h3>
+
+    <form class="input-form">
+      <mat-form-field class="input-full-width">
+        <input #box matInput (ngModelChange)="unlockChangeBTN()" disabled="{{ aliasInputDisabled }}" (keyup.enter)="changeAlias(box.value)" placeholder="Alias" name="aliasInput"
+          [(ngModel)]="alias">
+        <mat-hint>Your alias will be
+          <b>permantly</b> stored on the Blockchain!</mat-hint>
+      </mat-form-field>
+    </form>
+    <br>
+    <form class="input-form">
+      <mat-form-field class="input-full-width">
+        <div matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard [cbContent]="address"
+          (cbOnSuccess)="isCopied = true" (click)="copyAddress()">
+          <input matInput placeholder="ETH-Address" name="address" disabled [(ngModel)]="address">
+        </div>
+        <mat-hint>Can only be changed in MetaMask (
+          <b>Reload required</b>)
+        </mat-hint>
+      </mat-form-field>
+    </form>
+
+    <br> Status
+    <br>
+    <mat-button-toggle-group name="Status" value="{{ status }}" disabled>
+      <mat-button-toggle value="none">None</mat-button-toggle>
+      <mat-button-toggle value="pending">Pending</mat-button-toggle>
+      <mat-button-toggle value="member">Member</mat-button-toggle>
+      <mat-button-toggle value="board">Board</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <br>
+    <br> Actions
+    <br>
+    <button mat-raised-button (click)="apply()" disabled="{{ applyBTNDisabled }}">Apply</button>
+    <button mat-raised-button (click)="changeAlias()" disabled="{{ changeBTNDisabled }}">Change Alias</button>
+    <button mat-raised-button (click)="resign()" disabled="{{ resignBTNDisabled }}">Resign</button>
+
+  </div>
+
+  <!-- Grid 1.2 -->
+  <div class="col-sm">
+    <h3>Active Votes</h3>
+  </div>
+</div>
+
+<div class="row">
+
+  <!-- Grid 2 -->
+  <div class="col-sm">
+    <h3>Newsfeed</h3>
+    <h5 class="category-title">Aktuelle Einträge</h5>
+    <article class="post-item">
+      <span class="post-meta date-label">28 May</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2018/blockLAB-OIBW2018/"> blockLAB auf dem Open Innovation Kongress BW 2018 </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">15 May</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2018/Blockchain-Compass/"> Blockchain Compass: 360°- Analyse von Business-Modellen und Blockchain-Technologie </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">04 May</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2018/Blockchain-in-der-Region-Stuttgart/"> Blockchain in der Region Stuttgart </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">02 Mar</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2018/IHK-Region-Stuttgart-Blockchain-Camp-II/"> IHK Region Stuttgart Blockchain Camp II </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">23 Feb</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2018/R%C3%BCckblick-Blockchain-Hackathon/"> Blockchain Hackathon – Three Days Envisioning The Crypto Future! </a>
+      </div>
+    </article>
+    <h5 class="category-title">2017</h5>
+    <article class="post-item">
+      <span class="post-meta date-label">04 Dec</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/Blockchain-Hackathon/"> 1. Blockchain-Hackathon in Stuttgart </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">02 Oct</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/Blockchain-Camp/"> Vortragsveranstaltung: IHK Region Stuttgart Blockchain Camp am 23.10. </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">16 Aug</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/wie-besitz-von-cryptowaehrungen-nachweisen/"> Wie kann man den Besitz von Cryptowährung nachweisen? </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">20 Jul</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/Zusammenarbeit_mit_dem_ISW/"> ISW der Uni Stuttgart und blockLAB Stuttgart arbeiten zukünftig zusammen </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">02 Jun</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/rueckblick-veranstaltung-blockchain-versprechen-bwcon/">
+        Rückblick Vortragsveranstaltung - Hält die Blockchain-Technologie ihr Versprechen? </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">25 May</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/Blockchain-Versprechen/"> Vortragsveranstaltung: Hält die Blockchain-Technologie ihr Versprechen? </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">17 Apr</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/Skalierung/"> Skalieren Blockchains? Sorgen und Lösungsansätze </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">12 Apr</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/Unterstuetzung-Forschungsprojekt-Blockworks/"> blockLAB Stuttgart unterstützt das europäische Forschungsprojekt Blockworks in der Antragsphase </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">10 Apr</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/ethereum_und_java/"> Verwendung von Ethereum Smart Contracts in&nbsp;Java </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">21 Mar</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/Qualifizierungsprogramm/"> Qualifizierungsprogramm Smart Contract Programmierung auf der Ethereum-Blockchain startet im März </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">01 Feb</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2017/Gruendung-Special-Interest-Group-bei-der-bwcon/">
+        bwcon und blockLAB Stuttgart gründen die Special Interest Group Blockchain </a>
+      </div>
+    </article>
+    <h5 class="category-title">2016</h5>
+    <article class="post-item">
+      <span class="post-meta date-label">21 Dec</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2016/bwcon-und-blockLAB/"> Zusammenarbeit bwcon und blockLAB Stuttgart beim Thema Blockchain </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">20 Nov</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2016/introduction-smart-contracts/"> Workshop: Hands-on Smart Contract Programmierung am 24.01.2017 </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">29 Oct</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2016/oracles-in-ethereum/"> Orakel in Ethereum </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">10 Oct</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2016/Ethereum_Ecosystem/"> Das Ethereum Ökosystem </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">09 Oct</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2016/tapscott/"> Was ist Blockchain-Technologie? TED-Talk - Don Tapscott: How the blockchain is changing money and business </a>
+      </div>
+    </article>
+    <article class="post-item">
+      <span class="post-meta date-label">25 Sep</span>
+      <div class="article-title">
+        <a target="_blank" class="post-link" href="http://site.blocklab.de//2016/introduction-smart-contracts/"> Workshop: Einführung in die Smart Contract Programmierung </a>
+      </div>
+    </article>
+
+  </div>
+</div>
