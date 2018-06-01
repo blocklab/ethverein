@@ -71,6 +71,7 @@ export class DashboardComponent implements OnInit {
   }
 
   unlockChangeBTN() {
+    console.log(this.status);
     if (this.status === ('member' || 'board')) {
       this.changeBTNDisabled = false;
     }

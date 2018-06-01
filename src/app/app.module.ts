@@ -13,7 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MetaMaskComponent } from './meta-mask/meta-mask.component';
 import { ConfirmApplicationDialogComponent } from './confirm-application-dialog/confirm-application-dialog.component';
-import {
+import { 
   MatFormFieldModule, MatGridListModule, MatCardModule, MatToolbarModule,
   MatMenuModule, MatIconModule, MatButtonToggleModule, MatButtonModule,
   MatSortModule, MatInputModule, MatSnackBarModule, MatTooltipModule, MatTableModule,
@@ -31,8 +31,8 @@ import {
     MetaMaskComponent,
     ConfirmApplicationDialogComponent,
   ],
-  imports: [
-    BrowserModule,
+  imports: [ 
+    BrowserModule, 
     ClipboardModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -44,7 +44,7 @@ import {
     MatFormFieldModule,
     MatSortModule,
     MatInputModule,
-    FormsModule,
+    FormsModule, 
     MatSnackBarModule,
     MatTooltipModule,
     MatButtonToggleModule,
