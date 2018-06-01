@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Confirm Membership</h2>
+
+<mat-dialog-content>
+  <div>
+   Confirm application for {{ alias }}?
+ </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button"(click)="cancel()">Cancel</button>
+    <button class="mat-raised-button mat-primary"(click)="confirm()">Confirm</button>
+</mat-dialog-actions>

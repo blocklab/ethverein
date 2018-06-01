@@ -1,14 +1,25 @@
-# blockLAB member management prototype
-## Setup
-`npm i`
+# BlockLab-Website
 
-## Run Scenario
-### Start Truffle develop and deploy contract
-`truffle develop` takes you to Truffle dev cli (should always generate the same accounts) - notice the account addresses and private keys (always the same for develop network)
+Member-Website of the [BlockLAB](http://site.blocklab.de/)-club
 
-`migrate --reset` deploys/replaces the smart contract -> first 3 accounts are used for initializing the contract, those accounts are the "founders" with board member status
+## Required
+* [Angular CLI](https://github.com/angular/angular-cli)
+* [MetaMask browser plugin](https://metamask.io/)
 
-### Start web app in second terminal session
-`npm run dev` to start the web app -> load the app in Chrome with MetaMask using `http://localhost:8081/`
+## Development server
 
-Configure the custom RPC `http://localhost:9545` as well as some of the test accounts in MetaMask and have fun
+Run `ng s -o` to start and open dev-server
+
+## Build
+
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+
+## Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+

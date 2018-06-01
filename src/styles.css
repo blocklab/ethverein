@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.content {
+    margin-top: 100px;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+/* Navigation link styles */
+
+nav {
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    background-color: white;
+}
+
+.navbar.navbar .navbar-toggler-icon {
+    background-image: url('https://mdbootstrap.com/img/svg/hamburger7.svg?color=ed7d31');
+}
+
+logo {
+    margin: 5px 15px 5px 0px;
+}
+
+nav a { 
+    white-space: nowrap;
+    text-decoration: none;
+    padding-top: 5px;
+    height: 37px;
+    margin: 5px 5px 5px 0px;
+    display: inline-block;
+    border: 2px solid #fbe3d3;
+    border-radius: 7px;
+}
+
+nav a:visited, a:link {
+    color: black;
+}
+
+nav a:hover {
+    background-color: #ed7d31;
+    border: 2px solid #ed7d31;
+    color: white
+}
+
+nav a.active {
+    border: 2px solid #ed7d31;
+}
