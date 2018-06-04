@@ -1,9 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 body {
     padding: 0;
     margin: 0;
-    font-family: 'Open Sans', sans-serif;
 }
 
 .content {
@@ -15,7 +13,6 @@ body {
 /* Navigation link styles */
 
 nav {
-    font-family: 'Open Sans', sans-serif;
     display: flex;
     background-color: white;
 }
@@ -28,7 +25,7 @@ logo {
     margin: 5px 15px 5px 0px;
 }
 
-nav a { 
+nav a {
     white-space: nowrap;
     text-decoration: none;
     padding-top: 5px;

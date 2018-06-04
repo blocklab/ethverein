@@ -10,14 +10,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { VotesComponent } from './votes/votes.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MetaMaskComponent } from './meta-mask/meta-mask.component';
 import { ConfirmApplicationDialogComponent } from './confirm-application-dialog/confirm-application-dialog.component';
-import { 
+import {
   MatFormFieldModule, MatGridListModule, MatCardModule, MatToolbarModule,
   MatMenuModule, MatIconModule, MatButtonToggleModule, MatButtonModule,
   MatSortModule, MatInputModule, MatSnackBarModule, MatTooltipModule, MatTableModule,
-  MatDialogModule
+  MatDialogModule, MatTabsModule, MatStepperModule,  
 } from '@angular/material';
 
 
@@ -31,8 +31,8 @@ import {
     MetaMaskComponent,
     ConfirmApplicationDialogComponent,
   ],
-  imports: [ 
-    BrowserModule, 
+  imports: [
+    BrowserModule,
     ClipboardModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -44,8 +44,11 @@ import {
     MatFormFieldModule,
     MatSortModule,
     MatInputModule,
-    FormsModule, 
+    FormsModule,
+    ReactiveFormsModule,
     MatSnackBarModule,
+    MatTabsModule, 
+    MatStepperModule,
     MatTooltipModule,
     MatButtonToggleModule,
     MatTableModule,
@@ -60,4 +63,4 @@ import {
 })
 export class AppModule {
 
- }
+}

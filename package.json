@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "^6.0.2",
     "@angular/router": "^6.0.2",
     "angular-bootstrap-md": "^6.1.1",
-    "babel-register": "^6.26.0",
+    "angular-crypto-js": "^1.0.7",
     "chart.js": "^2.5.0",
     "core-js": "^2.5.4",
     "font-awesome": "^4.7.0",

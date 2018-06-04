@@ -1,0 +1,33 @@
+.tab-group {
+    border: 1px solid #e8e8e8;
+    border-radius: 7px;
+}
+
+.tab-content {
+    padding: 16px;
+}
+
+mat-card {
+    box-shadow: 0px 2px 4px 1px #ccc;
+    border: 2px solid #fbe3d3;
+    border-radius: 7px;
+}
+
+mat-card:hover {
+    border: 2px solid #ed7d31;
+}
+/* 
+.upload-btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    
+  }
+  
+  .upload-btn input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  } */
