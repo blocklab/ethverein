@@ -60,6 +60,12 @@ button {
   padding: 0px 5px 0px;
   margin-right: 5px;
   margin-bottom: 5px;
+  outline: none;
+}
+
+button:hover {
+  background-color: white !important;
+  border: 2px solid #ed7d31;
 }
 
 .mat-raised-button:disabled {

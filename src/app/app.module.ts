@@ -1,3 +1,4 @@
+import { DroppableModule } from '@ctrl/ngx-droppable';
 import { ClipboardModule } from 'ngx-clipboard';
 import { Web3Service } from './services/web3.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,7 +18,7 @@ import {
   MatFormFieldModule, MatGridListModule, MatCardModule, MatToolbarModule,
   MatMenuModule, MatIconModule, MatButtonToggleModule, MatButtonModule,
   MatSortModule, MatInputModule, MatSnackBarModule, MatTooltipModule, MatTableModule,
-  MatDialogModule, MatTabsModule, MatStepperModule,  
+  MatDialogModule, MatTabsModule, MatStepperModule,
 } from '@angular/material';
 
 
@@ -33,6 +34,7 @@ import {
   ],
   imports: [
     BrowserModule,
+    DroppableModule,
     ClipboardModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -47,7 +49,7 @@ import {
     FormsModule,
     ReactiveFormsModule,
     MatSnackBarModule,
-    MatTabsModule, 
+    MatTabsModule,
     MatStepperModule,
     MatTooltipModule,
     MatButtonToggleModule,
