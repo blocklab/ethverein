@@ -21,7 +21,6 @@ import {
   MatDialogModule, MatTabsModule, MatStepperModule,
 } from '@angular/material';
 
-
 @NgModule({
   declarations: [
     AppComponent,

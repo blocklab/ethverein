@@ -6,14 +6,17 @@
             <mat-tab label="Document Vote">
 
                 <div class="tab-content">
-                    <p>You can upload any file to start a Document Vote. The other members will verify the file-hash when they vote.</p>
+                    <p>You can upload any file to start a Document Vote. The other members will verify the file-hash when they
+                        vote.
+                    </p>
                     <mat-horizontal-stepper [linear]="true" #stepper>
                         <mat-step [stepControl]="firstFormGroup" [editable]="true">
                             <form [formGroup]="firstFormGroup">
                                 <ng-template matStepLabel>Upload Document</ng-template>
-                                <div droppable [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFilesDropped($event)" [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">
-                                    {{ docName }} </div>
+
+                                <div droppable [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFiles($event)" [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ docName }}</div>
                                 <div>
+
                                     <button matStepperNext>Next</button>
                                 </div>
                             </form>

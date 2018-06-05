@@ -25,6 +25,7 @@ mat-card:hover {
     border-radius: 7px;
     cursor: pointer;
     outline: none;
+    margin-top: 1em;
 }
 
 .drop-card-success {
