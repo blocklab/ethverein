@@ -9,7 +9,7 @@
                     <p>You can upload any file to start a Document Vote. The other members will verify the file-hash when they
                         vote.
                     </p>
-                    <mat-horizontal-stepper [linear]="true" #stepper>
+                    <mat-horizontal-stepper [linear]="true" #stepper1>
 
                         <mat-step [stepControl]="firstFormGroup" [editable]="true">
                             <form [formGroup]="firstFormGroup">
@@ -43,7 +43,7 @@
                             <p>By pressing the Submit-Button, your Document-Vote will be sent to the Blockchain.</p>
                             <div>
                                 <button matStepperPrevious>Back</button>
-                                <button (click)="createDocumentVote()" (click)="stepper.reset()">Submit</button>
+                                <button (click)="createDocumentVote()" (click)="stepper1.reset()">Submit</button>
 
                             </div>
                         </mat-step>
@@ -57,7 +57,7 @@
                     <p>Upload a contract-file (.sol) to start a Contract Update Vote. The other members will verify the contract-hash
                         when they vote.
                     </p>
-                    <mat-horizontal-stepper [linear]="true" #stepper>
+                    <mat-horizontal-stepper [linear]="true" #stepper2>
 
                         <mat-step [stepControl]="secondFormGroup" [editable]="true">
                             <form [formGroup]="secondFormGroup">
@@ -91,7 +91,7 @@
                             <p>By pressing the Submit-Button, your Document-Vote will be sent to the Blockchain.</p>
                             <div>
                                 <button matStepperPrevious>Back</button>
-                                <button (click)="createContractVote()" (click)="stepper.reset()">Submit</button>
+                                <button (click)="createContractVote()" (click)="stepper2.reset()">Submit</button>
 
                             </div>
                         </mat-step>
@@ -105,7 +105,7 @@
                             <p>Upload any file and the three new board memebers addresses to start a Board Member Vote. The other members will verify the docuemnt-hash and the addresses
                                 when they vote.
                             </p>
-                            <mat-horizontal-stepper [linear]="true" #stepper>
+                            <mat-horizontal-stepper [linear]="true" #stepper3>
         
                                 <mat-step [stepControl]="thirdFormGroup" [editable]="true">
                                     <form [formGroup]="thirdFormGroup">
@@ -139,7 +139,7 @@
                                     <p>By pressing the Submit-Button, your Document-Vote will be sent to the Blockchain.</p>
                                     <div>
                                         <button matStepperPrevious>Back</button>
-                                        <button (click)="createMemberVote()" (click)="stepper.reset()">Submit</button>
+                                        <button (click)="createMemberVote()" (click)="stepper3.reset()">Submit</button>
         
                                     </div>
                                 </mat-step>
