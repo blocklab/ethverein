@@ -9,7 +9,7 @@ export class HashFileService {
 
   constructor() { }
 
-  getHash(_files): Promise<string> {
+  getHash(_file): Promise<string> {
     const fileReader = new FileReader();
 
     return new Promise<string>((resolve, reject) => {
@@ -18,7 +18,7 @@ export class HashFileService {
         const res = (SHA256(e.target.result).toString());
         resolve(res);
       };
-      fileReader.readAsBinaryString(_files[0]);
+      fileReader.readAsBinaryString(_file);
     });
 
   }

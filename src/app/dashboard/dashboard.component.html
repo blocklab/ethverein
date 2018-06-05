@@ -14,7 +14,7 @@
     <br>
     <form class="input-form">
       <mat-form-field class="input-full-width">
-        <div matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard [cbContent]="address"
+        <div matTooltip="Click to copy hash" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard [cbContent]="address"
           (cbOnSuccess)="isCopied = true" (click)="copyAddress()">
           <input matInput placeholder="ETH-Address" name="address" disabled [(ngModel)]="address">
         </div>

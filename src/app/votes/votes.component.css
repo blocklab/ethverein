@@ -7,6 +7,27 @@
     padding: 16px;
 }
 
+.input {
+    min-width: 150px;
+    max-width: 800px;
+    width: 100%;
+    margin: 0px 0px 1em 0px;
+}
+
+.input-full-width {
+    width: 100%;
+}
+
+.hash {
+    background-color: fbe3d3;
+    border-radius: 7px;
+    border: 2px solid #fbe3d3;
+    padding: 5px;
+    display: inline-block;
+    font-family: 'Courier New', Courier, monospace;
+    cursor: pointer;
+}
+
 mat-card {
     box-shadow: 0px 2px 4px 1px #ccc;
     border: 2px solid #fbe3d3;
@@ -51,7 +72,7 @@ button {
     border: 2px solid #fbe3d3;
     height: 37px;
     padding: 0px 10px 0px;
-    margin-top: 15px;
+    margin: 15px 15px 0px 0px;
     background-color: white;
     outline: none;
 }
