@@ -41,7 +41,10 @@ export class VotesComponent implements OnInit {
       firstCtrl: ['', Validators.required]
     });
     this.thirdFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
+      firstCtrl: ['', Validators.required],
+      secondCtrl: ['', Validators.required],
+      thirdCtrl: ['', Validators.required],
+      fourthCtrl: ['', Validators.required]
     });
   }
 
@@ -88,12 +91,22 @@ export class VotesComponent implements OnInit {
   }
 
   createDocumentVote() {
-    console.log(this.docHash);
+    this.docName = 'Drop a file here or click to select one.';
+    this.droppedFile = false;
+
   }
 
   createContractVote() {
+    this.contractName = 'Drop a contract (.sol) here or click to select one.';
     console.log(this.docHash);
+    this.droppedContract = false;
+
   }
 
+  createMemberVote() {
+    this.memberDocName = 'Drop a file here or click to select one.';
+    this.droppedMemberFile = false;
+
+  }
 }
 

@@ -1,10 +1,12 @@
 <mat-card>
     <mat-card-content>
         <h3>Initiate new Vote</h3>
-
+<input matInput placeholder="Favorite food" value="Sushi">
+       
         <mat-tab-group class="tab-group">
             <mat-tab label="Document Vote">
 
+                <!-- Tab 1 -->
                 <div class="tab-content">
                     <p>You can upload any file to start a Document Vote. The other members will verify the file-hash when they
                         vote.
@@ -16,10 +18,9 @@
                                 <ng-template matStepLabel>Upload Document</ng-template>
 
                                 <div droppable [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFiles($event)" [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ docName }}</div>
-                                <div>
 
-                                    <button matStepperNext>Next</button>
-                                </div>
+                                <button matStepperNext>Next</button>
+
                             </form>
                         </mat-step>
 
@@ -52,6 +53,7 @@
                 </div>
             </mat-tab>
 
+            <!-- Tab 2 -->
             <mat-tab label="Contract Update">
                 <div class="tab-content">
                     <p>Upload a contract-file (.sol) to start a Contract Update Vote. The other members will verify the contract-hash
@@ -64,10 +66,9 @@
                                 <ng-template matStepLabel>Upload Contract</ng-template>
 
                                 <div droppable [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleContracts($event)" [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ contractName }}</div>
-                                <div>
 
-                                    <button matStepperNext>Next</button>
-                                </div>
+                                <button matStepperNext>Next</button>
+
                             </form>
                         </mat-step>
 
@@ -100,52 +101,52 @@
                 </div>
             </mat-tab>
             <mat-tab label="Board Member Vote">
-                
-                    <div class="tab-content">
-                            <p>Upload any file and the three new board memebers addresses to start a Board Member Vote. The other members will verify the docuemnt-hash and the addresses
-                                when they vote.
-                            </p>
-                            <mat-horizontal-stepper [linear]="true" #stepper3>
-        
-                                <mat-step [stepControl]="thirdFormGroup" [editable]="true">
-                                    <form [formGroup]="thirdFormGroup">
-                                        <ng-template matStepLabel>Upload Document</ng-template>
-        
-                                        <div droppable [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleMemberFiles($event)" [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ memberDocName }}</div>
-                                        <div>
-        
-                                            <button matStepperNext>Next</button>
-                                        </div>
-                                    </form>
-                                </mat-step>
-        
-                                <mat-step [editable]="true">
-                                    <form>
-                                        <ng-template matStepLabel>Review Document Hash</ng-template>
-        
-                                        <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
-                                            [cbContent]="hash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ memberDocHash }}
-                                        </div>
-        
-                                        <div>
-                                            <button matStepperPrevious>Back</button>
-                                            <button matStepperNext>Next</button>
-                                        </div>
-                                    </form>
-                                </mat-step>
-                                <mat-step>
-        
-                                    <ng-template matStepLabel>Submit Vote</ng-template>
-                                    <p>By pressing the Submit-Button, your Document-Vote will be sent to the Blockchain.</p>
-                                    <div>
-                                        <button matStepperPrevious>Back</button>
-                                        <button (click)="createMemberVote()" (click)="stepper3.reset()">Submit</button>
-        
-                                    </div>
-                                </mat-step>
-                            </mat-horizontal-stepper>
-        
-                        </div>
+
+                <!-- Tab 3 -->
+                <div class="tab-content">
+                    <p>Upload any file and the three new board memebers addresses to start a Board Member Vote. The other members
+                        will verify the docuemnt-hash and the addresses when they vote.
+                    </p>
+                    <mat-horizontal-stepper [linear]="true" #stepper3>
+
+                        <mat-step [stepControl]="thirdFormGroup" [editable]="true">
+                            <form [formGroup]="thirdFormGroup">
+                                <ng-template matStepLabel>Upload Document</ng-template>
+                               
+                                <div droppable [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleMemberFiles($event)" [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ memberDocName }}</div>
+                                
+                                <button matStepperNext>Next</button>
+
+                            </form>
+                        </mat-step>
+
+                        <mat-step [editable]="true">
+                            <form>
+                                <ng-template matStepLabel>Review Document Hash</ng-template>
+
+                                <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
+                                    [cbContent]="hash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ memberDocHash }}
+                                </div>
+
+                                <div>
+                                    <button matStepperPrevious>Back</button>
+                                    <button matStepperNext>Next</button>
+                                </div>
+                            </form>
+                        </mat-step>
+                        <mat-step>
+
+                            <ng-template matStepLabel>Submit Vote</ng-template>
+                            <p>By pressing the Submit-Button, your Document-Vote will be sent to the Blockchain.</p>
+                            <div>
+                                <button matStepperPrevious>Back</button>
+                                <button (click)="createMemberVote()" (click)="stepper3.reset()">Submit</button>
+
+                            </div>
+                        </mat-step>
+                    </mat-horizontal-stepper>
+
+                </div>
 
             </mat-tab>
         </mat-tab-group>

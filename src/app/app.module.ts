@@ -30,7 +30,7 @@ import {
     NotFoundComponent,
     MetaMaskComponent,
     ConfirmApplicationDialogComponent,
-  ],
+  ], 
   imports: [
     BrowserModule,
     DroppableModule,

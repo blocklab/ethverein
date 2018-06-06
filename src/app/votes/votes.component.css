@@ -7,7 +7,7 @@
     padding: 16px;
 }
 
-.input {
+/* .input {
     min-width: 150px;
     max-width: 800px;
     width: 100%;
@@ -16,7 +16,7 @@
 
 .input-full-width {
     width: 100%;
-}
+} */
 
 .hash {
     background-color: fbe3d3;
