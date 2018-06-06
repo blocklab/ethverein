@@ -1,4 +1,3 @@
-import { async } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { Web3Service } from './web3.service';
 import { Injectable } from '@angular/core';

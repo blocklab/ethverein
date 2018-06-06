@@ -16,7 +16,7 @@
                             <form [formGroup]="firstFormGroup">
                                 <ng-template matStepLabel>Upload Document</ng-template>
 
-                                <div ngDefaultControl  droppable formControlName="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFiles($event)"
+                                <div ngDefaultControl  droppable name="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFiles($event)"
                                     [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ docName }}</div>
 
                                 <button matStepperNext>Next</button>
@@ -65,7 +65,7 @@
                             <form [formGroup]="secondFormGroup">
                                 <ng-template matStepLabel>Upload Contract</ng-template>
 
-                                <div ngDefaultControl droppable formControlName="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleContracts($event)"
+                                <div ngDefaultControl droppable name="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleContracts($event)"
                                     [ngClass]="droppedContract ? 'drop-card-success' : 'drop-card'">{{ contractName }}</div>
 
                                 <button matStepperNext>Next</button>
@@ -114,7 +114,7 @@
                             <form [formGroup]="thirdFormGroup">
                                 <ng-template matStepLabel>Upload Document</ng-template>
 
-                                <div ngDefaultControl droppable formControlName="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleMemberFiles($event)"
+                                <div ngDefaultControl droppable name="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleMemberFiles($event)"
                                     [ngClass]="droppedMemberFile ? 'drop-card-success' : 'drop-card'">{{ memberDocName }}</div>
                                 <br>
                                 <mat-form-field class="input-full-width">
