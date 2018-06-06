@@ -1,8 +1,7 @@
 <mat-card>
     <mat-card-content>
         <h3>Initiate new Vote</h3>
-<input matInput placeholder="Favorite food" value="Sushi">
-       
+
         <mat-tab-group class="tab-group">
             <mat-tab label="Document Vote">
 
@@ -17,7 +16,8 @@
                             <form [formGroup]="firstFormGroup">
                                 <ng-template matStepLabel>Upload Document</ng-template>
 
-                                <div droppable [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFiles($event)" [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ docName }}</div>
+                                <div ngDefaultControl  droppable formControlName="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFiles($event)"
+                                    [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ docName }}</div>
 
                                 <button matStepperNext>Next</button>
 
@@ -65,7 +65,8 @@
                             <form [formGroup]="secondFormGroup">
                                 <ng-template matStepLabel>Upload Contract</ng-template>
 
-                                <div droppable [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleContracts($event)" [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ contractName }}</div>
+                                <div ngDefaultControl droppable formControlName="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleContracts($event)"
+                                    [ngClass]="droppedContract ? 'drop-card-success' : 'drop-card'">{{ contractName }}</div>
 
                                 <button matStepperNext>Next</button>
 
@@ -77,7 +78,7 @@
                                 <ng-template matStepLabel>Review Document Hash</ng-template>
 
                                 <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
-                                    [cbContent]="hash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ contractHash }}
+                                    [cbContent]="contractHash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ contractHash }}
                                 </div>
 
                                 <div>
@@ -112,9 +113,22 @@
                         <mat-step [stepControl]="thirdFormGroup" [editable]="true">
                             <form [formGroup]="thirdFormGroup">
                                 <ng-template matStepLabel>Upload Document</ng-template>
-                               
-                                <div droppable [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleMemberFiles($event)" [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ memberDocName }}</div>
-                                
+
+                                <div ngDefaultControl droppable formControlName="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleMemberFiles($event)"
+                                    [ngClass]="droppedMemberFile ? 'drop-card-success' : 'drop-card'">{{ memberDocName }}</div>
+                                <br>
+                                <mat-form-field class="input-full-width">
+                                    <input formControlName="address1" matInput placeholder="Board Memeber 1 Address">
+                                </mat-form-field>
+                                <br>
+                                <mat-form-field class="input-full-width">
+                                    <input formControlName="address2" matInput placeholder="Board Memeber 2 Address">
+                                </mat-form-field>
+                                <br>
+                                <mat-form-field class="input-full-width">
+                                    <input formControlName="address3" matInput placeholder="Board Memeber 3 Address">
+                                </mat-form-field>
+                                <br>
                                 <button matStepperNext>Next</button>
 
                             </form>
@@ -125,7 +139,7 @@
                                 <ng-template matStepLabel>Review Document Hash</ng-template>
 
                                 <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
-                                    [cbContent]="hash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ memberDocHash }}
+                                    [cbContent]="memberDocHash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ memberDocHash }}
                                 </div>
 
                                 <div>

@@ -1,9 +1,9 @@
+import { ValidatorService } from './../services/validator.service';
 import { HashFileService } from './../services/hash-file.service';
 import { Component, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DroppableModule } from '@ctrl/ngx-droppable';
 import { MatSnackBar } from '@angular/material';
-
 
 @Component({
   selector: 'app-votes',
@@ -31,20 +31,21 @@ export class VotesComponent implements OnInit {
     private _hashFile: HashFileService,
     private _formBuilder: FormBuilder,
     public _snackBar: MatSnackBar,
+    public _validatorService: ValidatorService
   ) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
+      'firstCtrl': ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
+      'firstCtrl': ['', Validators.required]
     });
     this.thirdFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
-      secondCtrl: ['', Validators.required],
-      thirdCtrl: ['', Validators.required],
-      fourthCtrl: ['', Validators.required]
+      'firstCtrl': ['', Validators.required],
+      'address1': ['', [Validators.required, this._validatorService.addressValidator]] ,
+      'address2': ['', [Validators.required, this._validatorService.addressValidator]],
+      'address3': ['', [Validators.required, this._validatorService.addressValidator]]
     });
   }
 

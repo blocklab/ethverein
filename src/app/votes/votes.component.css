@@ -7,16 +7,24 @@
     padding: 16px;
 }
 
-/* .input {
-    min-width: 150px;
+inoput {
+    text-overflow: ellipsis;
+}
+
+.input-form {
     max-width: 800px;
     width: 100%;
     margin: 0px 0px 1em 0px;
 }
 
 .input-full-width {
-    width: 100%;
-} */
+    width: 40%;
+    min-width: 350px;
+}
+
+.mat-form-field-infix {
+    width: 400px !important;
+}
 
 .hash {
     background-color: fbe3d3;

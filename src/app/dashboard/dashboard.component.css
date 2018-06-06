@@ -29,10 +29,6 @@ div[class*="col"]:hover {
   border: 2px solid #ed7d31;
 }
 
-.inline {
-  display: inline-block;
-}
-
 .mat-form-field .mat-form-field-subscript-wrapper {
   overflow: visible !important;
 }

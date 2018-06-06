@@ -15,7 +15,7 @@ export class HashFileService {
     return new Promise<string>((resolve, reject) => {
 
       fileReader.onloadend = (e) => {
-        const res = (SHA256(e.target.result).toString());
+        const res = (SHA256(fileReader.result).toString());
         resolve(res);
       };
       fileReader.readAsBinaryString(_file);
