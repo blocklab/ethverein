@@ -31,6 +31,7 @@ export class Web3Service {
       this.web3 = new Web3(window.web3.currentProvider);
       return true;
     } else {
+      this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
       return false;
     }
     

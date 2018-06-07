@@ -78,9 +78,9 @@ export class MemberContractService {
 
   // get votingContractAddress
   async getVotingContractAddress(): Promise<string> {
-    const acc = await this._web3Service.getAccount();
+
     return new Promise((resolve, reject) => {
-      this.membersContract.votingContractAddress.call(acc, function (err, res) {
+      this.membersContract.votingContractAddress.call(function (err, res) {
         if (err != null) {
           reject(err);
         }

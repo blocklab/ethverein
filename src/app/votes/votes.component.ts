@@ -1,9 +1,11 @@
+import { Web3Service } from './../services/web3.service';
 import { ValidatorService } from './../services/validator.service';
 import { HashFileService } from './../services/hash-file.service';
 import { Component, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DroppableModule } from '@ctrl/ngx-droppable';
 import { MatSnackBar } from '@angular/material';
+import { VotingContractService } from './../services/voting-contract.service';
 
 @Component({
   selector: 'app-votes',
@@ -12,38 +14,54 @@ import { MatSnackBar } from '@angular/material';
 })
 
 export class VotesComponent implements OnInit {
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
+  formGroup1: FormGroup;
+  formGroup2: FormGroup;
+  formGroup3: FormGroup;
+  formGroup4: FormGroup;
+  formGroup5: FormGroup;
   docName = 'Drop a file here or click to select one.';
-  contractName = 'Drop a contract (.sol) here or click to select one.';
   memberDocName = 'Drop a file here or click to select one.';
   droppedFile = false;
   droppedMemberFile = false;
   droppedContract = false;
   docHash;
   memberDocHash;
-  contractHash;
+  contractName;
+  contractAddress: String = '';
   isCopied;
-
+  docVoteName;
+  address;
 
   constructor(
     private _hashFile: HashFileService,
     private _formBuilder: FormBuilder,
-    public _snackBar: MatSnackBar,
-    public _validatorService: ValidatorService
-  ) { }
+    private _snackBar: MatSnackBar,
+    private _web3Service: Web3Service,
+    private _validatorService: ValidatorService,
+    private _votingContractService: VotingContractService
+  ) {
+    _web3Service.getAccount().then(address => {
+      this.address = address;
+    });
+
+  }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
+    this.formGroup1 = this._formBuilder.group({
       'firstCtrl': ['', Validators.required]
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.formGroup2 = this._formBuilder.group({
+      'address': ['', [Validators.required, this._validatorService.addressValidator]],
+      'name': ['', Validators.required]
+    });
+    this.formGroup3 = this._formBuilder.group({
       'firstCtrl': ['', Validators.required]
     });
-    this.thirdFormGroup = this._formBuilder.group({
-      'firstCtrl': ['', Validators.required],
-      'address1': ['', [Validators.required, this._validatorService.addressValidator]] ,
+    this.formGroup4 = this._formBuilder.group({
+      'voteName': ['', Validators.required]
+    });
+    this.formGroup5 = this._formBuilder.group({
+      'address1': ['', [Validators.required, this._validatorService.addressValidator]],
       'address2': ['', [Validators.required, this._validatorService.addressValidator]],
       'address3': ['', [Validators.required, this._validatorService.addressValidator]]
     });
@@ -56,23 +74,7 @@ export class VotesComponent implements OnInit {
 
     this.docName = _files[0].name;
     this.droppedFile = true;
-    this.firstFormGroup.patchValue({ firstCtrl: this.docName });
-  }
-
-  handleContracts(_files: FileList) {
-    const len = _files[0].name.length;
-    const ending = _files[0].name.slice(len - 4, len);
-    if (ending === '.sol') {
-      this._hashFile.getHash(_files[0]).then(res => {
-        this.contractHash = res;
-      });
-
-      this.contractName = _files[0].name;
-      this.droppedContract = true;
-      this.secondFormGroup.patchValue({ firstCtrl: this.contractName });
-    } else {
-      this._snackBar.open('\'' + ending + '\' not allowed, choose a \'.sol\' file.', 'Alright...', { duration: 4000 });
-    }
+    this.formGroup1.patchValue({ firstCtrl: this.docName });
   }
 
   handleMemberFiles(_files: FileList) {
@@ -82,7 +84,7 @@ export class VotesComponent implements OnInit {
 
     this.memberDocName = _files[0].name;
     this.droppedMemberFile = true;
-    this.thirdFormGroup.patchValue({ firstCtrl: this.memberDocName });
+    this.formGroup3.patchValue({ firstCtrl: this.memberDocName });
   }
 
   copyHash() {
@@ -92,15 +94,20 @@ export class VotesComponent implements OnInit {
   }
 
   createDocumentVote() {
-    this.docName = 'Drop a file here or click to select one.';
-    this.droppedFile = false;
+    
+    this._votingContractService.initiateDocumentVote(this.docVoteName, this._web3Service.web3.fromAscii(this.docHash)).then(res => {
+      this.docName = 'Drop a file here or click to select one.';
+      this.droppedFile = false;
+      this._snackBar.open('Success!', 'Yeha!', { duration: 3000 });
+    });
 
   }
 
   createContractVote() {
-    this.contractName = 'Drop a contract (.sol) here or click to select one.';
-    console.log(this.docHash);
-    this.droppedContract = false;
+    this._votingContractService.initiateVotingContractUpdateVote(this.contractName, this.address).then(res => {
+      this.contractName = '';
+      this.droppedContract = false;
+    });
 
   }
 

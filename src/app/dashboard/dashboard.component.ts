@@ -1,3 +1,4 @@
+import { VotingContractService } from './../services/voting-contract.service';
 import { MemberContractService } from '../services/member-contract.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
@@ -10,8 +11,6 @@ import { Web3Service } from '../services/web3.service';
   styleUrls: ['./dashboard.component.css']
 })
 
-
-
 export class DashboardComponent implements OnInit {
   status;
   address;
@@ -21,11 +20,13 @@ export class DashboardComponent implements OnInit {
   resignBTNDisabled;
   aliasInputDisabled;
   isCopied;
+  openVotes = [];
 
   constructor(
     public _snackBar: MatSnackBar,
     private _web3Service: Web3Service,
-    private _memberContractService: MemberContractService
+    private _memberContractService: MemberContractService,
+    private _votingContractService: VotingContractService
   ) {
 
     _web3Service.getAccount().then(address => {
@@ -53,11 +54,32 @@ export class DashboardComponent implements OnInit {
           break;
       }
 
+      // get open votes
+      this._votingContractService.getNumberOfVotes().then(noV => {
+        for (let i = 0; i < noV; i++) {
+          this._votingContractService.getVoteDetails(i).then(vote => {
+            if (!vote[6].includes(this.address)) {
+              const voteObj = {
+                name: vote[0],
+                type: vote[1],
+                docHash: vote[2],
+                status: vote[3],
+                newBoardMembers: vote[4],
+                newVotingContractAddress: vote[5],
+                voters: vote[6]
+              };
+              this.openVotes.push(voteObj);
+            }
+          });
+        }
+      });
     });
 
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+
+  }
 
   copyAddress() {
     if (this.isCopied) {
