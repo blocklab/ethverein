@@ -27,6 +27,7 @@ div[class*="col"] {
   padding: 1em;
   border: 2px solid #fbe3d3;
   border-radius: 7px;
+  min-width: 330px;
 }
 
 div[class*="col"]:nth-child(-n+2) {
@@ -35,6 +36,7 @@ div[class*="col"]:nth-child(-n+2) {
 
 div[class*="col"]:nth-child(n+2) {
   overflow-y: auto;
+
 }
 
 div[class*="col"]:hover {

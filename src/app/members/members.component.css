@@ -24,3 +24,9 @@
   background-color: #fbe3d3;
   cursor: pointer;
 }
+
+th {
+  color: white;
+  font-size: 1em;
+  background-color: #ed7d31;
+}

@@ -1,3 +1,4 @@
+import { MemberContractService } from './../services/member-contract.service';
 import { VotingContractService } from './../services/voting-contract.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort } from '@angular/material';
@@ -11,9 +12,12 @@ import { MatTableDataSource, MatSort } from '@angular/material';
 export class VoteListComponent implements OnInit {
 
   constructor(
-    private _votingContractService: VotingContractService
+    private _votingContractService: VotingContractService,
+    private _memberContractService: MemberContractService
   ) {
-    this.getVotes();
+    this._memberContractService.getThisMember().then(() => {
+      this.getVotes();
+    });
   }
 
   displayedColumns = ['nr', 'name'];
@@ -50,7 +54,7 @@ export class VoteListComponent implements OnInit {
           return voteObj;
 
         }).then(voteObj => {
-          
+
           voteList[i] = ({ nr: voteObj.id, name: voteObj.name });
           this.dataSource.sort = this.sort;
         });

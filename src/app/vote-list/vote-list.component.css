@@ -6,3 +6,8 @@
     width: 20%;
   }
 
+  th {
+    color: white;
+    font-size: 1em;
+    background-color: #ed7d31;
+  }
