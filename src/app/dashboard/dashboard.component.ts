@@ -57,10 +57,9 @@ export class DashboardComponent implements OnInit {
           this.aliasInputDisabled = false;
           break;
       }
-      this.getOpenVotes();
       this.getPendingMembers();
+      this.getOpenVotes();
     });
-
 
   }
 

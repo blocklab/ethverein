@@ -57,6 +57,17 @@ export class VotingContractService {
     }) as Promise<number>;
   }
 
+  async computeVoteOutcome(_voteID): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.votingContract.computeVoteOutcome.call(_voteID, function (err, res) {
+        if (err != null) {
+          reject(err);
+        }
+        resolve(res);
+      });
+    }) as Promise<any>;
+  }
+
   /* Contract Transactions */
 
   async initiateDocumentVote(_name: string, _documentHash) {

@@ -4,10 +4,7 @@ body {
 }
 
 .content {
-    margin-top: 100px;
-    margin-left: 1em;
-    margin-right: 1em;
-    margin-bottom: 15px;
+margin: 100px 2em 2em 2em;
 }
 
 /* Navigation link styles */

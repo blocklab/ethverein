@@ -25,7 +25,6 @@ export class ConfirmApplicationDialogComponent implements OnInit {
   }
 
   confirm() {
-    console.log(this.address);
     this._memberContractService.confirmApplication(this.address).then(() => {
       this.dialogRef.close();
     });

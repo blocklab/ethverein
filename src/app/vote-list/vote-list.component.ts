@@ -20,7 +20,7 @@ export class VoteListComponent implements OnInit {
     });
   }
 
-  displayedColumns = ['nr', 'name', 'type'];
+  displayedColumns = ['nr', 'name', 'type', 'status', 'outcome'];
   dataSource = new MatTableDataSource(voteList);
 
   @ViewChild(MatSort) sort: MatSort;
@@ -40,13 +40,30 @@ export class VoteListComponent implements OnInit {
 
       for (let i = 0; i < noV; i++) {
         this._votingContractService.getVoteDetails(i).then(vote => {
+          let voteObj;
+          let voteType;
+          let voteStatus;
 
-          const voteObj = {
+          switch (parseInt(vote[1], 0)) {
+            case 1: voteType = 'Document Vote'; break;
+            case 2: voteType = 'Board Member Vote'; break;
+            case 3: voteType = 'Voting Contract Vote'; break;
+            default: break;
+          }
+
+          switch (parseInt(vote[3], 0)) {
+            case 0: voteStatus = 'None'; break;
+            case 1: voteStatus = 'Open'; break;
+            case 2: voteStatus = 'Closed'; break;
+            default: break;
+          }
+
+          voteObj = {
             id: i,
             name: vote[0],
-            type: vote[1],
+            type: voteType,
             docHash: vote[2],
-            status: vote[3],
+            status: voteStatus,
             newBoardMembers: vote[4],
             newVotingContractAddress: vote[5],
             voters: vote[6]
@@ -54,17 +71,17 @@ export class VoteListComponent implements OnInit {
           return voteObj;
 
         }).then(voteObj => {
-          let voteType;
-          switch (parseInt(voteObj.type, 0)) {
-            case 1: voteType = 'Document Vote'; break;
-            case 2: voteType = 'Board Member Vote'; break;
-            case 3: voteType = 'Voting Contract Vote'; break;
+          this._votingContractService.computeVoteOutcome(voteObj.id).then(_outcome => {
 
-
-            default: break;
-          }
-          voteList[i] = ({ nr: voteObj.id, name: voteObj.name, type: voteType });
-          this.dataSource.sort = this.sort;
+            switch (parseInt(_outcome.c[0], 0)) {
+              case 0: voteObj.outcome = 'Undecided'; break;
+              case 1: voteObj.outcome = 'Accepted'; break;
+              case 2: voteObj.outcome = 'Declined'; break;
+              default: break;
+            }
+            voteList[i] = ({ nr: voteObj.id, name: voteObj.name, type: voteObj.type, status: voteObj.status, outcome: voteObj.outcome });
+            this.dataSource.sort = this.sort;
+          });
         });
       }
     });
@@ -75,6 +92,8 @@ export interface PeriodicElement {
   nr: number;
   name: string;
   type: string;
+  outcome: number;
+  status: string;
 }
 
 const voteList: PeriodicElement[] = [];
