@@ -45,8 +45,8 @@
   <!-- Grid 1.2 -->
   <div class="col-sm">
     <h3>Open Votes</h3>
-    <ul class="votes" (click)="acceptMember(member)">
-      <li *ngFor="let member of pendingMembers">
+    <ul class="votes" >
+      <li *ngFor="let member of pendingMembers" (click)="acceptMember(member)">
         <mat-icon>person_add</mat-icon> Pending Member:
         <b>{{ member.name }}</b>
       </li>

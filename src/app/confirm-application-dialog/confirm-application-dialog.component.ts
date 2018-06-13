@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { MemberContractService } from './../services/member-contract.service';
 
 @Component({
@@ -10,10 +10,12 @@ import { MemberContractService } from './../services/member-contract.service';
 export class ConfirmApplicationDialogComponent implements OnInit {
   alias;
   address;
+  isCopied;
 
   constructor(
     private _memberContractService: MemberContractService,
     private dialogRef: MatDialogRef<ConfirmApplicationDialogComponent>,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) data) {
     this.alias = data.alias;
     this.address = data.address;
@@ -31,5 +33,11 @@ export class ConfirmApplicationDialogComponent implements OnInit {
 
   cancel() {
     this.dialogRef.close();
+  }
+
+  copyHash() {
+    if (this.isCopied) {
+      this.snackBar.open('Copied to Clipboard', 'Thanks!', { duration: 2000 });
+    }
   }
 }

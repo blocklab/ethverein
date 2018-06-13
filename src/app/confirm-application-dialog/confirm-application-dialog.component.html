@@ -2,8 +2,14 @@
 
 <mat-dialog-content>
   <div>
-   Confirm application for {{ alias }}?
+   <h5>Confirm application for {{ alias }}?</h5>
  </div>
+ <br>
+ Wallet Address:
+ <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
+ [cbContent]="address" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ address }}
+</div>
+ <br>
 </mat-dialog-content>
 
 <mat-dialog-actions>

@@ -1,3 +1,4 @@
+import { ConfirmApplicationDialogComponent } from './../confirm-application-dialog/confirm-application-dialog.component';
 import { CastVoteDialogComponent } from './../cast-vote-dialog/cast-vote-dialog.component';
 import { VotingContractService } from './../services/voting-contract.service';
 import { MemberContractService } from '../services/member-contract.service';
@@ -60,7 +61,7 @@ export class DashboardComponent implements OnInit {
       this.getPendingMembers();
     });
 
-    
+
   }
 
   ngOnInit() {
@@ -105,6 +106,16 @@ export class DashboardComponent implements OnInit {
       vote: _vote
     };
     this.dialog.open(CastVoteDialogComponent, dialogConfig);
+  }
+
+  acceptMember(_member) {
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      alias: _member.name,
+      address: _member.address
+    };
+    this.dialog.open(ConfirmApplicationDialogComponent, dialogConfig);
   }
 
   getPendingMembers() {
