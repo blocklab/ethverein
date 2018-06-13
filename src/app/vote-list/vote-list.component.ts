@@ -20,7 +20,7 @@ export class VoteListComponent implements OnInit {
     });
   }
 
-  displayedColumns = ['nr', 'name'];
+  displayedColumns = ['nr', 'name', 'type'];
   dataSource = new MatTableDataSource(voteList);
 
   @ViewChild(MatSort) sort: MatSort;
@@ -54,8 +54,16 @@ export class VoteListComponent implements OnInit {
           return voteObj;
 
         }).then(voteObj => {
+          let voteType;
+          switch (parseInt(voteObj.type, 0)) {
+            case 1: voteType = 'Document Vote'; break;
+            case 2: voteType = 'Board Member Vote'; break;
+            case 3: voteType = 'Voting Contract Vote'; break;
 
-          voteList[i] = ({ nr: voteObj.id, name: voteObj.name });
+
+            default: break;
+          }
+          voteList[i] = ({ nr: voteObj.id, name: voteObj.name, type: voteType });
           this.dataSource.sort = this.sort;
         });
       }
@@ -66,6 +74,7 @@ export class VoteListComponent implements OnInit {
 export interface PeriodicElement {
   nr: number;
   name: string;
+  type: string;
 }
 
 const voteList: PeriodicElement[] = [];
