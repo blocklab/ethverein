@@ -17,12 +17,24 @@ input {
   width: 100%;
 }
 
+.row {
+  margin: 0;
+}
+
 div[class*="col"] {
   box-shadow: 0px 2px 4px 1px #ccc;
   margin: 10px;
   padding: 1em;
   border: 2px solid #fbe3d3;
   border-radius: 7px;
+}
+
+div[class*="col"]:nth-child(-n+2) {
+  max-height: 600px;
+}
+
+div[class*="col"]:nth-child(n+2) {
+  overflow-y: auto;
 }
 
 div[class*="col"]:hover {
@@ -113,4 +125,24 @@ button:hover {
   display: inline-block;
   letter-spacing: 1px;
   font-size: .875rem
+}
+
+.votes {
+  list-style-type: none;
+  margin: 0.5em;
+  padding: 0;
+}
+
+li {
+  padding: 5px 10px;
+  background-color: #fbe3d3;
+  border-radius: 7px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+ul {
+  list-style-position: inside;
+  text-overflow: ellipsis;
 }

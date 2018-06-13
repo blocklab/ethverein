@@ -5,13 +5,15 @@ import { VotesComponent } from './votes/votes.component';
 import { MembersComponent } from './members/members.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { VoteListComponent } from './vote-list/vote-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/myVerein', pathMatch: 'full' },
   { path: 'members', component: MembersComponent },
-  { path: 'votes', component: VotesComponent },
+  { path: 'newVote', component: VotesComponent },
   { path: 'myVerein', component: DashboardComponent },
   { path: 'MetaMask', component: MetaMaskComponent },
+  { path: 'votes', component: VoteListComponent },  
   { path: '**', component: NotFoundComponent }
 ];
 

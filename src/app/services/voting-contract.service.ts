@@ -57,10 +57,9 @@ export class VotingContractService {
   /* Contract Transactions */
 
   async initiateDocumentVote(_name: string, _documentHash) {
-    console.log(_documentHash);
+    const bytes32Hash = '0x'.concat(_documentHash);
     return new Promise((resolve, reject) => {
-
-      this.votingContract.initiateDocumentVote.sendTransaction(_name, _documentHash, function (err, res) {
+      this.votingContract.initiateDocumentVote.sendTransaction(_name, bytes32Hash, function (err, res) {
         if (err != null) {
           reject(err);
         }
@@ -81,7 +80,7 @@ export class VotingContractService {
   }
 
   async initiateBoardMemberVote(_name: string, _documentHash: string, _addresses: string[]): Promise<number> {
-    const bytes32Hash = this.web3.fromAscii(_documentHash, 32);
+    const bytes32Hash = '0x'.concat(_documentHash);
     return new Promise((resolve, reject) => {
       this.votingContract.initiateBoardMemberVote.sendTransaction(_name, bytes32Hash, _addresses, function (err, res) {
         if (err != null) {
@@ -90,5 +89,13 @@ export class VotingContractService {
         resolve(res);
       });
     }) as Promise<number>;
+  }
+
+  async castVote(_voteID: number, _decision: boolean) {
+    this.votingContract.castVote.sendTransaction(_voteID, _decision, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
   }
 }

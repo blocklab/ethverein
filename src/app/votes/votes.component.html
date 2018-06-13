@@ -28,7 +28,7 @@
                             <form [formGroup]="formGroup4">
                                 <ng-template matStepLabel>Name the Vote</ng-template>
                                 <mat-form-field class="input-full-width">
-                                    <input formControlName="voteName" [(ngModel)]="docVoteName" matInput placeholder="Vote Name">
+                                    <input formControlName="voteName" matInput placeholder="Vote Name">
                                 </mat-form-field>
                                 <div>
                                     <button matStepperPrevious>Back</button>
@@ -39,7 +39,8 @@
 
                         <mat-step>
                             <ng-template matStepLabel>Submit Vote</ng-template>
-                            Name: {{ docVoteName }}
+                            Name:
+                            <b>{{ formGroup4.get('voteName').value }} </b>
                             <br>
                             <br> Generated Hash
                             <br>
@@ -70,10 +71,10 @@
                             <form [formGroup]="formGroup2">
                                 <ng-template matStepLabel>Insert Contract Adrress</ng-template>
                                 <mat-form-field class="input-full-width">
-                                    <input formControlName="name" matInput [(ngModel)]="contractName" placeholder="Vote Name">
+                                    <input formControlName="name" matInput placeholder="Vote Name">
                                 </mat-form-field>
                                 <mat-form-field class="input-full-width">
-                                    <input formControlName="address"  [(ngModel)]="contractAddress" matInput placeholder="New Voting Contract Address">
+                                    <input formControlName="address" matInput placeholder="New Voting Contract Address">
                                 </mat-form-field>
                                 <br>
                                 <button matStepperNext>Next</button>
@@ -85,7 +86,14 @@
                         <mat-step>
 
                             <ng-template matStepLabel>Submit Vote</ng-template>
-                            <p>By pressing the Submit-Button, your Contract-Vote will be sent to the Blockchain.</p>
+                            Name:
+                            <b>{{ formGroup2.get('name').value }}</b>
+                            <br> Contract Address:
+                            <b>{{ formGroup2.get('address').value }}</b>
+                            <br>
+                            <br>
+                            <p>By pressing the Submit-Button, your Contract-Update-Vote will be sent to the Blockchain.</p>
+
                             <div>
                                 <button matStepperPrevious>Back</button>
                                 <button (click)="createContractVote()" (click)="stepper2.reset()">Submit</button>
@@ -120,9 +128,12 @@
 
                         <mat-step [stepControl]="formGroup5" [editable]="true">
                             <form [formGroup]="formGroup5">
-                                <ng-template matStepLabel>Review Document Hash</ng-template>
+                                <ng-template matStepLabel>Insert Board Member Adresses</ng-template>
 
-
+                                <mat-form-field class="input-full-width">
+                                        <input formControlName="memberVoteName" matInput placeholder="Vote Name">
+                                    </mat-form-field>
+                                    <br>
                                 <mat-form-field class="input-full-width">
                                     <input formControlName="address1" matInput placeholder="Board Memeber 1 Address">
                                 </mat-form-field>
@@ -144,9 +155,9 @@
                         </mat-step>
                         <mat-step>
                             <ng-template matStepLabel>Submit Vote</ng-template>
-                            Address1: {{ formGroup5.get('address1').value }}
-                            <br> Address2: {{ formGroup5.get('address2').value }}
-                            <br> Address3: {{ formGroup5.get('address3').value }}
+                            Address1:  <b>{{ formGroup5.get('address1').value }}</b>
+                            <br> Address2:  <b>{{ formGroup5.get('address2').value }}</b>
+                            <br> Address3:  <b>{{ formGroup5.get('address3').value }}</b>
                             <br>
                             <br> Generated Hash
                             <br>

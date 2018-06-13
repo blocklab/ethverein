@@ -1,7 +1,8 @@
+import { CastVoteDialogComponent } from './../cast-vote-dialog/cast-vote-dialog.component';
 import { VotingContractService } from './../services/voting-contract.service';
 import { MemberContractService } from '../services/member-contract.service';
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { Web3Service } from '../services/web3.service';
 
 
@@ -26,7 +27,8 @@ export class DashboardComponent implements OnInit {
     public _snackBar: MatSnackBar,
     private _web3Service: Web3Service,
     private _memberContractService: MemberContractService,
-    private _votingContractService: VotingContractService
+    private _votingContractService: VotingContractService,
+    private dialog: MatDialog,
   ) {
 
     _web3Service.getAccount().then(address => {
@@ -53,26 +55,7 @@ export class DashboardComponent implements OnInit {
           this.aliasInputDisabled = false;
           break;
       }
-
-      // get open votes
-      this._votingContractService.getNumberOfVotes().then(noV => {
-        for (let i = 0; i < noV; i++) {
-          this._votingContractService.getVoteDetails(i).then(vote => {
-            if (!vote[6].includes(this.address)) {
-              const voteObj = {
-                name: vote[0],
-                type: vote[1],
-                docHash: vote[2],
-                status: vote[3],
-                newBoardMembers: vote[4],
-                newVotingContractAddress: vote[5],
-                voters: vote[6]
-              };
-              this.openVotes.push(voteObj);
-            }
-          });
-        }
-      });
+      this.getOpenVotes();
     });
 
   }
@@ -113,5 +96,39 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  submitVote(_vote) {
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      vote: _vote
+    };
+    this.dialog.open(CastVoteDialogComponent, dialogConfig);
+  }
+
+  getOpenVotes() {
+    // get open votes
+    this._votingContractService.getNumberOfVotes().then(noV => {
+      for (let i = 0; i < noV; i++) {
+        this._votingContractService.getVoteDetails(i).then(vote => {
+          if (!vote[6].includes(this.address)) {
+            const voteObj = {
+              id: i,
+              name: vote[0],
+              type: vote[1],
+              docHash: vote[2],
+              status: vote[3],
+              newBoardMembers: vote[4],
+              newVotingContractAddress: vote[5],
+              voters: vote[6]
+            };
+            this.openVotes.push(voteObj);
+          }
+        });
+      }
+    });
+  }
+
 }
+
+
 

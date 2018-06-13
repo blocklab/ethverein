@@ -26,10 +26,7 @@ export class VotesComponent implements OnInit {
   droppedContract = false;
   docHash;
   memberDocHash;
-  contractName;
-  contractAddress: String = '';
   isCopied;
-  docVoteName;
   address;
 
   constructor(
@@ -61,6 +58,7 @@ export class VotesComponent implements OnInit {
       'voteName': ['', Validators.required]
     });
     this.formGroup5 = this._formBuilder.group({
+      'memberVoteName': ['', Validators.required],
       'address1': ['', [Validators.required, this._validatorService.addressValidator]],
       'address2': ['', [Validators.required, this._validatorService.addressValidator]],
       'address3': ['', [Validators.required, this._validatorService.addressValidator]]
@@ -94,8 +92,7 @@ export class VotesComponent implements OnInit {
   }
 
   createDocumentVote() {
-    
-    this._votingContractService.initiateDocumentVote(this.docVoteName, this._web3Service.web3.fromAscii(this.docHash)).then(res => {
+    this._votingContractService.initiateDocumentVote(this.formGroup4.value.voteName, this.docHash).then(res => {
       this.docName = 'Drop a file here or click to select one.';
       this.droppedFile = false;
       this._snackBar.open('Success!', 'Yeha!', { duration: 3000 });
@@ -104,16 +101,23 @@ export class VotesComponent implements OnInit {
   }
 
   createContractVote() {
-    this._votingContractService.initiateVotingContractUpdateVote(this.contractName, this.address).then(res => {
-      this.contractName = '';
+    this._votingContractService.initiateVotingContractUpdateVote(this.formGroup2.value.name, this.formGroup2.value.address).then(res => {
+      // this.formGroup2.reset(true);
       this.droppedContract = false;
+      this._snackBar.open('Success!', 'Cool!', { duration: 3000 });
     });
 
   }
 
   createMemberVote() {
-    this.memberDocName = 'Drop a file here or click to select one.';
-    this.droppedMemberFile = false;
+    const addresses: string[] = [this.formGroup5.value.address1, this.formGroup5.value.address1, this.formGroup5.value.address1];
+    this._votingContractService.initiateBoardMemberVote(this.formGroup5.value.memberVoteName, this.memberDocHash, addresses)
+      .then(res => {
+        this.memberDocName = 'Drop a file here or click to select one.';
+        this.droppedMemberFile = false;
+        this._snackBar.open('Success!', 'Sweet!', { duration: 3000 });
+      });
+
 
   }
 }

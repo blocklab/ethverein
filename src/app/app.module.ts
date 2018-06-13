@@ -20,6 +20,8 @@ import {
   MatSortModule, MatInputModule, MatSnackBarModule, MatTooltipModule, MatTableModule,
   MatDialogModule, MatTabsModule, MatStepperModule,
 } from '@angular/material';
+import { CastVoteDialogComponent } from './cast-vote-dialog/cast-vote-dialog.component';
+import { VoteListComponent } from './vote-list/vote-list.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import {
     NotFoundComponent,
     MetaMaskComponent,
     ConfirmApplicationDialogComponent,
+    CastVoteDialogComponent,
+    VoteListComponent,
   ], 
   imports: [
     BrowserModule,
@@ -60,7 +64,10 @@ import {
     Web3Service,
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmApplicationDialogComponent]
+  entryComponents: [
+    ConfirmApplicationDialogComponent,
+    CastVoteDialogComponent
+  ]
 })
 export class AppModule {
 

@@ -25,7 +25,7 @@ export class Web3Service {
   }
 
   public checkWeb3() {
-   
+
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof window.web3.currentProvider !== 'undefined') {
       this.web3 = new Web3(window.web3.currentProvider);
@@ -34,7 +34,7 @@ export class Web3Service {
       this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
       return false;
     }
-    
+
   }
 
   // get current account address from MetaMask
@@ -60,6 +60,4 @@ export class Web3Service {
     }
     return Promise.resolve(this.account);
   }
-
-
 }
