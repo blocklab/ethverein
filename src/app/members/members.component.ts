@@ -54,12 +54,13 @@ export class MembersComponent implements OnInit {
     });
   }
 
-  openDialog(_row) {
-    if (_row.status === 'pending') {
+  openDialog(_member) {
+ 
+    if (_member.status === 'pending') {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {
-        alias: _row.alias,
-        address: membersList[_row.nr - 1].address
+        alias: _member.alias,
+        address: _member.address 
       };
       this.dialog.open(ConfirmApplicationDialogComponent, dialogConfig);
     }

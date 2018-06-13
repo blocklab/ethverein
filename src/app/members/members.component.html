@@ -23,6 +23,5 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDialog(row)">
-  </tr>
+  <tr [ngClass]="member.status == 'pending' ? 'pending' : 'regular'" mat-row *matRowDef="let member; columns: displayedColumns;" (click)="openDialog(member)"></tr>
 </table>

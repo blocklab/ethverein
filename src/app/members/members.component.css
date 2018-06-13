@@ -16,6 +16,11 @@
   width: 30%;
 }
 
-.mat-cell {
+.regular {
+  cursor: default;
+}
+
+.pending {
+  background-color: #fbe3d3;
   cursor: pointer;
 }
