@@ -6,11 +6,7 @@
 <br>
 
 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-  <ng-container matColumnDef="nr">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-    <td mat-cell *matCellDef="let element"> {{element.nr}} </td>
-  </ng-container>
-
+  
   <ng-container matColumnDef="alias">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Alias </th>
     <td mat-cell *matCellDef="let element"> {{element.alias}} </td>

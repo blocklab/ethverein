@@ -18,7 +18,7 @@ import {
   MatFormFieldModule, MatGridListModule, MatCardModule, MatToolbarModule,
   MatMenuModule, MatIconModule, MatButtonToggleModule, MatButtonModule,
   MatSortModule, MatInputModule, MatSnackBarModule, MatTooltipModule, MatTableModule,
-  MatDialogModule, MatTabsModule, MatStepperModule,
+  MatDialogModule, MatTabsModule, MatStepperModule
 } from '@angular/material';
 import { CastVoteDialogComponent } from './cast-vote-dialog/cast-vote-dialog.component';
 import { VoteListComponent } from './vote-list/vote-list.component';

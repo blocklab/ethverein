@@ -23,11 +23,14 @@ export class VotingContractService {
     private _memberContractService: MemberContractService
   ) {
     this.web3 = this._web3Service.getWeb3();
+    this.getContractAddress();
+  }
+
+  async getContractAddress() {
     this._memberContractService.getVotingContractAddress().then(add => {
       this.votingContractAdrress = add;
       this.votingContract = this.web3.eth.contract(VotingAbi.abi).at(this.votingContractAdrress);
     });
-
   }
   /* Contract Functions */
   /* Contract Calls */

@@ -140,9 +140,15 @@ li {
   text-overflow: ellipsis;
   overflow: hidden;
   cursor: pointer;
+  vertical-align: bottom;
 }
 
 ul {
   list-style-position: inside;
   text-overflow: ellipsis;
+}
+
+.mat-icon {
+  vertical-align: middle !important;
+  font-style: outline;
 }

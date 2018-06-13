@@ -39,7 +39,7 @@ export class MemberContractService {
     }) as Promise<string>;
   }
 
-  // get members mapping for spezific member
+  // get members mapping for specific member
   async getMember(_account: string): Promise<string> {
     return new Promise((resolve, reject) => {
       this.membersContract.members.call(_account, function (err, res) {

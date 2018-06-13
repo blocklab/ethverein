@@ -1,17 +1,4 @@
-table {
-  font-family: 'Open Sans', sans-serif;
-  width: 80%;
-}
 
-th {
-  color: white;
-  font-size: 1em;
-  background-color: #ed7d31;
-}
-
-th.mat-sort-header-sorted {
-  color: black;
-}
 
 .mat-form-field {
   width: 80%;

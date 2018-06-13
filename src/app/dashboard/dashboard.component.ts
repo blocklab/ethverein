@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   aliasInputDisabled;
   isCopied;
   openVotes = [];
+  pendingMembers = [];
 
   constructor(
     public _snackBar: MatSnackBar,
@@ -56,12 +57,13 @@ export class DashboardComponent implements OnInit {
           break;
       }
       this.getOpenVotes();
+      this.getPendingMembers();
     });
 
+    
   }
 
   ngOnInit() {
-
   }
 
   copyAddress() {
@@ -103,6 +105,28 @@ export class DashboardComponent implements OnInit {
       vote: _vote
     };
     this.dialog.open(CastVoteDialogComponent, dialogConfig);
+  }
+
+  getPendingMembers() {
+    this._memberContractService.getNumberOfMembers().then(noM => {
+      for (let i = 0; i < noM; i++) {
+        this._memberContractService.getMembers(i)
+          .then(address => {
+            return address;
+          })
+          .then(address => {
+            this._memberContractService.getMember(address).then(member => {
+              if (parseInt(member[1], 0) === 1) {
+                const memberObj = {
+                  name: member[0],
+                  address: address
+                };
+                this.pendingMembers.push(memberObj);
+              }
+            });
+          });
+      }
+    });
   }
 
   getOpenVotes() {
