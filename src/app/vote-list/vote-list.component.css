@@ -1,13 +1,33 @@
 .mat-form-field {
-    width: 80%;
-  }
-  
-  .mat-column-no {
-    width: 20%;
-  }
+  width: 80%;
+}
 
-  th {
-    color: white;
-    font-size: 1em;
-    background-color: #ed7d31;
-  }
+.mat-column-no {
+  width: 5%;
+}
+
+.mat-column-name {
+  width: 30%;
+}
+
+th {
+  color: white;
+  font-size: 1em;
+  background-color: #ed7d31;
+}
+
+mat-icon {
+  vertical-align: middle;
+}
+
+.icon-red {
+  color: red;
+}
+
+.icon-green {
+  color: rgb(4, 170, 4);
+}
+
+.icon-yellow {
+  color: rgb(250, 182, 56);
+}

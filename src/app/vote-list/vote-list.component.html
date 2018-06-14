@@ -13,12 +13,18 @@
 
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    <td mat-cell *matCellDef="let element">
+      <b>{{element.name}}</b>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="type">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
-    <td mat-cell *matCellDef="let element">{{element.type}} </td>
+    <td mat-cell *matCellDef="let element">
+      <mat-icon *ngIf="element.type == 'Document Vote'">description</mat-icon>
+      <mat-icon *ngIf="element.type == 'Voting Contract Vote'">swap_horiz</mat-icon>
+      <mat-icon *ngIf="element.type == 'Board Member Vote'">people</mat-icon>
+       {{element.type}} </td>
   </ng-container>
 
   <ng-container matColumnDef="status">
@@ -28,7 +34,11 @@
 
   <ng-container matColumnDef="outcome">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Outcome </th>
-    <td mat-cell *matCellDef="let element">{{element.outcome}} </td>
+    <td mat-cell *matCellDef="let element">
+      <mat-icon *ngIf="element.outcome == 'Undecided'" class="icon-yellow">help_outline</mat-icon>
+      <mat-icon *ngIf="element.outcome == 'Accepted'" class="icon-green">check_circle_outline</mat-icon>
+      <mat-icon *ngIf="element.outcome == 'Declined'" class="icon-red">block</mat-icon>
+       {{element.outcome}}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

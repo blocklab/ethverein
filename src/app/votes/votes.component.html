@@ -1,8 +1,10 @@
 <h3>Initiate new Vote</h3>
 
 <mat-tab-group class="tab-group">
-    <mat-tab label="Document Vote">
-
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon>description</mat-icon>Document Vote
+        </ng-template>
         <!-- Tab 1 -->
         <div class="tab-content">
             <p>You can upload any file to start a Document Vote. The other members will verify the file-hash when they vote.
@@ -58,7 +60,11 @@
     </mat-tab>
 
     <!-- Tab 2 -->
-    <mat-tab label="Contract Update">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon>swap_horiz</mat-icon> 
+            Contract Update
+        </ng-template>
         <div class="tab-content">
             <p>Provide the Address of the new Voting Contratc's address.
             </p>
@@ -70,6 +76,7 @@
                         <mat-form-field class="input-full-width">
                             <input formControlName="name" matInput placeholder="Vote Name">
                         </mat-form-field>
+                        <br>
                         <mat-form-field class="input-full-width">
                             <input formControlName="address" matInput placeholder="New Voting Contract Address">
                         </mat-form-field>
@@ -101,10 +108,13 @@
 
         </div>
     </mat-tab>
-    <mat-tab label="Board Member Vote">
-
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon>people</mat-icon>Board Member Vote
+        </ng-template>
         <!-- Tab 3 -->
         <div class="tab-content">
+
             <p>Upload any file and the three new board memebers addresses to start a Board Member Vote. The other members will
                 verify the docuemnt-hash and the addresses when they vote.
             </p>
