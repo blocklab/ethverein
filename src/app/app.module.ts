@@ -23,7 +23,7 @@ import {
 import { CastVoteDialogComponent } from './dialogs/cast-vote-dialog/cast-vote-dialog.component';
 import { VoteListComponent } from './vote-list/vote-list.component';
 import { ConfirmCloseVoteDialogComponent } from './dialogs/confirm-close-vote-dialog/confirm-close-vote-dialog.component';
-import { ConfirmResignDialogComponent } from './Dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
+import { ConfirmResignDialogComponent } from './dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
 import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 
 @NgModule({

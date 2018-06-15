@@ -1,4 +1,4 @@
-import { ConfirmResignDialogComponent } from './../Dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
+import { ConfirmResignDialogComponent } from './../dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
 import { ConfirmApplicationDialogComponent } from './../dialogs/confirm-application-dialog/confirm-application-dialog.component';
 import { CastVoteDialogComponent } from './../dialogs/cast-vote-dialog/cast-vote-dialog.component';
 import { VotingContractService } from './../services/voting-contract.service';
