@@ -24,6 +24,7 @@ import { CastVoteDialogComponent } from './dialogs/cast-vote-dialog/cast-vote-di
 import { VoteListComponent } from './vote-list/vote-list.component';
 import { ConfirmCloseVoteDialogComponent } from './dialogs/confirm-close-vote-dialog/confirm-close-vote-dialog.component';
 import { ConfirmResignDialogComponent } from './Dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
+import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ConfirmResignDialogComponent } from './Dialogs/confirm-resign-dialog/co
     VoteListComponent,
     ConfirmCloseVoteDialogComponent,
     ConfirmResignDialogComponent,
+    NewsfeedComponent,
   ],
   imports: [
     BrowserModule,

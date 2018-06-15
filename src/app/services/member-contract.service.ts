@@ -23,6 +23,13 @@ export class MemberContractService {
     this.membersContract = this.web3.eth.contract(MembersAbi.abi).at(this.membersContractAdrress);
   }
 
+  getAddress() {
+    return this.membersContractAdrress;
+  }
+
+  getContract() {
+    return this.membersContract;
+  }
   /* Contract Functions */
   /* Contract Calls */
 
