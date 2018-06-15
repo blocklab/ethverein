@@ -45,22 +45,22 @@
   <!-- Grid 1.2 -->
   <div class="col-sm">
     <h3>Open Votes</h3>
-    <ul class="votes" >
-      <li *ngFor="let member of pendingMembers" (click)="acceptMember(member)">
+    <ul class="votes" *ngFor="let member of pendingMembers">
+      <li class="voteItem" (click)="acceptMember(member)">
         <mat-icon>person_add</mat-icon> Pending Member:
         <b>{{ member.name }}</b>
       </li>
     </ul>
     <ul class="votes" (click)="submitVote(vote)" [ngSwitch]="vote.type" *ngFor="let vote of openVotes">
-      <li *ngSwitchCase="1">
+      <li class="voteItem" *ngSwitchCase="1">
         <mat-icon>description</mat-icon> Document Vote:
         <b>{{ vote.name }}</b> #{{ vote.id }}
       </li>
-      <li *ngSwitchCase="2">
+      <li class="voteItem" *ngSwitchCase="2">
         <mat-icon>people</mat-icon> Board Member Vote:
         <b>{{ vote.name }}</b> #{{ vote.id }}
       </li>
-      <li *ngSwitchCase="3">
+      <li class="voteItem" *ngSwitchCase="3">
         <mat-icon>swap_horiz</mat-icon> Voting Contract Vote:
         <b>{{ vote.name }}</b> #{{ vote.id }}
       </li>

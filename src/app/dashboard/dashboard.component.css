@@ -27,7 +27,7 @@ div[class*="col"] {
   padding: 1em;
   border: 2px solid #fbe3d3;
   border-radius: 7px;
-  min-width: 330px;
+  min-width: 300px;
 }
 
 div[class*="col"]:nth-child(-n+2) {
@@ -36,7 +36,6 @@ div[class*="col"]:nth-child(-n+2) {
 
 div[class*="col"]:nth-child(n+2) {
   overflow-y: auto;
-
 }
 
 div[class*="col"]:hover {
@@ -135,8 +134,8 @@ button:hover {
   padding: 0;
 }
 
-li {
-  padding: 5px 10px;
+.voteItem {
+  padding: 10px;
   background-color: #fbe3d3;
   border-radius: 7px;
   text-overflow: ellipsis;

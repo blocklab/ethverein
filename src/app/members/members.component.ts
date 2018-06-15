@@ -40,13 +40,13 @@ export class MembersComponent implements OnInit {
           this._memberContractService.getMember(memberAddress).then(member => {
             let _status;
             switch (parseInt(member[1], 0)) {
-              case 1: _status = 'pending'; break;
-              case 2: _status = 'regular'; break;
-              case 3: _status = 'board'; break;
-              default: _status = 'none'; break;
+              case 1: _status = 'Pending'; break;
+              case 2: _status = 'Member'; break;
+              case 3: _status = 'Board Member'; break;
+              default: _status = 'None'; break;
             }
             const _entry = parseInt(member[2], 0);
-            membersList[i] = ({alias: member[0], status: _status, block: _entry, address: memberAddress });
+            membersList[i] = ({ alias: member[0], status: _status, block: _entry, address: memberAddress });
             this.dataSource.sort = this.sort;
           });
         });
@@ -55,12 +55,12 @@ export class MembersComponent implements OnInit {
   }
 
   openDialog(_member) {
- 
-    if (_member.status === 'pending') {
+
+    if (_member.status === 'Pending') {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {
         alias: _member.alias,
-        address: _member.address 
+        address: _member.address
       };
       this.dialog.open(ConfirmApplicationDialogComponent, dialogConfig);
     }

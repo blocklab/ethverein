@@ -1,5 +1,3 @@
-
-
 .mat-form-field {
   width: 80%;
 }
@@ -21,7 +19,6 @@
 }
 
 .pending {
-  background-color: #fbe3d3;
   cursor: pointer;
 }
 
