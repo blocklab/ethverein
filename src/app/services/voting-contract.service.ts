@@ -112,4 +112,13 @@ export class VotingContractService {
       }
     });
   }
+
+  async closeVote(_voteID: number) {
+    this.votingContract.closeVote.sendTransaction(_voteID, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
+
 }

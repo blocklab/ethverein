@@ -1,5 +1,6 @@
-import { ConfirmApplicationDialogComponent } from './../confirm-application-dialog/confirm-application-dialog.component';
-import { CastVoteDialogComponent } from './../cast-vote-dialog/cast-vote-dialog.component';
+import { ConfirmResignDialogComponent } from './../Dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
+import { ConfirmApplicationDialogComponent } from './../dialogs/confirm-application-dialog/confirm-application-dialog.component';
+import { CastVoteDialogComponent } from './../dialogs/cast-vote-dialog/cast-vote-dialog.component';
 import { VotingContractService } from './../services/voting-contract.service';
 import { MemberContractService } from '../services/member-contract.service';
 import { Component, OnInit } from '@angular/core';
@@ -44,12 +45,14 @@ export class DashboardComponent implements OnInit {
           this.status = 'pending';
           break;
         case 2:
-          this.status = 'regular';
+          this.status = 'member';
           this.aliasInputDisabled = false;
+          this.resignBTNDisabled = false;          
           break;
         case 3:
           this.status = 'board';
           this.aliasInputDisabled = false;
+          this.resignBTNDisabled = false;          
           break;
         default:
           this.status = 'none';
@@ -95,7 +98,7 @@ export class DashboardComponent implements OnInit {
   }
 
   resign() {
-
+    this.dialog.open(ConfirmResignDialogComponent);
   }
 
   submitVote(_vote) {

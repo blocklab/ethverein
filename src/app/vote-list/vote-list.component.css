@@ -31,3 +31,7 @@ mat-icon {
 .icon-yellow {
   color: rgb(250, 182, 56);
 }
+
+.open {
+  cursor: pointer;
+}

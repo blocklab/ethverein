@@ -1,4 +1,4 @@
-import { ConfirmApplicationDialogComponent } from './../confirm-application-dialog/confirm-application-dialog.component';
+import { ConfirmApplicationDialogComponent } from './../dialogs/confirm-application-dialog/confirm-application-dialog.component';
 import { MemberContractService } from './../services/member-contract.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog, MatDialogConfig } from '@angular/material';

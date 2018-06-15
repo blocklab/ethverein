@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Close Vote</h2>
+
+<mat-dialog-content>
+  <div>
+    <h5>Do you want to close vote #{{ voteID }}:
+      <b>{{ voteName }}</b>?</h5>
+  </div>
+  <br>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="cancel()">Cancel</button>
+  <button class="mat-raised-button mat-primary" (click)="confirm()">Close Vote</button>
+</mat-dialog-actions>

@@ -1,12 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
-import { MemberContractService } from './../services/member-contract.service';
+import { MemberContractService } from './../../services/member-contract.service';
 
 @Component({
   selector: 'app-confirm-application-dialog',
   templateUrl: './confirm-application-dialog.component.html',
   styleUrls: ['./confirm-application-dialog.component.css']
 })
+
 export class ConfirmApplicationDialogComponent implements OnInit {
   alias;
   address;

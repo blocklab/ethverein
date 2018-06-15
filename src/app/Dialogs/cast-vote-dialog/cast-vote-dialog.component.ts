@@ -1,7 +1,7 @@
-import { VotingContractService } from './../services/voting-contract.service';
+import { VotingContractService } from './../../services/voting-contract.service';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
-import { MemberContractService } from './../services/member-contract.service';
+import { MemberContractService } from './../../services/member-contract.service';
 
 @Component({
   selector: 'app-cast-vote-dialog',

@@ -1,7 +1,8 @@
 import { MemberContractService } from './../services/member-contract.service';
 import { VotingContractService } from './../services/voting-contract.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialogConfig, MatDialog, MatSnackBar } from '@angular/material';
+import { ConfirmCloseVoteDialogComponent } from '../dialogs/confirm-close-vote-dialog/confirm-close-vote-dialog.component';
 
 @Component({
   selector: 'app-vote-list',
@@ -12,10 +13,12 @@ import { MatTableDataSource, MatSort } from '@angular/material';
 export class VoteListComponent implements OnInit {
 
   constructor(
-    private _votingContractService: VotingContractService,
-    private _memberContractService: MemberContractService
+    private dialog: MatDialog,
+    private votingContractService: VotingContractService,
+    private memberContractService: MemberContractService,
+    private snackbar: MatSnackBar
   ) {
-    this._memberContractService.getThisMember().then(() => {
+    this.memberContractService.getThisMember().then(() => {
       this.getVotes();
     });
   }
@@ -36,10 +39,10 @@ export class VoteListComponent implements OnInit {
 
   getVotes() {
     // get open votes
-    this._votingContractService.getNumberOfVotes().then(noV => {
+    this.votingContractService.getNumberOfVotes().then(noV => {
 
       for (let i = 0; i < noV; i++) {
-        this._votingContractService.getVoteDetails(i).then(vote => {
+        this.votingContractService.getVoteDetails(i).then(vote => {
           let voteObj;
           let voteType;
           let voteStatus;
@@ -71,7 +74,7 @@ export class VoteListComponent implements OnInit {
           return voteObj;
 
         }).then(voteObj => {
-          this._votingContractService.computeVoteOutcome(voteObj.id).then(_outcome => {
+          this.votingContractService.computeVoteOutcome(voteObj.id).then(_outcome => {
 
             switch (parseInt(_outcome.c[0], 0)) {
               case 0: voteObj.outcome = 'Undecided'; break;
@@ -86,6 +89,26 @@ export class VoteListComponent implements OnInit {
       }
     });
   }
+
+  closeVote(_vote) {
+    if (_vote.status === 'Open') {
+
+      if (_vote.outcome === 'Undecided') {
+        this.snackbar.open('Undecided votes cannot be closed!', 'Alright...', { duration: 2000 });
+      } else {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = {
+          voteID: _vote.nr,
+          voteName: _vote.name
+        };
+        this.dialog.open(ConfirmCloseVoteDialogComponent, dialogConfig);
+      }
+    }
+
+    // this._votingContractService.closeVote(_vote.nr);
+  }
+
+
 }
 
 export interface PeriodicElement {

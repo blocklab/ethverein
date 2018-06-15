@@ -13,15 +13,17 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MetaMaskComponent } from './meta-mask/meta-mask.component';
-import { ConfirmApplicationDialogComponent } from './confirm-application-dialog/confirm-application-dialog.component';
+import { ConfirmApplicationDialogComponent } from './dialogs/confirm-application-dialog/confirm-application-dialog.component';
 import {
   MatFormFieldModule, MatGridListModule, MatCardModule, MatToolbarModule,
   MatMenuModule, MatIconModule, MatButtonToggleModule, MatButtonModule,
   MatSortModule, MatInputModule, MatSnackBarModule, MatTooltipModule, MatTableModule,
   MatDialogModule, MatTabsModule, MatStepperModule
 } from '@angular/material';
-import { CastVoteDialogComponent } from './cast-vote-dialog/cast-vote-dialog.component';
+import { CastVoteDialogComponent } from './dialogs/cast-vote-dialog/cast-vote-dialog.component';
 import { VoteListComponent } from './vote-list/vote-list.component';
+import { ConfirmCloseVoteDialogComponent } from './dialogs/confirm-close-vote-dialog/confirm-close-vote-dialog.component';
+import { ConfirmResignDialogComponent } from './Dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { VoteListComponent } from './vote-list/vote-list.component';
     ConfirmApplicationDialogComponent,
     CastVoteDialogComponent,
     VoteListComponent,
-  ], 
+    ConfirmCloseVoteDialogComponent,
+    ConfirmResignDialogComponent,
+  ],
   imports: [
     BrowserModule,
     DroppableModule,
@@ -66,7 +70,9 @@ import { VoteListComponent } from './vote-list/vote-list.component';
   bootstrap: [AppComponent],
   entryComponents: [
     ConfirmApplicationDialogComponent,
-    CastVoteDialogComponent
+    ConfirmCloseVoteDialogComponent,
+    CastVoteDialogComponent,
+    ConfirmResignDialogComponent
   ]
 })
 export class AppModule {

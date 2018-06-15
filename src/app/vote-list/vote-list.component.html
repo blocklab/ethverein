@@ -24,7 +24,7 @@
       <mat-icon *ngIf="element.type == 'Document Vote'">description</mat-icon>
       <mat-icon *ngIf="element.type == 'Voting Contract Vote'">swap_horiz</mat-icon>
       <mat-icon *ngIf="element.type == 'Board Member Vote'">people</mat-icon>
-       {{element.type}} </td>
+      {{element.type}} </td>
   </ng-container>
 
   <ng-container matColumnDef="status">
@@ -38,10 +38,10 @@
       <mat-icon *ngIf="element.outcome == 'Undecided'" class="icon-yellow">help_outline</mat-icon>
       <mat-icon *ngIf="element.outcome == 'Accepted'" class="icon-green">check_circle_outline</mat-icon>
       <mat-icon *ngIf="element.outcome == 'Declined'" class="icon-red">block</mat-icon>
-       {{element.outcome}}</td>
+      {{element.outcome}}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+  <tr mat-row *matRowDef="let vote; columns: displayedColumns;" [ngClass]="vote.status == 'Open' ? 'open' : 'closed'" (click)="closeVote(vote)">
   </tr>
 </table>
