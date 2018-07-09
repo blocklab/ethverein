@@ -2,6 +2,8 @@ pragma solidity ^0.4.23;
 
 contract Members {
 
+    address owner;
+
     enum MemberStatus {
           // not a member or applicant
         NONE,
@@ -32,6 +34,12 @@ contract Members {
             members[initialMemberAddresses[index]] = Member({name: "???", status: MemberStatus.BOARD, entryBlock: block.number});
             memberAddresses.push(initialMemberAddresses[index]);
         }
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
     }
 
     modifier onlyVotingContract() {
@@ -161,7 +169,7 @@ contract Members {
     /**
      * Initially set contract address
      */
-    function setVotingContractAddress(address newAddress) public {
+    function setVotingContractAddress(address newAddress) public onlyOwner {
         if (votingContractAddress == address(0)) {
             votingContractAddress = newAddress;
         } else {
@@ -174,5 +182,12 @@ contract Members {
      */
     function updateVotingContractAddress(address newAddress) public onlyVotingContract {
         votingContractAddress = newAddress;
+    }
+
+    /**
+     * Kill switch.
+     */
+    function kill() public onlyOwner {
+        selfdestruct(owner);
     }
 }

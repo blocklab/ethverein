@@ -144,4 +144,25 @@ contract('Members', function(accounts) {
       assertException(err);
     }
   });
+
+  it("kill can only be called by contract owner", async function() {
+    try {
+      await membersContract.kill({from: THIRD_FOUNDER_AND_BOARD_MEMBER});
+      assert(false, "Supposed to throw - only contract owner should be able to call kill operation");
+    } catch (err) {
+      assertException(err);
+    }
+  });
+
+  it("should fail contract operation after self-destruct", async function() {
+    await membersContract.kill();
+    try {
+      await membersContract.members.call(FIRST_FOUNDER_AND_BOARD_MEMBER);
+      assert(false, "Supposed to throw - no operation possible after kill");
+    } catch (err) {
+      if (err.toString().indexOf("Error: ") == -1) {
+        assert(false, err.toString());
+      }
+    }
+  });
 });

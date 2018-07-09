@@ -424,6 +424,8 @@ contract('Voting', function(accounts) {
     // check if address is set correctly
     let newVotingContractAddressInMembersContract = await membersContract.votingContractAddress.call();
     assert.equal(newVotingContractAddressInMembersContract, NEW_CONTRACT_ADDRESS);
+    let voteDetails = await votingContract.getVoteDetails(voteId);
+    assert.equal(voteDetails[3], VOTE_STATUS_CLOSED, "Vote should be closed when it has outcome YES.");
   });
 
   // test if contract address is zero; 
