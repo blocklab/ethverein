@@ -8,3 +8,24 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.drop-card {
+    padding: 2em;
+    text-align: center;
+    border: 2px dashed #fbe3d3;
+    border-radius: 7px;
+    cursor: pointer;
+    outline: none;
+    margin-top: 1em;
+}
+
+.drop-card-success {
+    padding: 2em;
+    text-align: center;
+    border: 2px solid #ed7d31;
+    border-radius: 7px;
+    cursor: pointer;
+    outline: none;
+    margin-top: 1em;
+    
+}

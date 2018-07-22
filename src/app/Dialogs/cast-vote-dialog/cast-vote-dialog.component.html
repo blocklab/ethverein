@@ -6,11 +6,17 @@
     <div [ngSwitch]="vote.type">
       <div *ngSwitchCase="1">
         <h5> Do you accept Document Vote #{{ vote.id }}?</h5>
-        <br> Document Hash:
+        <br> Document Hash in vote:
         <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
           [cbContent]="vote.docHash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.docHash }}
         </div>
+        <div ngDefaultControl droppable ngDefaultModel name="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFiles($event)"
+        [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ docName }}</div>
+        <br> Document Hash in dropped document:
+        <div class="hash">{{ verifyHash }}</div>
         <br>
+        <p *ngIf="vote.docHash === verifyHash" style="color: green;"><mat-icon style="vertical-align: text-bottom;">check_circle_outline</mat-icon> Document hashes match</p>
+        <p *ngIf="vote.docHash !== verifyHash" style="color: red;"><mat-icon style="vertical-align: text-bottom;">error_outline</mat-icon> Document hashes DO NOT match!!</p>
       </div>
       <div *ngSwitchCase="2">
         <h5>Do you accept Board Member Vote #{{ vote.id }}?</h5>
