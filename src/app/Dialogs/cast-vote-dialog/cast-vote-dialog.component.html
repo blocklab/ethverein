@@ -18,17 +18,11 @@
         <div class="hash" matTooltip="Click to copy hash" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard [cbContent]="vote.docHash"
           (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.docHash }}
         </div>
-        <br> New Board Member 1 Address:
-        <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
-          [cbContent]="vote.newBoardMembers[0]" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.newBoardMembers[0] }}
-        </div>
-        <br> New Board Member 2 Address:
-        <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
-          [cbContent]="vote.newBoardMembers[1]" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.newBoardMembers[1] }}
-        </div>
-        <br> New Board Member 3 Address:
-        <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
-          [cbContent]="vote.newBoardMembers[2]" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.newBoardMembers[2]}}
+        <div *ngFor="let newBoardMember of vote.newBoardMembers; let idx = index">
+          <br> New Board Member {{ (idx + 1) }} (Alias {{ newBoardMember.alias }}):
+          <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
+            [cbContent]="newBoardMember.address" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ newBoardMember.address }}
+          </div>
         </div>
         <br>
       </div>

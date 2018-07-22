@@ -158,11 +158,31 @@ export class DashboardComponent implements OnInit {
               newVotingContractAddress: vote[5],
               voters: vote[6]
             };
+            this.addAliasesForNewBoardMembers(voteObj.newBoardMembers);
             this.openVotes.push(voteObj);
           }
         });
       }
     });
+  }
+
+  async addAliasesForNewBoardMembers(newBoardMembers: any) {
+    if (newBoardMembers && newBoardMembers.length > 0) {
+      let addressToAlias = {};
+      let numberOfMembers = await this._memberContractService.getNumberOfMembers();
+      for (let i = 0; i < numberOfMembers; i++) {
+        let memberAddress = await this._memberContractService.getMembers(i);
+        let member = await this._memberContractService.getMember(memberAddress);
+        addressToAlias[memberAddress] = member[0];
+      }
+      for (let i = 0; i < newBoardMembers.length; i++) {
+        const boardMemberAddress = newBoardMembers[i];
+        newBoardMembers[i] = {
+          address: boardMemberAddress,
+          alias: addressToAlias[boardMemberAddress]
+        }
+      }
+    }
   }
 
 }

@@ -110,7 +110,7 @@ export class VotesComponent implements OnInit {
   }
 
   createMemberVote() {
-    const addresses: string[] = [this.formGroup5.value.address1, this.formGroup5.value.address1, this.formGroup5.value.address1];
+    const addresses: string[] = [this.formGroup5.value.address1, this.formGroup5.value.address2, this.formGroup5.value.address3];
     this._votingContractService.initiateBoardMemberVote(this.formGroup5.value.memberVoteName, this.memberDocHash, addresses)
       .then(res => {
         this.memberDocName = 'Drop a file here or click to select one.';
