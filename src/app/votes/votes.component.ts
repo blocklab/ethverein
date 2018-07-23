@@ -28,6 +28,11 @@ export class VotesComponent implements OnInit {
   memberDocHash;
   isCopied;
   address;
+  newBoardMembers = [
+    { address: ''},
+    { address: ''},
+    { address: ''}
+  ];
 
   constructor(
     private _hashFile: HashFileService,
@@ -59,9 +64,7 @@ export class VotesComponent implements OnInit {
     });
     this.formGroup5 = this._formBuilder.group({
       'memberVoteName': ['', Validators.required],
-      'address1': ['', [Validators.required, this._validatorService.addressValidator]],
-      'address2': ['', [Validators.required, this._validatorService.addressValidator]],
-      'address3': ['', [Validators.required, this._validatorService.addressValidator]]
+      'memberAddress': ['', [Validators.required, this._validatorService.addressValidator]]
     });
   }
 
@@ -110,15 +113,28 @@ export class VotesComponent implements OnInit {
   }
 
   createMemberVote() {
-    const addresses: string[] = [this.formGroup5.value.address1, this.formGroup5.value.address2, this.formGroup5.value.address3];
-    this._votingContractService.initiateBoardMemberVote(this.formGroup5.value.memberVoteName, this.memberDocHash, addresses)
+    this._votingContractService.initiateBoardMemberVote(this.formGroup5.value.memberVoteName, this.memberDocHash, 
+      this.newBoardMembers.map(bm => bm.address))
       .then(res => {
         this.memberDocName = 'Drop a file here or click to select one.';
         this.droppedMemberFile = false;
         this._snackBar.open('Success!', 'Sweet!', { duration: 3000 });
       });
+  }
 
+  areBoardMemberAddressesDistinct() {
+    const boardMemberAddresses = this.newBoardMembers.map(bm => bm.address);
+    return Array.from(new Set(boardMemberAddresses)).length == boardMemberAddresses.length;
+  }
 
+  addBoardMemberAddressField() {
+    this.newBoardMembers.push( {
+      address: ''
+    });
+  }
+
+  removeBoardMemberAddressField() {
+    this.newBoardMembers.splice(-1, 1);
   }
 }
 

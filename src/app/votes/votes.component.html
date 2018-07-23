@@ -141,35 +141,30 @@
                             <input formControlName="memberVoteName" matInput placeholder="Vote Name">
                         </mat-form-field>
                         <br>
-                        <mat-form-field class="input-full-width">
-                            <input formControlName="address1" matInput placeholder="Board Memeber 1 Address">
-                        </mat-form-field>
-                        <br>
-                        <mat-form-field class="input-full-width">
-                            <input formControlName="address2" matInput placeholder="Board Memeber 2 Address">
-                        </mat-form-field>
-                        <br>
-                        <mat-form-field class="input-full-width">
-                            <input formControlName="address3" matInput placeholder="Board Memeber 3 Address">
-                        </mat-form-field>
-                        <br>
-
+                        <div *ngFor="let newBoardMember of newBoardMembers; let i = index;">
+                            <mat-form-field class="input-full-width">
+                                <input formControlName="memberAddress" [(ngModel)]="newBoardMembers[i].address" matInput placeholder="Board Member {{ (i+1)}} Address">
+                            </mat-form-field>
+                            <a *ngIf="i == newBoardMembers.length - 1 && newBoardMembers.length > 3" (click)="removeBoardMemberAddressField()">
+                                <mat-icon>remove_circle_outline</mat-icon>
+                            </a>
+                            <a *ngIf="i == newBoardMembers.length - 1" (click)="addBoardMemberAddressField()">
+                                <mat-icon>add_circle_outline</mat-icon>
+                            </a>
+                            <br>
+                        </div>
+                        <mat-error *ngIf="!areBoardMemberAddressesDistinct()">New board member addresses must be distinct</mat-error>
                         <div>
                             <button matStepperPrevious>Back</button>
-                            <button matStepperNext>Next</button>
+                            <button matStepperNext [disabled]="!areBoardMemberAddressesDistinct()">Next</button>
                         </div>
                     </form>
                 </mat-step>
                 <mat-step>
                     <ng-template matStepLabel>Submit Vote</ng-template>
-                    Address1:
-                    <b>{{ formGroup5.get('address1').value }}</b>
-                    <br> Address2:
-                    <b>{{ formGroup5.get('address2').value }}</b>
-                    <br> Address3:
-                    <b>{{ formGroup5.get('address3').value }}</b>
-                    <br>
-                    <br> Generated Hash
+                    New Board Members:
+                    <p *ngFor="let newBoardMember of newBoardMembers">{{ newBoardMember.address }}</p>
+                    <br>Generated Hash:
                     <br>
                     <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
                         [cbContent]="memberDocHash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ memberDocHash }}
