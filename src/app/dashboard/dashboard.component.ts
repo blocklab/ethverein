@@ -60,8 +60,12 @@ export class DashboardComponent implements OnInit {
           this.aliasInputDisabled = false;
           break;
       }
-      this.getPendingMembers();
-      this.getOpenVotes();
+      if (this.status === 'board') {
+        this.getPendingMembers();
+      }
+      if (this.status === 'board' || this.status === 'member') {
+        this.getOpenVotes();
+      }
     });
 
   }
