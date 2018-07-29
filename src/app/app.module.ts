@@ -18,7 +18,7 @@ import {
   MatFormFieldModule, MatGridListModule, MatCardModule, MatToolbarModule,
   MatMenuModule, MatIconModule, MatButtonToggleModule, MatButtonModule,
   MatSortModule, MatInputModule, MatSnackBarModule, MatTooltipModule, MatTableModule,
-  MatDialogModule, MatTabsModule, MatStepperModule
+  MatDialogModule, MatTabsModule, MatStepperModule, MatSelectModule, MatOptionModule
 } from '@angular/material';
 import { CastVoteDialogComponent } from './dialogs/cast-vote-dialog/cast-vote-dialog.component';
 import { VoteListComponent } from './vote-list/vote-list.component';
@@ -64,6 +64,8 @@ import { NewsfeedComponent } from './newsfeed/newsfeed.component';
     MatButtonToggleModule,
     MatTableModule,
     MatDialogModule,
+    MatSelectModule,
+    MatOptionModule,
     MDBBootstrapModule.forRoot()
   ],
   providers: [

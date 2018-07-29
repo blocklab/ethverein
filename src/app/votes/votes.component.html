@@ -143,7 +143,10 @@
                         <br>
                         <div *ngFor="let newBoardMember of newBoardMembers; let i = index;">
                             <mat-form-field class="input-full-width">
-                                <input formControlName="memberAddress" [(ngModel)]="newBoardMembers[i].address" matInput placeholder="Board Member {{ (i+1)}} Address">
+                                <mat-label>New Board Member</mat-label>
+                                <mat-select formControlName="memberAddress" [(value)]="newBoardMembers[i].address">
+                                    <mat-option *ngFor="let selection of memberSelectOptions" [value]="selection.value">{{ selection.label }}</mat-option>
+                                </mat-select>
                             </mat-form-field>
                             <a *ngIf="i == newBoardMembers.length - 1 && newBoardMembers.length > 3" (click)="removeBoardMemberAddressField()">
                                 <mat-icon>remove_circle_outline</mat-icon>
@@ -153,10 +156,10 @@
                             </a>
                             <br>
                         </div>
-                        <mat-error *ngIf="!areBoardMemberAddressesDistinct()">New board member addresses must be distinct</mat-error>
+                        <mat-error *ngIf="!areBoardMemberAddressesValid()">New board member addresses must be distinct</mat-error>
                         <div>
                             <button matStepperPrevious>Back</button>
-                            <button matStepperNext [disabled]="!areBoardMemberAddressesDistinct()">Next</button>
+                            <button matStepperNext [disabled]="!areBoardMemberAddressesValid()">Next</button>
                         </div>
                     </form>
                 </mat-step>

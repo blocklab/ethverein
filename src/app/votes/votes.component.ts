@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DroppableModule } from '@ctrl/ngx-droppable';
 import { MatSnackBar } from '@angular/material';
 import { VotingContractService } from './../services/voting-contract.service';
+import { MemberContractService } from './../services/member-contract.service';
 
 @Component({
   selector: 'app-votes',
@@ -33,6 +34,7 @@ export class VotesComponent implements OnInit {
     { address: ''},
     { address: ''}
   ];
+  memberSelectOptions = [];
 
   constructor(
     private _hashFile: HashFileService,
@@ -40,6 +42,7 @@ export class VotesComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private _web3Service: Web3Service,
     private _validatorService: ValidatorService,
+    private _memberContractService: MemberContractService,
     private _votingContractService: VotingContractService
   ) {
     _web3Service.getAccount().then(address => {
@@ -66,6 +69,7 @@ export class VotesComponent implements OnInit {
       'memberVoteName': ['', Validators.required],
       'memberAddress': ['', [Validators.required, this._validatorService.addressValidator]]
     });
+    this.getMemberSelectionOptions();
   }
 
   handleFiles(_files: FileList) {
@@ -122,9 +126,11 @@ export class VotesComponent implements OnInit {
       });
   }
 
-  areBoardMemberAddressesDistinct() {
+  areBoardMemberAddressesValid() {
     const boardMemberAddresses = this.newBoardMembers.map(bm => bm.address);
-    return Array.from(new Set(boardMemberAddresses)).length == boardMemberAddresses.length;
+    // addresses must all be not empty and distinct
+    return boardMemberAddresses.indexOf('') == -1 
+      && Array.from(new Set(boardMemberAddresses)).length == boardMemberAddresses.length;
   }
 
   addBoardMemberAddressField() {
@@ -135,6 +141,18 @@ export class VotesComponent implements OnInit {
 
   removeBoardMemberAddressField() {
     this.newBoardMembers.splice(-1, 1);
+  }
+
+  async getMemberSelectionOptions() {
+    let numberOfMembers = await this._memberContractService.getNumberOfMembers();
+    for (let i = 0; i < numberOfMembers; i++) {
+      let memberAddress = await this._memberContractService.getMembers(i);
+      let member = await this._memberContractService.getMember(memberAddress);
+      this.memberSelectOptions.push({
+        label: member[0] + ' - ' + memberAddress,
+        value: memberAddress,
+      })
+    }
   }
 }
 
