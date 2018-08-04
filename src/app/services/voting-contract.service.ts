@@ -27,11 +27,10 @@ export class VotingContractService {
   }
 
   async getContractAddress() {
-    this._memberContractService.getVotingContractAddress().then(add => {
-      this.votingContractAdrress = add;
-      this.votingContract = this.web3.eth.contract(VotingAbi.abi).at(this.votingContractAdrress);
-    });
+    this.votingContractAdrress = await this._memberContractService.getVotingContractAddress();
+    this.votingContract = this.web3.eth.contract(VotingAbi.abi).at(this.votingContractAdrress);
   }
+  
   /* Contract Functions */
   /* Contract Calls */
 

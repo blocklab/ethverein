@@ -39,6 +39,10 @@
           [cbContent]="vote.newVotingContractAddress" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.newVotingContractAddress}}
         </div>
         <br>
+        <p>View the contract on Etherscan: <br>
+          <a [href]="blockExplorerLink" target="_blank">{{ blockExplorerLink }}</a>
+        </p>
+        <br>
       </div>
     </div>
   </div>

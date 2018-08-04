@@ -2,7 +2,7 @@ import { VotingContractService } from './../../services/voting-contract.service'
 import { HashFileService } from './../../services/hash-file.service';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
-import { MemberContractService } from './../../services/member-contract.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cast-vote-dialog',
@@ -15,6 +15,7 @@ export class CastVoteDialogComponent implements OnInit {
   verifyHash = '0x';
   docName = 'Drop the file here or click to select one.';
   droppedFile = false;
+  blockExplorerLink: string;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -23,6 +24,7 @@ export class CastVoteDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<CastVoteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
     this.vote = data.vote;
+    this.blockExplorerLink = environment.blockExplorerBaseUrl + this.vote.newVotingContractAddress;
   }
 
   ngOnInit() {
