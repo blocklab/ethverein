@@ -1,6 +1,6 @@
-import { Observable } from 'rxjs';
 import { Web3Service } from './web3.service';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 declare let require: any;
 
@@ -13,18 +13,17 @@ const MembersAbi = require('../../build/contracts/Members.json');
 
 export class MemberContractService {
   private web3: any;
-  private account: any;
 
   private membersContract: any;
-  private membersContractAdrress = '0x345ca3e014aaf5dca488057592ee47305d9b3e10';
+  private membersContractAddress = environment.membersContractAddress;
 
   constructor(private _web3Service: Web3Service) {
     this.web3 = this._web3Service.getWeb3();
-    this.membersContract = this.web3.eth.contract(MembersAbi.abi).at(this.membersContractAdrress);
+    this.membersContract = this.web3.eth.contract(MembersAbi.abi).at(this.membersContractAddress);
   }
 
   getAddress() {
-    return this.membersContractAdrress;
+    return this.membersContractAddress;
   }
 
   getContract() {

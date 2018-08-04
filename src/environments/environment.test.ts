@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  membersContractAddress: '0x345ca3e014aaf5dca488057592ee47305d9b3e10',
-  blockExplorerBaseUrl: 'http://localhost:4200/fakexplorer/'
+  membersContractAddress: 'TODO',
+  blockExplorerBaseUrl: 'https://rinkeby.etherscan.io/address/'
 };
 
 /*

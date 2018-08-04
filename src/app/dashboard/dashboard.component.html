@@ -18,8 +18,8 @@
           (cbOnSuccess)="isCopied = true" (click)="copyAddress()">
           <input matInput placeholder="ETH-Address" name="address" disabled [(ngModel)]="address">
         </div>
-        <mat-hint>Can only be changed in MetaMask (
-          <b>Page reload required</b>)
+        <mat-hint>Can only be changed in MetaMask
+          (<b>Page reload required</b>)
         </mat-hint>
       </mat-form-field>
     </form>
@@ -44,7 +44,7 @@
 
   <!-- Grid 1.2 -->
   <div class="col-sm">
-    <h3>Open Votes</h3>
+    <h3>My Open Votes</h3>
     <ul class="votes" *ngFor="let member of pendingMembers">
       <li class="voteItem" (click)="acceptMember(member)">
         <mat-icon>person_add</mat-icon> Pending Member:
