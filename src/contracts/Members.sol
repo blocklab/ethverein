@@ -76,7 +76,7 @@ contract Members {
         }
     }
 
-    function hasConfirmedApplicant(address boardMember, address applicant) private view returns (bool) {
+    function hasConfirmedApplicant(address boardMember, address applicant) public view returns (bool) {
         for (uint index = 0; index < confirmations[applicant].length; index++) {
             if (confirmations[applicant][index] == boardMember)
                 return true;

@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
   ) {
 
-    _web3Service.getAccount().then(address => {
+    this._web3Service.getAccount().then(address => {
       this.address = address;
     });
 
@@ -134,11 +134,16 @@ export class DashboardComponent implements OnInit {
           .then(address => {
             this._memberContractService.getMember(address).then(member => {
               if (parseInt(member[1], 0) === 1) {
-                const memberObj = {
-                  name: member[0],
-                  address: address
-                };
-                this.pendingMembers.push(memberObj);
+                this._memberContractService.hasConfirmedApplicant(this.address, address).then(hasConfirmed => {
+                  // only show pending members the current user did not yet confirm
+                  if (!hasConfirmed) {
+                    const memberObj = {
+                      name: member[0],
+                      address: address
+                    };
+                    this.pendingMembers.push(memberObj);
+                  }
+                })
               }
             });
           });

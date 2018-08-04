@@ -69,19 +69,6 @@ export class MemberContractService {
     }) as Promise<string>;
   }
 
-  // get confirmations for vote
-  async getConfirmations(): Promise<string> {
-    const acc = await this._web3Service.getAccount();
-    return new Promise((resolve, reject) => {
-      this.membersContract.members.call(acc, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<string>;
-  }
-
   // get votingContractAddress
   async getVotingContractAddress(): Promise<string> {
 
@@ -130,6 +117,18 @@ export class MemberContractService {
         resolve(res);
       });
     }) as Promise<string>;
+  }
+
+  // check if board member has already confirmed applicant
+  async hasConfirmedApplicant(_boardMemberAddress: string, _applicantAddress: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.membersContract.hasConfirmedApplicant.call(_boardMemberAddress, _applicantAddress, function (err, res) {
+        if (err != null) {
+          reject(err);
+        }
+        resolve(res);
+      });
+    }) as Promise<boolean>;
   }
 
   /* Contract Transactions */
