@@ -2,6 +2,13 @@ pragma solidity ^0.4.23;
 
 contract Members {
 
+    event MemberApplied(address applicantAddress, string applicantName);
+    event MemberConfirmed(address memberAddress, string memberName);
+    event MemberNameChanged(address memberAddress, string newMemberName);
+    event MemberResigned(address memberAddress, string memberName);
+    event BoardMembersChanged(address[] newBoardMemberAddresses);
+    event VotingContractAddressUpdated(address newVotingContractAddress);
+
     address owner;
 
     enum MemberStatus {
@@ -55,6 +62,7 @@ contract Members {
         require (members[msg.sender].status == MemberStatus.NONE);
         members[msg.sender] = Member({name: memberName, status: MemberStatus.APPLIED, entryBlock: 0});
         memberAddresses.push(msg.sender);
+        emit MemberApplied(msg.sender, memberName);
     }
 
     function confirmApplication(address applicant) public {
@@ -73,6 +81,7 @@ contract Members {
             members[applicant].status = MemberStatus.REGULAR;
             members[applicant].entryBlock = block.number;
             delete confirmations[applicant];
+            emit MemberConfirmed(applicant, members[applicant].name);
         }
     }
 
@@ -86,6 +95,7 @@ contract Members {
 
     function changeName(string newName) public {
         members[msg.sender].name = newName;
+        emit MemberNameChanged(msg.sender, newName);
     }
 
     function isRegularOrBoardMember(address memberAddress) public view returns (bool) {
@@ -107,6 +117,7 @@ contract Members {
 
         // reset membership status
         members[msg.sender].status = MemberStatus.NONE;
+        string storage memberName = members[msg.sender].name;
         
         // delete address of (ex) member from list of member addresses
         uint numberOfMembers = getNumberOfMembers();
@@ -119,6 +130,8 @@ contract Members {
                 break;
             }
         }
+
+        emit MemberResigned(msg.sender, memberName);
     }
 
     /**
@@ -151,6 +164,8 @@ contract Members {
         for (i = 0; i != newBoardMembers.length; ++i) {
             members[newBoardMembers[i]].status = MemberStatus.BOARD;
         }
+
+        emit BoardMembersChanged(newBoardMembers);
     } 
 
     /**
@@ -182,6 +197,7 @@ contract Members {
      */
     function updateVotingContractAddress(address newAddress) public onlyVotingContract {
         votingContractAddress = newAddress;
+        emit VotingContractAddressUpdated(newAddress);
     }
 
     /**

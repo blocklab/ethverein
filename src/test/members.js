@@ -48,7 +48,11 @@ contract('Members', function(accounts) {
   });
 
   it("should allow other account to apply", async function() {
-    await membersContract.applyForMembership("Michael", {from: APPLIED_MEMBER});
+    let applyEvent = await membersContract.applyForMembership("Michael", {from: APPLIED_MEMBER});
+    assert.equal(applyEvent.logs.length, 1, "an event was triggered for apply membership");
+    assert.equal(applyEvent.logs[0].event, "MemberApplied", "the event type is correct");
+    assert.equal(applyEvent.logs[0].args.applicantAddress, APPLIED_MEMBER, "the address of the applicant in the event is correct");
+    assert.equal(applyEvent.logs[0].args.applicantName, "Michael", "the address of the applicant in the event is correct");
     let appliedMember = await membersContract.members.call(APPLIED_MEMBER)
     assert.equal(appliedMember[0], "Michael", "Wrong name for applicant");
     assert.equal(appliedMember[1], STATUS_APPLIED, "Wrong status for applicant");
@@ -64,7 +68,9 @@ contract('Members', function(accounts) {
 
   it("should take 3 founders to confirm Michael", async function() {
     // first confirmation
-    await membersContract.confirmApplication(APPLIED_MEMBER, {from: FIRST_FOUNDER_AND_BOARD_MEMBER});
+    let confirmEvent = await membersContract.confirmApplication(APPLIED_MEMBER, {from: FIRST_FOUNDER_AND_BOARD_MEMBER});
+    // verify no event is fired if not yet confirmed by all board members
+    assert.equal(confirmEvent.logs.length, 0, "an event was triggered although member not confirmed");
     let appliedMemberAfterFirstConfirmation = await membersContract.members.call(APPLIED_MEMBER);
     assert.equal(appliedMemberAfterFirstConfirmation[0], "Michael", "Wrong name for applicant");
     assert.equal(appliedMemberAfterFirstConfirmation[1], STATUS_APPLIED, "Wrong status for applicant");
@@ -73,23 +79,33 @@ contract('Members', function(accounts) {
     let appliedMemberAfterSecondConfirmation = await membersContract.members.call(APPLIED_MEMBER);
     assert.equal(appliedMemberAfterSecondConfirmation[1], STATUS_APPLIED, "Wrong status for applicant");
     // third confirmation
-    await membersContract.confirmApplication(APPLIED_MEMBER, {from: THIRD_FOUNDER_AND_BOARD_MEMBER});
+    confirmEvent = await membersContract.confirmApplication(APPLIED_MEMBER, {from: THIRD_FOUNDER_AND_BOARD_MEMBER});
+    assert.equal(confirmEvent.logs.length, 1, "no event was triggered for confirm membership");
+    assert.equal(confirmEvent.logs[0].event, "MemberConfirmed", "the event type is correct");
+    assert.equal(confirmEvent.logs[0].args.memberAddress, APPLIED_MEMBER, "the address of the member in the event is correct");
+    assert.equal(confirmEvent.logs[0].args.memberName, "Michael", "the address of the member in the event is correct");
     let appliedMemberAfterThirdConfirmation = await membersContract.members.call(APPLIED_MEMBER);
     assert.equal(appliedMemberAfterThirdConfirmation[1], STATUS_REGULAR, "Wrong status for applicant");
     assert.isTrue(appliedMemberAfterThirdConfirmation[2] > 0, "Entry block not initialized");
   });
 
-  it("should correctly change name of first founder", function() {
-    return membersContract.changeName("Horst", {from: FIRST_FOUNDER_AND_BOARD_MEMBER}).then(function() {
-      return membersContract.members.call(FIRST_FOUNDER_AND_BOARD_MEMBER);
-    }).then(function(appliedMember) {
-      assert.equal(appliedMember[0], "Horst", "Wrong name for founder");
-      assert.equal(appliedMember[1], STATUS_BOARD, "Wrong status for founder");
-    })
+  it("should correctly change name of first founder", async function() {
+    let nameChangeEvent = await membersContract.changeName("Horst", {from: FIRST_FOUNDER_AND_BOARD_MEMBER}); 
+    assert.equal(nameChangeEvent.logs.length, 1, "no event was triggered for change name");
+    assert.equal(nameChangeEvent.logs[0].event, "MemberNameChanged", "the event type is correct");
+    assert.equal(nameChangeEvent.logs[0].args.memberAddress, FIRST_FOUNDER_AND_BOARD_MEMBER, "the address of the member in the event is correct");
+    assert.equal(nameChangeEvent.logs[0].args.newMemberName, "Horst", "the new name of the member in the event is correct");
+    let memberWithNewName = await membersContract.members.call(FIRST_FOUNDER_AND_BOARD_MEMBER);
+    assert.equal(memberWithNewName[0], "Horst", "Wrong name for founder");
+    assert.equal(memberWithNewName[1], STATUS_BOARD, "Wrong status for founder");
   });
 
   it("should delete member from membership list", async function() {
-    await membersContract.resignOwnMembership({from: FIRST_FOUNDER_AND_BOARD_MEMBER});
+    let resignEvent = await membersContract.resignOwnMembership({from: FIRST_FOUNDER_AND_BOARD_MEMBER});
+    assert.equal(resignEvent.logs.length, 1, "no event was triggered for resign membership");
+    assert.equal(resignEvent.logs[0].event, "MemberResigned", "the event type is correct");
+    assert.equal(resignEvent.logs[0].args.memberAddress, FIRST_FOUNDER_AND_BOARD_MEMBER, "the address of the member in the event is correct");
+    assert.equal(resignEvent.logs[0].args.memberName, "Horst", "the name of the member in the event is correct");
     let isStillAMember = await membersContract.isRegularOrBoardMember.call(FIRST_FOUNDER_AND_BOARD_MEMBER);
     assert.isFalse(isStillAMember, "Should not be a member anymore");
     let numberOfMembers = await membersContract.getNumberOfMembers.call();
