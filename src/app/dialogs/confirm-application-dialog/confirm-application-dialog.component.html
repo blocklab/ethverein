@@ -11,8 +11,8 @@
 </div>
  <br>
 </mat-dialog-content>
-
+<p *ngIf="confirming">Confirming application, please wait...</p>
 <mat-dialog-actions>
     <button class="mat-raised-button"(click)="cancel()">Cancel</button>
-    <button class="mat-raised-button mat-primary"(click)="confirm()">Confirm</button>
+    <button class="mat-raised-button mat-primary"(click)="confirm()" [disabled]="confirming">Confirm</button>
 </mat-dialog-actions>

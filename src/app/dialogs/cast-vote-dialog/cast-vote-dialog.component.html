@@ -47,8 +47,8 @@
     </div>
   </div>
 </mat-dialog-content>
-
+<p *ngIf="voting"><br>Casting the vote, please wait...</p>
 <mat-dialog-actions>
-  <button class="mat-raised-button mat-primary" (click)="yes()">Yes</button>
-  <button class="mat-raised-button mat-primary" (click)="no()">No</button>
+  <button class="mat-raised-button mat-primary" (click)="yes()" [disabled]="voting">Yes</button>
+  <button class="mat-raised-button mat-primary" (click)="no()" [disabled]="voting">No</button>
 </mat-dialog-actions>

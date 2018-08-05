@@ -12,6 +12,7 @@ export class ConfirmApplicationDialogComponent implements OnInit {
   alias;
   address;
   isCopied;
+  confirming;
 
   constructor(
     private _memberContractService: MemberContractService,
@@ -26,8 +27,15 @@ export class ConfirmApplicationDialogComponent implements OnInit {
   }
 
   confirm() {
-    this._memberContractService.confirmApplication(this.address).then(() => {
-      this.dialogRef.close();
+    this.confirming = true;
+    this._memberContractService.confirmApplication(this.address, (err) => {
+      this.confirming = false;
+      if (err) {
+        this.snackBar.open('Error sending confirmation, please check and try again', 'Oh No!', { duration: 2000 });
+      } else {
+        this.snackBar.open('Application confirmed', 'Great!', { duration: 2000 });
+        this.dialogRef.close();
+      }
     });
   }
 

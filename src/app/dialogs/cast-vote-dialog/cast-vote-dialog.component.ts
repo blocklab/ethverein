@@ -16,6 +16,7 @@ export class CastVoteDialogComponent implements OnInit {
   docName = 'Drop the file here or click to select one.';
   droppedFile = false;
   blockExplorerLink: string;
+  voting;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -37,14 +38,28 @@ export class CastVoteDialogComponent implements OnInit {
   }
 
   yes() {
-    this.votingContractService.castVote(this.vote.id, true).then(() => {
-      this.dialogRef.close();
+    this.voting = true;
+    this.votingContractService.castVote(this.vote.id, true, (err) => {
+      this.voting = false;
+      if (err) {
+        this.snackBar.open('Error casting vote', 'What happened?', { duration: 2000 });  
+      } else {
+        this.snackBar.open('Casted Vote with yes', 'Excellent!', { duration: 2000 });
+        this.dialogRef.close();
+      }
     });
   }
 
   no() {
-    this.votingContractService.castVote(this.vote.id, false).then(() => {
-      this.dialogRef.close();
+    this.voting = true;
+    this.votingContractService.castVote(this.vote.id, false, (err) => {
+      this.voting = false;
+      if (err) {
+        this.snackBar.open('Error casting vote', 'What happened?', { duration: 2000 });  
+      } else {
+        this.snackBar.open('Casted Vote with no', 'Why that?', { duration: 2000 });
+        this.dialogRef.close();
+      }
     });
 
   }

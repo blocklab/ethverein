@@ -152,12 +152,8 @@ export class MemberContractService {
   }
 
   // confirm Application of applicant
-  async confirmApplication(_applicantAddress: string) {
-    this.membersContract.confirmApplication.sendTransaction(_applicantAddress, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+  async confirmApplication(_applicantAddress: string, callback: Function) {
+    this.membersContract.confirmApplication.sendTransaction(_applicantAddress, callback);
   }
 
   // resign membership of logged in member

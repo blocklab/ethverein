@@ -104,12 +104,8 @@ export class VotingContractService {
     }) as Promise<number>;
   }
 
-  async castVote(_voteID: number, _decision: boolean) {
-    this.votingContract.castVote.sendTransaction(_voteID, _decision, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+  async castVote(_voteID: number, _decision: boolean, callback: Function) {
+    this.votingContract.castVote.sendTransaction(_voteID, _decision, callback);
   }
 
   async closeVote(_voteID: number) {

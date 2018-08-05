@@ -111,7 +111,8 @@ export class DashboardComponent implements OnInit {
     dialogConfig.data = {
       vote: _vote
     };
-    this.dialog.open(CastVoteDialogComponent, dialogConfig);
+    let dialogRef = this.dialog.open(CastVoteDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => this.getOpenVotes());
   }
 
   acceptMember(_member) {
@@ -121,10 +122,12 @@ export class DashboardComponent implements OnInit {
       alias: _member.name,
       address: _member.address
     };
-    this.dialog.open(ConfirmApplicationDialogComponent, dialogConfig);
+    let dialogRef = this.dialog.open(ConfirmApplicationDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((() => this.getPendingMembers()));
   }
 
   getPendingMembers() {
+    this.pendingMembers = [];
     this._memberContractService.getNumberOfMembers().then(noM => {
       for (let i = 0; i < noM; i++) {
         this._memberContractService.getMembers(i)
@@ -152,6 +155,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getOpenVotes() {
+    this.openVotes = [];
     // get open votes
     this._votingContractService.getNumberOfVotes().then(noV => {
       for (let i = 0; i < noV; i++) {
