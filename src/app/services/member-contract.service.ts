@@ -175,4 +175,21 @@ export class MemberContractService {
   }
 
   /* /Contract Functions */
+
+  /* Contract Events */
+  getMemberAppliedEvent() {
+    return this.membersContract.MemberApplied();
+  }
+
+  getMemberConfirmedEvent() {
+    return this.membersContract.MemberConfirmed();
+  }
+
+  getMemberNameChangedEvent() {
+    return this.membersContract.MemberNameChanged();
+  }
+
+  getMemberResignedEvent() {
+    return this.membersContract.MemberResigned();
+  }
 }

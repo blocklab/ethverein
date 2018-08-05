@@ -14,17 +14,48 @@ export class MembersComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private _memberContractService: MemberContractService
-  ) { }
+  ) {
+    // register event listeners
+    this._memberContractService.getMemberAppliedEvent().watch((err, res) => {
+      if (res) {
+        membersList.push({ alias: res.applicantAlias, status: 'Pending', block: 0, address: res.applicantAddress});
+      }
+    });
+    this._memberContractService.getMemberConfirmedEvent().watch((err, res) => {
+      if (res) {
+        membersList.filter(m => m.address === res.memberAddress).map(m => m.status = 'Member');
+        this.dataSource.sort = this.sort;
+        this.dataSource.filter = this.filter;
+      }
+    });
+    this._memberContractService.getMemberNameChangedEvent().watch((err, res) => {
+      if (res) {
+        membersList.filter(m => m.address === res.args.memberAddress).map(m => m.alias = res.args.newMemberName);
+        this.dataSource.sort = this.sort;
+        this.dataSource.filter = this.filter;
+      }
+    });
+    this._memberContractService.getMemberResignedEvent().watch((err, res) => {
+      if (res) {
+        let indexOfResignedMember = membersList.findIndex(m => m.address === res.args.memberAddress);
+        if (indexOfResignedMember !== -1) {
+          membersList.splice(indexOfResignedMember, 1);
+        }
+      }
+    });
+   }
 
   displayedColumns = ['alias', 'status', 'block'];
   dataSource = new MatTableDataSource(membersList);
+  private filter = '';
 
   @ViewChild(MatSort) sort: MatSort;
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+    this.filter = filterValue;
+    this.dataSource.filter = this.filter;
   }
 
   ngOnInit() {
@@ -32,7 +63,6 @@ export class MembersComponent implements OnInit {
   }
 
   loadData() {
-
     this._memberContractService.getNumberOfMembers().then(nOM => {
       for (let i = 0; i < nOM; i++) {
         this._memberContractService.getMembers(i).then(memberAddress => {
@@ -67,7 +97,7 @@ export class MembersComponent implements OnInit {
   }
 }
 
-export interface PeriodicElement {
+export interface TableElement {
   alias: string;
   status: string;
   block: number;
@@ -75,7 +105,7 @@ export interface PeriodicElement {
 }
 
 
-const membersList: PeriodicElement[] = [];
+const membersList: TableElement[] = [];
 
 function compare(a, b, isAsc) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);

@@ -13,22 +13,20 @@ const VotingAbi = require('../../build/contracts/Voting.json');
 })
 export class VotingContractService {
   private web3: any;
-  private account: any;
 
   private votingContract: any;
-  private votingContractAdrress;
 
   constructor(
     private _web3Service: Web3Service,
     private _memberContractService: MemberContractService
   ) {
     this.web3 = this._web3Service.getWeb3();
-    this.getContractAddress();
+    this.getContract();
   }
 
-  async getContractAddress() {
-    this.votingContractAdrress = await this._memberContractService.getVotingContractAddress();
-    this.votingContract = this.web3.eth.contract(VotingAbi.abi).at(this.votingContractAdrress);
+  async getContract() {
+    let votingContractAddress = await this._memberContractService.getVotingContractAddress();
+    this.votingContract = await this.web3.eth.contract(VotingAbi.abi).at(votingContractAddress);
   }
   
   /* Contract Functions */
