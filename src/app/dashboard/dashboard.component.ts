@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  changeAlias(_alias) {
+  changeAlias() {
     this._memberContractService.changeName(this.alias);
     this.changeBTNDisabled = true;
   }

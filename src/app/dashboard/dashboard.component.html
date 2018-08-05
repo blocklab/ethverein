@@ -5,7 +5,7 @@
 
     <form class="input-form">
       <mat-form-field class="input-full-width">
-        <input #box matInput (ngModelChange)="unlockChangeBTN()" disabled="{{ aliasInputDisabled }}" (keyup.enter)="changeAlias(box.value)"
+        <input #box matInput (ngModelChange)="unlockChangeBTN()" disabled="{{ aliasInputDisabled }}" (keyup.enter)="changeAlias()"
           placeholder="Alias" name="aliasInput" [(ngModel)]="alias">
         <mat-hint>Your alias will be
           <b>permanently</b> stored on the Blockchain!</mat-hint>
