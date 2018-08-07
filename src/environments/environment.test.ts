@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   membersContractAddress: 'TODO',
-  blockExplorerBaseUrl: 'https://rinkeby.etherscan.io/address/'
+  blockExplorerBaseUrl: 'https://ropsten.etherscan.io/address/0x...'
 };
 
 /*

@@ -139,7 +139,13 @@ contract('Voting', function(accounts) {
   });
 
   it("board member vote returns id with increasing number", async function() {
-    await votingContract.initiateBoardMemberVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_SECOND_BOARD_MEMBER]);
+    let voteCreatedEvent = await votingContract.initiateBoardMemberVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_SECOND_BOARD_MEMBER]);
+    // first check if event has been emitted
+    assert.equal(voteCreatedEvent.logs.length, 1, "no event was triggered after creating new vote");
+    assert.equal(voteCreatedEvent.logs[0].event, "VoteCreated", "event type should be VoteCreated");
+    assert.equal(voteCreatedEvent.logs[0].args.voteId.toNumber(), 0, "voteId not correct");
+    assert.equal(voteCreatedEvent.logs[0].args.voteType, VOTE_TYPE_BOARD_MEMBER, "vote type should be BOARD_MEMBER");
+    // now check vote id
     await votingContract.initiateBoardMemberVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_SECOND_BOARD_MEMBER]);
     await votingContract.initiateBoardMemberVote(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_SECOND_BOARD_MEMBER]);
     let voteId = await votingContract.initiateBoardMemberVote.call(BOARD_MEMBER_VOTE_NAME, BOARD_MEMBER_VOTE_HASH, [ACCOUNT_FIRST_BOARD_MEMBER, ACCOUNT_SECOND_BOARD_MEMBER]);
@@ -147,7 +153,13 @@ contract('Voting', function(accounts) {
   });
 
   it("document vote returns id with increasing number", async function() {
-    await votingContract.initiateDocumentVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+    let voteCreatedEvent = await votingContract.initiateDocumentVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+    // first check if event has been emitted
+    assert.equal(voteCreatedEvent.logs.length, 1, "no event was triggered after creating new vote");
+    assert.equal(voteCreatedEvent.logs[0].event, "VoteCreated", "event type should be VoteCreated");
+    assert.equal(voteCreatedEvent.logs[0].args.voteId.toNumber(), 3, "voteId not correct");
+    assert.equal(voteCreatedEvent.logs[0].args.voteType, VOTE_TYPE_DOCUMENT, "vote type should be DOCUMENT");
+    // now check vote id
     await votingContract.initiateDocumentVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
     await votingContract.initiateDocumentVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
     let voteId = await votingContract.initiateDocumentVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
@@ -206,7 +218,12 @@ contract('Voting', function(accounts) {
 
   it("should throw if a member tries to vote twice", async function() {
     try {
-      await votingContract.castVote(0, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
+      let castVoteEvent = await votingContract.castVote(0, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
+      // first check if event has been emitted
+      assert.equal(castVoteEvent.logs.length, 1, "no event was triggered after casting a vote");
+      assert.equal(castVoteEvent.logs[0].event, "VoteCast", "event type should be VoteCast");
+      assert.equal(castVoteEvent.logs[0].args.voteId.toNumber(), 0, "voteId not correct in CastVote");
+      assert.equal(castVoteEvent.logs[0].args.voter, ACCOUNT_FIRST_BOARD_MEMBER, "address of voter not correct in CastVote");
       await votingContract.castVote.call(0, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
       assert(false, "Supposed to throw");
     } catch (err) {
@@ -246,7 +263,13 @@ contract('Voting', function(accounts) {
 
   it("vote details of contract update vote are given correctly", async function() {
     let voteId = await votingContract.initiateVotingContractUpdateVote.call(VOTING_CONTRACT_UPDATE_VOTE_NAME, NEW_CONTRACT_ADDRESS, { from: ACCOUNT_REGULAR_MEMBER });
-    await votingContract.initiateVotingContractUpdateVote(VOTING_CONTRACT_UPDATE_VOTE_NAME, NEW_CONTRACT_ADDRESS, { from: ACCOUNT_REGULAR_MEMBER });
+    let contractUpdateVoteEvent = await votingContract.initiateVotingContractUpdateVote(VOTING_CONTRACT_UPDATE_VOTE_NAME, NEW_CONTRACT_ADDRESS, { from: ACCOUNT_REGULAR_MEMBER });
+    // first check if event has been emitted
+    assert.equal(contractUpdateVoteEvent.logs.length, 1, "no event was triggered after creating new contract update vote");
+    assert.equal(contractUpdateVoteEvent.logs[0].event, "VoteCreated", "event type should be VoteCreated");
+    assert.equal(contractUpdateVoteEvent.logs[0].args.voteId.toNumber(), 8, "voteId not correct");
+    assert.equal(contractUpdateVoteEvent.logs[0].args.voteType, VOTE_TYPE_VOTING_CONTRACT_UPDATE, "vote type should be VOTING_CONTRACT_UPDATE");
+    // now check vote details
     let voteDetails = await votingContract.getVoteDetails.call(voteId);
     assert.equal(voteDetails[0], VOTING_CONTRACT_UPDATE_VOTE_NAME, "Name of vote does not match.");
     assert.equal(voteDetails[1], VOTE_TYPE_VOTING_CONTRACT_UPDATE, "Vote type of voting contract update vote does not match.");
@@ -319,7 +342,13 @@ contract('Voting', function(accounts) {
     await votingContract.castVote(voteId, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
     await votingContract.castVote(voteId, true, { from: ACCOUNT_SECOND_BOARD_MEMBER });
     // close vote
-    await votingContract.closeVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+    let voteClosedEvent = await votingContract.closeVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+    // first test if event has been emitted after closing a vote
+    assert.equal(voteClosedEvent.logs.length, 1, "no event was triggered after closing a vote");
+    assert.equal(voteClosedEvent.logs[0].event, "VoteClosed", "event type should be VoteClosed");
+    assert.equal(voteClosedEvent.logs[0].args.voteId.toNumber(), voteId, "voteId not correct in VoteClosed");
+    assert.equal(voteClosedEvent.logs[0].args.outcome, true, "outcome not correct in VoteClosed - expected to be true");
+    // now check if vote has been closed
     let voteDetails = await votingContract.getVoteDetails(voteId);
     assert.equal(voteDetails[3], VOTE_STATUS_CLOSED, "Vote should be closed when it has outcome YES.");
   }); 

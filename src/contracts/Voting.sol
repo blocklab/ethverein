@@ -4,6 +4,10 @@ import "./Members.sol";
 
 contract Voting {
 
+    event VoteCreated(uint voteId, uint voteType);
+    event VoteCast(uint voteId, address voter);
+    event VoteClosed(uint voteId, uint outcome);
+
     Members private membersContract;
 
     enum VoteStatus {
@@ -72,7 +76,9 @@ contract Voting {
             newVotingContractAddress: address(0),
             voters: new address[](0)}));
 
-        return votes.length - 1;
+        uint  voteId = votes.length - 1;
+        emit VoteCreated(voteId, uint(VoteType.BOARD_MEMBER));
+        return voteId;
     }
 
     // create a document vote
@@ -86,7 +92,9 @@ contract Voting {
             newVotingContractAddress: address(0),
             voters: new address[](0)}));
 
-        return votes.length - 1;
+        uint  voteId = votes.length - 1;
+        emit VoteCreated(voteId, uint(VoteType.DOCUMENT));
+        return voteId;
     }
 
     // create a contract update vote
@@ -104,7 +112,9 @@ contract Voting {
             newVotingContractAddress: newContractAddress,
             voters: new address[](0)}));
 
-        return votes.length - 1;
+        uint  voteId = votes.length - 1;
+        emit VoteCreated(voteId, uint(VoteType.VOTING_CONTRACT_UPDATE));
+        return voteId;
     }
 
     function castVote(uint voteId, bool decision) public onlyMember onlyOpenVote(voteId) {
@@ -116,6 +126,8 @@ contract Voting {
             vote.outcome[msg.sender] = VoteOutcome.NO;
         }
         vote.voters.push(msg.sender);
+
+        emit VoteCast(voteId, msg.sender);
     }
 
     function getNumberOfVotes() public view returns (uint) {
@@ -166,6 +178,8 @@ contract Voting {
         if (outcome == VoteOutcome.YES && vote.voteType == VoteType.VOTING_CONTRACT_UPDATE) {
             membersContract.updateVotingContractAddress(vote.newVotingContractAddress);
         }
+
+        emit VoteClosed(voteId, uint(outcome));
     }
 
     function computeVoteOutcome(uint voteId) public view returns (uint) {
