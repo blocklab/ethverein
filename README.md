@@ -50,6 +50,18 @@ $ ng serve --host 0.0.0.0
 
 3. Use your browser and connect to [http://localhost:4200](http://localhost:4200).
 
+## Installation (Ropsten)
+
+There are two ways to deploy the contracts to Ropsten testnet:
+* Using geth/truffle.
+* Using [http://remix.ethereum.org/](Remix).
+Initially, we deployed the contracts through Remix. Since leaving our build environment and copying/pasting contract code is quite painfull, we will add support for geth and truffle as well.
+
+As soon as the contract is deployed on the test net, insert the contract URL into environment.test.ts and run angular as follows:
+```console
+$ ng serve --configuration=test --host 0.0.0.0
+```
+
 ## Further angular commands
 
 ### Development server
