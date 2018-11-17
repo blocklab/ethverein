@@ -43,13 +43,13 @@ export class Web3Service {
       this.account = await new Promise((resolve, reject) => {
         this.web3.eth.getAccounts((err, accs) => {
           if (err != null) {
-            alert('There was an error fetching your accounts.');
+            alert('There was an error fetching your account.');
             return;
           }
 
           if (accs.length === 0) {
             alert(
-              'Couldn not get any accounts! Make sure MetaMast is logged in.'
+              'Could not get any accounts! Make sure you are correctly logged in to MetaMask.'
             );
             return;
           }
