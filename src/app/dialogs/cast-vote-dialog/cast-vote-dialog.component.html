@@ -2,48 +2,41 @@
 
 <mat-dialog-content>
   <div>
-
-    <div [ngSwitch]="vote.type">
-      <div *ngSwitchCase="1">
-        <h5> Do you accept Document Vote #{{ vote.id }}?</h5>
-        <br> Document Hash in vote:
+    <div *ngIf="vote.type === 2">
+      <h5>Do you accept Board Member Vote #{{ vote.id }}?</h5>
+      <div *ngFor="let newBoardMember of vote.newBoardMembers; let idx = index">
+        <br> New Board Member {{ (idx + 1) }} (Alias {{ newBoardMember.alias }}):
         <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
-          [cbContent]="vote.docHash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.docHash }}
+          [cbContent]="newBoardMember.address" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ newBoardMember.address }}
         </div>
-        <div ngDefaultControl droppable ngDefaultModel name="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFiles($event)"
-        [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ docName }}</div>
-        <br> Document Hash in dropped document:
-        <div class="hash">{{ verifyHash }}</div>
-        <br>
-        <p *ngIf="vote.docHash === verifyHash" style="color: green;"><mat-icon style="vertical-align: text-bottom;">check_circle_outline</mat-icon> Document hashes match</p>
-        <p *ngIf="vote.docHash !== verifyHash" style="color: red;"><mat-icon style="vertical-align: text-bottom;">error_outline</mat-icon> Document hashes DO NOT match!!</p>
       </div>
-      <div *ngSwitchCase="2">
-        <h5>Do you accept Board Member Vote #{{ vote.id }}?</h5>
-        <br> Document Hash:
-        <div class="hash" matTooltip="Click to copy hash" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard [cbContent]="vote.docHash"
-          (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.docHash }}
-        </div>
-        <div *ngFor="let newBoardMember of vote.newBoardMembers; let idx = index">
-          <br> New Board Member {{ (idx + 1) }} (Alias {{ newBoardMember.alias }}):
-          <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
-            [cbContent]="newBoardMember.address" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ newBoardMember.address }}
-          </div>
-        </div>
-        <br>
+    </div>
+    <div *ngIf="vote.type === 1 || vote.type === 2">
+      <h5 *ngIf="vote.type === 1"> Do you accept Document Vote #{{ vote.id }}?</h5>
+      <br> Document Hash in vote:
+      <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
+        [cbContent]="vote.docHash" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.docHash }}
       </div>
-      <div *ngSwitchCase="3">
-        <h5> Do you accept Voting Contract Vote #{{ vote.id }}?</h5>
-        <br> New Voting Contract Address:
-        <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
-          [cbContent]="vote.newVotingContractAddress" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.newVotingContractAddress}}
-        </div>
-        <br>
-        <p>View the contract on Etherscan: <br>
-          <a [href]="blockExplorerLink" target="_blank">{{ blockExplorerLink }}</a>
-        </p>
-        <br>
+      <div ngDefaultControl droppable ngDefaultModel name="firstCtrl" [acceptsMultipleFiles]="false" dragOverClass="dragOver" (filesDropped)="handleFiles($event)"
+      [ngClass]="droppedFile ? 'drop-card-success' : 'drop-card'">{{ docName }}</div>
+      <br> Document Hash in dropped document:
+      <div class="hash">{{ verifyHash }}</div>
+      <br>
+      <p *ngIf="vote.docHash === verifyHash" style="color: green;"><mat-icon style="vertical-align: text-bottom;">check_circle_outline</mat-icon> Document hashes match</p>
+      <p *ngIf="vote.docHash !== verifyHash" style="color: red;"><mat-icon style="vertical-align: text-bottom;">error_outline</mat-icon> Document hashes DO NOT match!!</p>
+    </div>
+    
+    <div *ngIf="vote.type === 3">
+      <h5> Do you accept Voting Contract Vote #{{ vote.id }}?</h5>
+      <br> New Voting Contract Address:
+      <div class="hash" matTooltip="Click to copy address" [matTooltipShowDelay]="500" [matTooltipHideDelay]="1000" ngxClipboard
+        [cbContent]="vote.newVotingContractAddress" (cbOnSuccess)="isCopied = true" (click)="copyHash()">{{ vote.newVotingContractAddress}}
       </div>
+      <br>
+      <p>View the contract on Etherscan: <br>
+        <a [href]="blockExplorerLink" target="_blank">{{ blockExplorerLink }}</a>
+      </p>
+      <br>
     </div>
   </div>
 </mat-dialog-content>

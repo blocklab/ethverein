@@ -29,6 +29,7 @@ export class CastVoteDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.vote.type = Number(this.vote.type);
   }
 
   copyHash() {

@@ -117,7 +117,7 @@ export class DashboardComponent implements OnInit {
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      vote: _vote
+      vote: { ..._vote }
     };
     let dialogRef = this.dialog.open(CastVoteDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => this.getOpenVotes());
@@ -168,7 +168,7 @@ export class DashboardComponent implements OnInit {
     this._votingContractService.getNumberOfVotes().then(noV => {
       for (let i = 0; i < noV; i++) {
         this._votingContractService.getVoteDetails(i).then(vote => {
-          if (!vote[6].includes(this.address)) {
+          if (Number(vote[3]) === 1 && !vote[6].includes(this.address)) {
             const voteObj = {
               id: i,
               name: vote[0],
