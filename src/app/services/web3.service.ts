@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import * as Web3 from 'web3';
 
 declare global {
-  interface Window { web3: any; }
+  interface Window { 
+    web3: any; 
+    ethereum: any;
+  }
 }
 
 window.web3 = window.web3 || {};
@@ -14,10 +17,13 @@ window.web3 = window.web3 || {};
 export class Web3Service {
   web3: any;
   account;
-  accounts;
 
   constructor() {
-    this.web3 = window.web3;
+    if (window.ethereum) {
+      this.web3 = new Web3(window.ethereum);
+    } else {
+      this.web3 = window.web3;
+    }
   }
 
   getWeb3() {
@@ -25,13 +31,12 @@ export class Web3Service {
   }
 
   public checkWeb3() {
-
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof window.web3.currentProvider !== 'undefined') {
       this.web3 = new Web3(window.web3.currentProvider);
       return true;
     } else {
-      this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+      this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545'));
       return false;
     }
 
@@ -40,22 +45,24 @@ export class Web3Service {
   // get current account address from MetaMask
   public async getAccount(): Promise<string> {
     if (this.account == null) {
-      this.account = await new Promise((resolve, reject) => {
-        this.web3.eth.getAccounts((err, accs) => {
-          if (err != null) {
-            alert('There was an error fetching your account.');
-            return;
-          }
+      if (window.ethereum) {
+        try {
+          // Request account access if needed
+          await window.ethereum.enable();
+        } catch (error) {
+          alert('Please allow this app access to MetaMask.');
+          return;
+        }
+      }
 
-          if (accs.length === 0) {
-            alert(
-              'Could not get any accounts! Make sure you are correctly logged in to MetaMask.'
-            );
-            return;
-          }
-          resolve(accs[0]);
-        });
-      }) as string;
+      this.account = this.web3.eth.accounts[0];
+      if (!this.account) {
+        alert(
+          'Could not get any accounts! Make sure you are correctly logged in to MetaMask.'
+        );
+        return Promise.reject("No account found");
+      }
+
       this.web3.eth.defaultAccount = this.account;
     }
     return Promise.resolve(this.account);

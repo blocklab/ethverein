@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  membersContractAddress: '0xfb88de099e13c3ed21f80a7a1e49f8caecf10df6',
+  membersContractAddress: '0xb529f14aa8096f943177c09ca294ad66d2e08b1f',
   blockExplorerBaseUrl: 'http://localhost:4200/fakexplorer/'
 };
 

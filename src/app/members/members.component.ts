@@ -2,6 +2,7 @@ import { ConfirmApplicationDialogComponent } from './../dialogs/confirm-applicat
 import { MemberContractService } from './../services/member-contract.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog, MatDialogConfig } from '@angular/material';
+import { Web3Service } from '../services/web3.service';
 
 @Component({
   selector: 'app-members',
@@ -13,17 +14,20 @@ export class MembersComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
+    private _web3Service: Web3Service,
     private _memberContractService: MemberContractService
   ) {
     // register event listeners
     this._memberContractService.getMemberAppliedEvent().watch((err, res) => {
-      if (res) {
-        membersList.push({ alias: res.applicantAlias, status: 'Pending', block: 0, address: res.applicantAddress});
+      if (res && res.args.applicantAddress && !membersList.some(m => m.address === res.args.applicantAddress)) {
+        membersList.push({ alias: res.args.applicantName, status: 'Pending', block: 0, address: res.args.applicantAddress});
+        this.dataSource.sort = this.sort;
+        this.dataSource.filter = this.filter;
       }
     });
     this._memberContractService.getMemberConfirmedEvent().watch((err, res) => {
       if (res) {
-        membersList.filter(m => m.address === res.memberAddress).map(m => m.status = 'Member');
+        membersList.filter(m => m.address === res.args.memberAddress).map(m => m.status = 'Member');
         this.dataSource.sort = this.sort;
         this.dataSource.filter = this.filter;
       }
@@ -48,6 +52,8 @@ export class MembersComponent implements OnInit {
   displayedColumns = ['alias', 'status', 'block'];
   dataSource = new MatTableDataSource(membersList);
   private filter = '';
+  ownAddress: string;
+  ownStatus: string;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -59,6 +65,9 @@ export class MembersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._web3Service.getAccount().then(address => {
+      this.ownAddress = address;
+    });
     this.loadData();
   }
 
@@ -76,6 +85,9 @@ export class MembersComponent implements OnInit {
               default: _status = 'None'; break;
             }
             const _entry = parseInt(member[2], 0);
+            if (this.ownAddress === memberAddress) {
+              this.ownStatus = _status;
+            }
             membersList[i] = ({ alias: member[0], status: _status, block: _entry, address: memberAddress });
             this.dataSource.sort = this.sort;
           });
@@ -85,8 +97,7 @@ export class MembersComponent implements OnInit {
   }
 
   openDialog(_member) {
-
-    if (_member.status === 'Pending') {
+    if (this.ownStatus === 'Board Member' && _member.status === 'Pending') {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {
         alias: _member.alias,
