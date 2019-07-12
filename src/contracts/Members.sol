@@ -45,12 +45,12 @@ contract Members {
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner);
+        require(msg.sender == owner, "Sender does not equal contract owner.");
         _;
     }
 
     modifier onlyVotingContract() {
-        require (votingContractAddress == msg.sender);
+        require (votingContractAddress == msg.sender, "Sender address does not equal voting contract address.");
         _;
     }
 
@@ -59,15 +59,15 @@ contract Members {
     }
 
     function applyForMembership(string memberName) public {
-        require (members[msg.sender].status == MemberStatus.NONE);
+        require (members[msg.sender].status == MemberStatus.NONE, "Sender seems to be a member already.");
         members[msg.sender] = Member({name: memberName, status: MemberStatus.APPLIED, entryBlock: 0});
         memberAddresses.push(msg.sender);
         emit MemberApplied(msg.sender, memberName);
     }
 
     function confirmApplication(address applicant) public {
-        require (members[msg.sender].status == MemberStatus.BOARD);
-        require (members[applicant].status == MemberStatus.APPLIED);
+        require (members[msg.sender].status == MemberStatus.BOARD, "Only board members can confirm application.");
+        require (members[applicant].status == MemberStatus.APPLIED, "Applicant does not have status APPLIED.");
         confirmations[applicant].push(msg.sender);
         bool allBoardMembersConfirmed = true;
         for (uint index = 0; index < getNumberOfMembers(); index++) {
@@ -108,11 +108,11 @@ contract Members {
      * (as long as it is not the last remaining member)
      */
     function resignOwnMembership() public {
-        require(isRegularOrBoardMember(msg.sender));
+        require(isRegularOrBoardMember(msg.sender), "Must be a member to resign membership.");
     
         // don't allow last man standing to resign
         if (getNumberOfMembers() == 1) {
-            revert();
+            revert("Last member cannot resign.");
         }
 
         // reset membership status
@@ -142,13 +142,13 @@ contract Members {
         // this is redundant:
         // It should not even be possible to have a board member vote with no board members to be instantiated
         if (newBoardMembers.length == 0) {
-            revert();
+            revert("There must be at least one board member.");
         }
 
         // check if new board members are already a member.
         for (uint i = 0; i != newBoardMembers.length; ++i) {
             if (isRegularOrBoardMember(newBoardMembers[i]) == false) {
-                revert();
+                revert("New board member must be a member.");
             }
         }
 
@@ -188,7 +188,7 @@ contract Members {
         if (votingContractAddress == address(0)) {
             votingContractAddress = newAddress;
         } else {
-            revert();
+            revert("Voting contract address can only be set initially.");
         }
     }
 
