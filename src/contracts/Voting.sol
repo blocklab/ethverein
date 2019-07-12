@@ -13,7 +13,8 @@ contract Voting {
     enum VoteStatus {
         NONE,
         OPEN,
-        CLOSED
+        CLOSED,
+        CANCELED
     }
 
     enum VoteOutcome {
@@ -46,6 +47,11 @@ contract Voting {
 
     modifier onlyMember {
         require(membersContract.isRegularOrBoardMember(msg.sender), "Sender is not a member");
+        _;
+    }
+
+    modifier onlyInitiator(uint voteId) {
+        require(votes[voteId].initiator == msg.sender, "Only initiator can cancel a vote");
         _;
     }
 
@@ -233,5 +239,20 @@ contract Voting {
         } else {
             return VoteOutcome.NONE;
         }
+    }
+
+    /**
+     * An initiator of a vote can cancel a vote (if it is still undecided)
+     */
+    function cancelVote(uint voteId) public onlyInitiator(voteId) onlyOpenVote(voteId) {
+
+        Vote storage vote = votes[voteId];
+
+        // check if vote is undecided
+        if (computeVoteOutcome(vote) != VoteOutcome.NONE) {
+            revert("Only undecided votes can be closed");
+        }
+        
+        vote.status = VoteStatus.CANCELED;
     }
 }

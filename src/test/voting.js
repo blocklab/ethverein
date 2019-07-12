@@ -18,6 +18,7 @@ let VOTE_TYPE_VOTING_CONTRACT_UPDATE = 3;
 
 let VOTE_STATUS_OPEN = 1;
 let VOTE_STATUS_CLOSED = 2;
+let VOTE_STATUS_CANCELED = 3;
 
 let VOTE_OUTCOME_NONE = 0;
 let VOTE_OUTCOME_YES = 1;
@@ -216,6 +217,15 @@ contract('Voting', function(accounts) {
     }
   });
 
+  it("should throw if non-initiator tries to cancel a vote", async function() {
+    try {
+      await votingContract.cancelVote.call(1, { from: ACCOUNT_REGULAR_MEMBER });
+      assert(false, "Supposed to throw");
+    } catch (err) {
+      assertException(err);
+    }
+  });
+  
   it("should throw if a member tries to vote twice", async function() {
     try {
       let castVoteEvent = await votingContract.castVote(0, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
@@ -339,6 +349,23 @@ contract('Voting', function(accounts) {
     assert.equal(voteOutcome, VOTE_OUTCOME_YES, "Vote outcome should be YES.");
   });
 
+  it("it should not be possible to cancel a vote that has been decided", async function() {
+    try {
+      // create a new vote
+      let voteId = await votingContract.initiateDocumentVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+      await votingContract.initiateDocumentVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+      // vote 3x YES 
+      await votingContract.castVote(voteId, true, { from: ACCOUNT_REGULAR_MEMBER });
+      await votingContract.castVote(voteId, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
+      await votingContract.castVote(voteId, true, { from: ACCOUNT_SECOND_BOARD_MEMBER });
+      // try to cancel the vote
+      await votingContract.cancelVote.call(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+      assert(false, "Supposed to throw");
+    } catch (err) {
+      assertException(err);
+    }
+  });
+  
   it("a vote with outcome YES should be closed", async function() {
     // create a new vote
     let voteId = await votingContract.initiateDocumentVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
@@ -358,6 +385,35 @@ contract('Voting', function(accounts) {
     let voteDetails = await votingContract.getVoteDetails(voteId);
     assert.equal(voteDetails[3], VOTE_STATUS_CLOSED, "Vote should be closed when it has outcome YES.");
   }); 
+
+  it("it should not be possible to cancel a vote that has been closed", async function() {
+    try {
+      // create a new vote
+      let voteId = await votingContract.initiateDocumentVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+      await votingContract.initiateDocumentVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+      // vote 3x YES 
+      await votingContract.castVote(voteId, true, { from: ACCOUNT_REGULAR_MEMBER });
+      await votingContract.castVote(voteId, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
+      await votingContract.castVote(voteId, true, { from: ACCOUNT_SECOND_BOARD_MEMBER });
+      // close vote
+      let voteClosedEvent = await votingContract.closeVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+      await votingContract.cancelVote.call(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+      assert(false, "Supposed to throw");
+    } catch (err) {
+      assertException(err);
+    }
+  });
+  
+  it("it should be possible to cancel a vote", async function() {
+    // create a new vote
+    let voteId = await votingContract.initiateDocumentVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+    await votingContract.initiateDocumentVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+    // cancel vote
+    await votingContract.cancelVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
+    // now check if vote has been closed
+    let voteDetails = await votingContract.getVoteDetails(voteId);
+    assert.equal(voteDetails[3], VOTE_STATUS_CANCELED, "Vote should be canceled.");
+  });
 
   it("a vote with <=50% NO votes should have outcome NO", async function() {
     // create a new vote
