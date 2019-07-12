@@ -38,22 +38,24 @@ contract Voting {
         address[] voters;
         address[] newBoardMembers;
         address newVotingContractAddress;
+        address initiator;
+        uint blockNumberOfVote;
     }
 
     Vote[] private votes;
 
     modifier onlyMember {
-        require(membersContract.isRegularOrBoardMember(msg.sender));
+        require(membersContract.isRegularOrBoardMember(msg.sender), "Sender is not a member");
         _;
     }
 
     modifier onlyOpenVote(uint voteId) {
-        require(votes[voteId].status == VoteStatus.OPEN);
+        require(votes[voteId].status == VoteStatus.OPEN, "Vote is not open");
         _;
     }
 
     modifier onlyClosedVote(uint voteId) {
-        require(votes[voteId].status == VoteStatus.CLOSED);
+        require(votes[voteId].status == VoteStatus.CLOSED, "Vote is not closed");
         _;
     }
 
@@ -64,7 +66,7 @@ contract Voting {
 
     function initiateBoardMemberVote(string name, bytes32 documentHash, address[] newBoardMembers) public onlyMember returns (uint) {
         if (newBoardMembers.length == 0) {
-            revert();
+            revert("List of board member addresses must not be empty");
         }
 
         votes.push(Vote(
@@ -74,7 +76,11 @@ contract Voting {
             status: VoteStatus.OPEN,
             newBoardMembers: newBoardMembers,
             newVotingContractAddress: address(0),
-            voters: new address[](0)}));
+            voters: new address[](0),
+            initiator: msg.sender,
+            blockNumberOfVote: block.number
+            }
+        ));
 
         uint  voteId = votes.length - 1;
         emit VoteCreated(voteId, uint(VoteType.BOARD_MEMBER));
@@ -90,7 +96,10 @@ contract Voting {
             status: VoteStatus.OPEN,
             newBoardMembers: new address[](0),
             newVotingContractAddress: address(0),
-            voters: new address[](0)}));
+            voters: new address[](0),
+            initiator: msg.sender,
+            blockNumberOfVote: block.number
+            }));
 
         uint  voteId = votes.length - 1;
         emit VoteCreated(voteId, uint(VoteType.DOCUMENT));
@@ -100,7 +109,7 @@ contract Voting {
     // create a contract update vote
     function initiateVotingContractUpdateVote(string name, address newContractAddress) public onlyMember returns (uint) {
         if (newContractAddress == address(0)) {
-            revert();
+            revert("Address of new contract must not be empty");
         }
         
         votes.push(Vote(
@@ -110,7 +119,10 @@ contract Voting {
             status: VoteStatus.OPEN,
             newBoardMembers: new address[](0),
             newVotingContractAddress: newContractAddress,
-            voters: new address[](0)}));
+            voters: new address[](0),
+            initiator: msg.sender,
+            blockNumberOfVote: block.number
+            }));
 
         uint  voteId = votes.length - 1;
         emit VoteCreated(voteId, uint(VoteType.VOTING_CONTRACT_UPDATE));
@@ -119,7 +131,7 @@ contract Voting {
 
     function castVote(uint voteId, bool decision) public onlyMember onlyOpenVote(voteId) {
         Vote storage vote = votes[voteId];
-        require(vote.outcome[msg.sender] == VoteOutcome.NONE);
+        require(vote.outcome[msg.sender] == VoteOutcome.NONE, "Vote outcome is already set");
         if (decision == true) {
             vote.outcome[msg.sender] = VoteOutcome.YES;
         } else {
@@ -144,7 +156,7 @@ contract Voting {
      *   address of new voting contract (if contract update vote)
      *   addresses of voters
      */
-    function getVoteDetails(uint voteId) public view returns (string, uint, bytes32, uint, address[], address, address[]) {
+    function getVoteDetails(uint voteId) public view returns (string, uint, bytes32, uint, address[], address, address[], address, uint) {
         Vote storage vote = votes[voteId];
         return (vote.name, 
             uint(vote.voteType),
@@ -152,7 +164,9 @@ contract Voting {
             uint(vote.status),
             vote.newBoardMembers,
             vote.newVotingContractAddress,
-            vote.voters);
+            vote.voters,
+            vote.initiator,
+            vote.blockNumberOfVote);
     }
 
     /**
@@ -164,7 +178,7 @@ contract Voting {
 
         // only close vote if result exists
         if (outcome == VoteOutcome.NONE) {
-            revert();
+            revert("No vote result exists yet");
         }          
 
         vote.status = VoteStatus.CLOSED;

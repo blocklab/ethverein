@@ -31,6 +31,11 @@ At the end of your session, *logout* or *exit* terminates the ssh session, and *
 
 ### Build and run ethverein
 
+0. Install git (should have been installed during bootstrapping)
+```
+$ sudo apt-get install git
+```
+
 1. Compile, test, and run smart contracts using truffle:
 ```console
 $ cd ethverein

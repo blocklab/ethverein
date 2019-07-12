@@ -246,6 +246,8 @@ contract('Voting', function(accounts) {
     assert.equal(voteDetails[5], 0x0, "No contract update address should be set.");
     assert.equal(voteDetails[6].length, 1, "One voter should be available.");
     assert.equal(voteDetails[6][0], ACCOUNT_FIRST_BOARD_MEMBER, "Address of voter wrong.");
+    assert.equal(voteDetails[7], ACCOUNT_REGULAR_MEMBER, "Initiator of vote not set correctly.");
+    assert.isTrue(voteDetails[8] > 0, "Block number of vote not set.");
   });
 
   it("vote details of document vote are given correctly", async function() {
@@ -259,6 +261,8 @@ contract('Voting', function(accounts) {
     assert.equal(voteDetails[4].length, 0, "No board member address should be set for document vote.");
     assert.equal(voteDetails[5], 0x0, "No contract update address should be set.");
     assert.equal(voteDetails[6].length, 0, "Noone should have voted yet.");
+    assert.equal(voteDetails[7], ACCOUNT_REGULAR_MEMBER, "Initiator of vote not set correctly.");
+    assert.isTrue(voteDetails[8] > 0, "Block number of vote not set.");
   });
 
   it("vote details of contract update vote are given correctly", async function() {
@@ -278,6 +282,8 @@ contract('Voting', function(accounts) {
     assert.equal(voteDetails[4].length, 0, "No board member address should be set for contract update vote.");
     assert.equal(voteDetails[5], NEW_CONTRACT_ADDRESS, "Address of new contract not set correctly.");
     assert.equal(voteDetails[6].length, 0, "Noone should have voted yet.");
+    assert.equal(voteDetails[7], ACCOUNT_REGULAR_MEMBER, "Initiator of vote not set correctly.");
+    assert.isTrue(voteDetails[8] > 0, "Block number of vote not set.");
   });
 
   it("should throw if non-member closes a vote", async function() {
