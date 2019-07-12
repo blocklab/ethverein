@@ -206,4 +206,25 @@ contract Members {
     function kill() public onlyOwner {
         selfdestruct(owner);
     }
+
+    /**
+     * Replace address
+     */
+    function replaceMemberAddress(address oldAddress, address newAddress) public onlyOwner {
+
+        // replace item in list of members
+        members[newAddress] = members[oldAddress];
+        
+        // replace item in list of member addresses
+        uint numberOfMembers = getNumberOfMembers();
+        for (uint i = 0; i != numberOfMembers; ++i) {
+            if (oldAddress == memberAddresses[i]) {
+                memberAddresses[i] = newAddress;
+                break;
+            }
+        }
+
+        // replace item in confirmations of user
+        confirmations[newAddress] = confirmations[oldAddress];
+    }
 }

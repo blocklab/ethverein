@@ -21,6 +21,7 @@ contract('Members', function(accounts) {
   let THIRD_FOUNDER_AND_BOARD_MEMBER = accounts[2];
   let APPLIED_MEMBER = accounts[3];
   let NEW_CONTRACT_ADDRESS = accounts[7];
+  let FIRST_FOUNDER_AND_BOARD_MEMBER_NEW_ADDRESS = accounts[8];
 
   it("prepare members", async function() {
     membersContract = await Members.deployed();
@@ -161,6 +162,38 @@ contract('Members', function(accounts) {
     }
   });
 
+
+  it("data should be stored under new address", async function() {
+
+    // store member data of "old" user
+    let numMembersBeforeAddressChange = await membersContract.getNumberOfMembers.call();
+    let memberDataBeforeAddressChange = await membersContract.members.call(FIRST_FOUNDER_AND_BOARD_MEMBER);
+    let nameBeforeAddressChange = memberDataBeforeAddressChange[0];
+    let statusBeforeAddressChange = memberDataBeforeAddressChange[1];
+    let entryBlockBeforeAddressChange = memberDataBeforeAddressChange[2];
+    
+    // perform address change
+    await membersContract.replaceMemberAddress(FIRST_FOUNDER_AND_BOARD_MEMBER, FIRST_FOUNDER_AND_BOARD_MEMBER_NEW_ADDRESS);
+
+    // check if data of "new" user matches data of "old" user
+    let numMembersAfterAddressChange = await membersContract.getNumberOfMembers.call();
+    assert.equal(numMembersAfterAddressChange.toNumber(), numMembersBeforeAddressChange.toNumber(), "Number of members should not change due to address change.");
+   
+    let memberDataAfterAddressChange = await membersContract.members.call(FIRST_FOUNDER_AND_BOARD_MEMBER_NEW_ADDRESS);
+    assert.equal(nameBeforeAddressChange.toString(), memberDataAfterAddressChange[0]);
+    assert.equal(statusBeforeAddressChange.toNumber(), memberDataAfterAddressChange[1]);
+    assert.equal(entryBlockBeforeAddressChange.toNumber(), memberDataAfterAddressChange[2]);
+  });
+
+  it("address change can only be called by contract owner", async function() {
+    try {
+      await membersContract.replaceMemberAddress.call(FIRST_FOUNDER_AND_BOARD_MEMBER, FIRST_FOUNDER_AND_BOARD_MEMBER_NEW_ADDRESS, {from: THIRD_FOUNDER_AND_BOARD_MEMBER});
+      assert(false, "Supposed to throw - only contract owner should be able to call address update");
+    } catch (err) {
+      assertException(err);
+    }
+  });
+
   it("kill can only be called by contract owner", async function() {
     try {
       await membersContract.kill({from: THIRD_FOUNDER_AND_BOARD_MEMBER});
@@ -181,4 +214,6 @@ contract('Members', function(accounts) {
       }
     }
   });
+
+
 });
