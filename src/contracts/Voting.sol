@@ -225,7 +225,16 @@ contract Voting {
             }
         }
 
-        // process result
+        if (vote.status == VoteStatus.CLOSED) {
+            if (positiveVotes > negativeVotes) {
+                return VoteOutcome.YES;
+            } else {
+                return VoteOutcome.NO;
+            }
+        }
+
+        // If vote is not yet closed, number of potential voters must be taken into account
+        // when determining status of vote.
         uint eligibleVoters = membersContract.getNumberOfEligibleMembers();
         if (positiveVotes > eligibleVoters/2) {
             return VoteOutcome.YES;
