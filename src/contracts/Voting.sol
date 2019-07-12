@@ -7,6 +7,7 @@ contract Voting {
     event VoteCreated(uint voteId, uint voteType);
     event VoteCast(uint voteId, address voter);
     event VoteClosed(uint voteId, uint outcome);
+    event VoteCanceled(uint voteId);
 
     Members private membersContract;
 
@@ -276,5 +277,7 @@ contract Voting {
         }
         
         vote.status = VoteStatus.CANCELED;
+
+        emit VoteCanceled(voteId);
     }
 }
