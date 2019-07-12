@@ -24,6 +24,24 @@ let VOTE_OUTCOME_NONE = 0;
 let VOTE_OUTCOME_YES = 1;
 let VOTE_OUTCOME_NO = 2;
 
+/**
+ * Util function waitNBlocks required to check for delay
+ * (i.e., anyone is required to cancel a vote after N number of blocks)
+ */
+const util = require('util');
+const waitNBlocks = async n => {
+  const sendAsync = util.promisify(web3.currentProvider.sendAsync);
+  await Promise.all(
+    [...Array(n).keys()].map(i =>
+      sendAsync({
+        jsonrpc: '2.0',
+        method: 'evm_mine',
+        id: i
+      })
+    )
+  );
+};
+
 let assertException = function(error) {
   if (error.toString().indexOf("VM Exception") == -1) {
     assert(false, error.toString());
@@ -217,15 +235,6 @@ contract('Voting', function(accounts) {
     }
   });
 
-  it("should throw if non-initiator tries to cancel a vote", async function() {
-    try {
-      await votingContract.cancelVote.call(1, { from: ACCOUNT_REGULAR_MEMBER });
-      assert(false, "Supposed to throw");
-    } catch (err) {
-      assertException(err);
-    }
-  });
-  
   it("should throw if a member tries to vote twice", async function() {
     try {
       let castVoteEvent = await votingContract.castVote(0, true, { from: ACCOUNT_FIRST_BOARD_MEMBER });
@@ -366,6 +375,39 @@ contract('Voting', function(accounts) {
     }
   });
   
+  it("should throw if non-initiator tries to cancel a vote", async function() {
+    try {
+      // create a new vote
+      let voteId = await votingContract.initiateDocumentVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+      await votingContract.initiateDocumentVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+      // try to cancel vote
+      await votingContract.cancelVote.call(voteId, { from: ACCOUNT_FIRST_BOARD_MEMBER });
+      assert(false, "Supposed to throw");
+    } catch (err) {
+      assertException(err);
+    }
+  });
+
+  /**
+   * Should jump >172,000 blocks ahead, however this does not
+   * work as intended since the helper function performs mining.
+   * Has been tested with 100 blocks (with reduced block number time in the Voting contract)
+   */
+  // it("after some time, any member should be allowed to cancel a vote", async function() {
+  //     // create a new vote
+  //     let voteId = await votingContract.initiateDocumentVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+  //     await votingContract.initiateDocumentVote(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
+  
+  //     await waitNBlocks(180000);
+
+  //     // try to cancel vote
+  //     await votingContract.cancelVote(voteId, { from: ACCOUNT_FIRST_BOARD_MEMBER });
+    
+  //     // now check if vote has been closed
+  //     let voteDetails = await votingContract.getVoteDetails.call(voteId);
+  //     assert.equal(voteDetails[3], VOTE_STATUS_CANCELED, "Vote should be canceled.");
+  // });
+
   it("a vote with outcome YES should be closed", async function() {
     // create a new vote
     let voteId = await votingContract.initiateDocumentVote.call(DOCUMENT_VOTE_NAME, DOCUMENT_VOTE_HASH, { from: ACCOUNT_REGULAR_MEMBER });
@@ -411,7 +453,7 @@ contract('Voting', function(accounts) {
     // cancel vote
     await votingContract.cancelVote(voteId, { from: ACCOUNT_REGULAR_MEMBER });
     // now check if vote has been closed
-    let voteDetails = await votingContract.getVoteDetails(voteId);
+    let voteDetails = await votingContract.getVoteDetails.call(voteId);
     assert.equal(voteDetails[3], VOTE_STATUS_CANCELED, "Vote should be canceled.");
   });
 

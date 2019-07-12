@@ -40,18 +40,13 @@ contract Voting {
         address[] newBoardMembers;
         address newVotingContractAddress;
         address initiator;
-        uint blockNumberOfVote;
+        uint blockNumberAtInitiation;
     }
 
     Vote[] private votes;
 
     modifier onlyMember {
         require(membersContract.isRegularOrBoardMember(msg.sender), "Sender is not a member");
-        _;
-    }
-
-    modifier onlyInitiator(uint voteId) {
-        require(votes[voteId].initiator == msg.sender, "Only initiator can cancel a vote");
         _;
     }
 
@@ -84,7 +79,7 @@ contract Voting {
             newVotingContractAddress: address(0),
             voters: new address[](0),
             initiator: msg.sender,
-            blockNumberOfVote: block.number
+            blockNumberAtInitiation: block.number
             }
         ));
 
@@ -104,7 +99,7 @@ contract Voting {
             newVotingContractAddress: address(0),
             voters: new address[](0),
             initiator: msg.sender,
-            blockNumberOfVote: block.number
+            blockNumberAtInitiation: block.number
             }));
 
         uint  voteId = votes.length - 1;
@@ -127,7 +122,7 @@ contract Voting {
             newVotingContractAddress: newContractAddress,
             voters: new address[](0),
             initiator: msg.sender,
-            blockNumberOfVote: block.number
+            blockNumberAtInitiation: block.number
             }));
 
         uint  voteId = votes.length - 1;
@@ -172,7 +167,7 @@ contract Voting {
             vote.newVotingContractAddress,
             vote.voters,
             vote.initiator,
-            vote.blockNumberOfVote);
+            vote.blockNumberAtInitiation);
     }
 
     /**
@@ -244,13 +239,31 @@ contract Voting {
     /**
      * An initiator of a vote can cancel a vote (if it is still undecided)
      */
-    function cancelVote(uint voteId) public onlyInitiator(voteId) onlyOpenVote(voteId) {
+    function cancelVote(uint voteId) public onlyOpenVote(voteId) {
 
         Vote storage vote = votes[voteId];
 
         // check if vote is undecided
         if (computeVoteOutcome(vote) != VoteOutcome.NONE) {
             revert("Only undecided votes can be closed");
+        }
+        
+        /**
+         * Within 172800 blocks (roughly 30 days assuming a 15-second block size):
+         * Only initiator should be allowed to cancel the vote.
+         *
+         * After 172800 blocks:
+         * Every eligible member should be allowed to cancel the vote.
+         */
+        uint blocksPassed = block.number - vote.blockNumberAtInitiation;
+        if (blocksPassed < 172800) {
+            if (votes[voteId].initiator != msg.sender) {
+                revert("Within 172,800 blocks, only initiator can cancel a vote");
+            }
+        } else {
+            if (!membersContract.isRegularOrBoardMember(msg.sender)) {
+                revert("After 172,800 blocks, only regular and board members can cancel a vote");
+            }
         }
         
         vote.status = VoteStatus.CANCELED;
