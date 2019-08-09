@@ -13,6 +13,7 @@ if (environment.production) {
 
 window.addEventListener('load', function () {
 
+  
   platformBrowserDynamic().bootstrapModule(AppModule)
     .catch(err => console.log(err));
 });

@@ -196,7 +196,7 @@ contract('Voting', function(accounts) {
 
   it("should throw if voting contract update vote is instantiated without new contract address", async function() {
     try {
-      await votingContract.initiateVotingContractUpdateVote.call(VOTING_CONTRACT_UPDATE_VOTE_NAME, 0, { from: ACCOUNT_REGULAR_MEMBER });
+      await votingContract.initiateVotingContractUpdateVote.call(VOTING_CONTRACT_UPDATE_VOTE_NAME, "0x0000000000000000000000000000000000000000", { from: ACCOUNT_REGULAR_MEMBER });
       assert(false, "Supposed to throw");
     } catch (e) {
       assertException(e);

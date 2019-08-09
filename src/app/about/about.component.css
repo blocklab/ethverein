@@ -1,0 +1,29 @@
+.mat-form-field {
+  width: 80%;
+}
+
+.mat-column-block, .mat-column-no {
+  width: 20%;
+}
+
+.mat-column-status {
+  width: 30%;
+}
+
+.mat-column-name {
+  width: 30%;
+}
+
+.regular {
+  cursor: default;
+}
+
+.pending {
+  cursor: pointer;
+}
+
+th {
+  color: white;
+  font-size: 1em;
+  background-color: #ed7d31;
+}

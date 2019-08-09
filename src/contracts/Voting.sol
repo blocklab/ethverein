@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.5.0;
 
 import "./Members.sol";
 
@@ -66,7 +66,7 @@ contract Voting {
         membersContract = Members(membersContractAddress); 
     }
 
-    function initiateBoardMemberVote(string name, bytes32 documentHash, address[] newBoardMembers) public onlyMember returns (uint) {
+    function initiateBoardMemberVote(string memory name, bytes32 documentHash, address[] memory newBoardMembers) public onlyMember returns (uint) {
         if (newBoardMembers.length == 0) {
             revert("List of board member addresses must not be empty");
         }
@@ -90,7 +90,7 @@ contract Voting {
     }
 
     // create a document vote
-    function initiateDocumentVote(string name, bytes32 documentHash) public onlyMember returns (uint) {
+    function initiateDocumentVote(string memory name, bytes32 documentHash) public onlyMember returns (uint) {
         votes.push(Vote(
             { name: name,
             voteType: VoteType.DOCUMENT,
@@ -109,7 +109,7 @@ contract Voting {
     }
 
     // create a contract update vote
-    function initiateVotingContractUpdateVote(string name, address newContractAddress) public onlyMember returns (uint) {
+    function initiateVotingContractUpdateVote(string memory name, address newContractAddress) public onlyMember returns (uint) {
         if (newContractAddress == address(0)) {
             revert("Address of new contract must not be empty");
         }
@@ -158,7 +158,7 @@ contract Voting {
      *   address of new voting contract (if contract update vote)
      *   addresses of voters
      */
-    function getVoteDetails(uint voteId) public view returns (string, uint, bytes32, uint, address[], address, address[], address, uint) {
+    function getVoteDetails(uint voteId) public view returns (string memory, uint, bytes32, uint, address[] memory, address, address[] memory, address, uint) {
         Vote storage vote = votes[voteId];
         return (vote.name, 
             uint(vote.voteType),

@@ -11,8 +11,13 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+            "customWebpackConfig": {
+               "path": "./webpack.config.js",
+               "mergeStrategies": { "externals": "replace" }
+         },
+            
             "outputPath": "dist/BlockLab",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -73,14 +78,23 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/dev-server:generic",
           "options": {
+
+
             "browserTarget": "BlockLab:build"
+            
+           
           },
           "configurations": {
+            
             "production": {
               "browserTarget": "BlockLab:build:production"
+            },
+            "test": {
+              "browserTarget": "BlockLab:build:test"              
             }
+            
           }
         },
         "extract-i18n": {

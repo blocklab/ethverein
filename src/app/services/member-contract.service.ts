@@ -19,7 +19,7 @@ export class MemberContractService {
 
   constructor(private _web3Service: Web3Service) {
     this.web3 = this._web3Service.getWeb3();
-    this.membersContract = this.web3.eth.contract(MembersAbi.abi).at(this.membersContractAddress);
+    this.membersContract = new this.web3.eth.Contract(MembersAbi.abi, this.membersContractAddress);
   }
 
   getAddress() {
@@ -35,161 +35,130 @@ export class MemberContractService {
   // get members mapping for logged in account
   async getThisMember(): Promise<string> {
     const acc = await this._web3Service.getAccount();
-    return new Promise((resolve, reject) => {
-      this.membersContract.members.call(acc, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<string>;
+    return this.membersContract.methods.members(acc).call();
   }
+  
 
   // get members mapping for specific member
   async getMember(_account: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.membersContract.members.call(_account, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<string>;
+    return this.membersContract.methods.members(_account).call();
   }
 
   // get all member addresses
   async getMembers(_memberNo: number): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.membersContract.memberAddresses.call(_memberNo, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<string>;
+    return this.membersContract.methods.memberAddresses(_memberNo).call();
   }
 
   // get votingContractAddress
   async getVotingContractAddress(): Promise<string> {
-
-    return new Promise((resolve, reject) => {
-      this.membersContract.votingContractAddress.call(function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<string>;
+    return this.membersContract.methods.votingContractAddress().call();
   }
 
   // get Number of Members
   async getNumberOfMembers(): Promise<number> {
-    return new Promise((resolve, reject) => {
-      this.membersContract.getNumberOfMembers.call(function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<number>;
+    return this.membersContract.methods.getNumberOfMembers().call();
   }
 
   // get Number of Eligible Members
   async getNumberOfEligibleMembers(): Promise<number> {
-    return new Promise((resolve, reject) => {
-      this.membersContract.getNumberOfEligibleMembers.call(function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<number>;
+    return this.membersContract.methods.getNumberOfEligibleMembers().call();
   }
 
   // check if address is regular or board
   async getIsRegularOrBoardMember(_memberAddress: string): Promise<string> {
     const acc = await this._web3Service.getAccount();
-    return new Promise((resolve, reject) => {
-      this.membersContract.isRegularOrBoardMember.call(_memberAddress, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<string>;
+    return this.membersContract.methods.isRegularOrBoardMember(_memberAddress).call();
   }
 
   // check if board member has already confirmed applicant
   async hasConfirmedApplicant(_boardMemberAddress: string, _applicantAddress: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this.membersContract.hasConfirmedApplicant.call(_boardMemberAddress, _applicantAddress, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<boolean>;
+  return this.membersContract.methods.hasConfirmedApplicant(_boardMemberAddress, _applicantAddress).call();
   }
 
   /* Contract Transactions */
 
   // apply for Membership
   async applyForMembership(_name: string) {
-    this.membersContract.applyForMembership.sendTransaction(_name, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    const acc = await this._web3Service.getAccount();
+    this.membersContract.methods.applyForMembership(_name).send({from: acc});
   }
 
   // change Name
   async changeName(_newName: string) {
-    this.membersContract.changeName.sendTransaction(_newName, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    const acc = await this._web3Service.getAccount();
+    this.membersContract.methods.changeName(_newName).send({from: acc});
   }
 
   // confirm Application of applicant
   async confirmApplication(_applicantAddress: string, callback: Function) {
-    this.membersContract.confirmApplication.sendTransaction(_applicantAddress, callback);
+    const acc = await this._web3Service.getAccount();
+    this.membersContract.methods.confirmApplication(_applicantAddress).send({from: acc}, callback);
   }
 
   // resign membership of logged in member
   async resignOwnMembership() {
-    this.membersContract.resignOwnMembership.sendTransaction(function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    const acc = await this._web3Service.getAccount();
+    this.membersContract.methods.resignOwnMembership().send({from:acc});
   }
 
   // Initially set voting contract address
   async setVotingContractAddress(_votingContractAdrres: string) {
-    this.membersContract.setVotingContractAddress.sendTransaction(_votingContractAdrres, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    const acc = await this._web3Service.getAccount();
+    this.membersContract.methods.setVotingContractAddress(_votingContractAdrres).send({from: acc})
   }
 
   /* /Contract Functions */
 
   /* Contract Events */
   getMemberAppliedEvent() {
-    return this.membersContract.MemberApplied();
+    return this.membersContract.events.MemberApplied({
+      filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
+      fromBlock: 0
+    }, function (error, event) { console.log(event); })
+      .on('data', function (event) {
+        console.log(event);
+      })
+      .on('changed', function (event) {
+      })
+      .on('error', console.error);
   }
 
   getMemberConfirmedEvent() {
-    return this.membersContract.MemberConfirmed();
+    return this.membersContract.events.MemberConfirmed({
+      filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
+    }, function (error, event) { console.log(event); })
+      .on('data', function (event) {
+        console.log(event);
+      })
+      .on('changed', function (event) {
+      })
+      .on('error', console.error);
+
   }
 
   getMemberNameChangedEvent() {
-    return this.membersContract.MemberNameChanged();
+    return this.membersContract.events.MemberNameChanged({
+      filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
+      fromBlock: 0
+    }, function (error, event) { console.log(event); })
+      .on('data', function (event) {
+        console.log(event);
+      })
+      .on('changed', function (event) {
+      })
+      .on('error', console.error);
   }
 
   getMemberResignedEvent() {
-    return this.membersContract.MemberResigned();
+    return this.membersContract.events.MemberResigned({
+      filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
+      fromBlock: 0
+    }, function (error, event) { console.log(event); })
+      .on('data', function (event) {
+        console.log(event);
+      })
+      .on('changed', function (event) {
+      })
+      .on('error', console.error);
   }
 }

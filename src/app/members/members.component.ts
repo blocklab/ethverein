@@ -18,28 +18,28 @@ export class MembersComponent implements OnInit {
     private _memberContractService: MemberContractService
   ) {
     // register event listeners
-    this._memberContractService.getMemberAppliedEvent().watch((err, res) => {
+    this._memberContractService.getMemberAppliedEvent(), ((err, res) => {
       if (res && res.args.applicantAddress && !membersList.some(m => m.address === res.args.applicantAddress)) {
         membersList.push({ alias: res.args.applicantName, status: 'Pending', block: 0, address: res.args.applicantAddress});
         this.dataSource.sort = this.sort;
         this.dataSource.filter = this.filter;
       }
     });
-    this._memberContractService.getMemberConfirmedEvent().watch((err, res) => {
+    this._memberContractService.getMemberConfirmedEvent(), ((err, res) => {
       if (res) {
         membersList.filter(m => m.address === res.args.memberAddress).map(m => m.status = 'Member');
         this.dataSource.sort = this.sort;
         this.dataSource.filter = this.filter;
       }
     });
-    this._memberContractService.getMemberNameChangedEvent().watch((err, res) => {
+    this._memberContractService.getMemberNameChangedEvent(), ((err, res) => {
       if (res) {
         membersList.filter(m => m.address === res.args.memberAddress).map(m => m.alias = res.args.newMemberName);
         this.dataSource.sort = this.sort;
         this.dataSource.filter = this.filter;
       }
     });
-    this._memberContractService.getMemberResignedEvent().watch((err, res) => {
+    this._memberContractService.getMemberResignedEvent(), ((err, res) => {
       if (res) {
         let indexOfResignedMember = membersList.findIndex(m => m.address === res.args.memberAddress);
         if (indexOfResignedMember !== -1) {

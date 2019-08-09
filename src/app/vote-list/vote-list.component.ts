@@ -76,7 +76,7 @@ export class VoteListComponent implements OnInit {
         }).then(voteObj => {
           this.votingContractService.computeVoteOutcome(voteObj.id).then(_outcome => {
 
-            switch (parseInt(_outcome.c[0], 0)) {
+            switch (parseInt(_outcome[0], 0)) {
               case 0: voteObj.outcome = 'Undecided'; break;
               case 1: voteObj.outcome = 'Accepted'; break;
               case 2: voteObj.outcome = 'Declined'; break;
