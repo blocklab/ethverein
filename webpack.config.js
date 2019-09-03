@@ -9,7 +9,6 @@ module.exports = {
       os: true,
       vm: true,
       stream: true,
-	  scrypt: true,
 	},
 	
 }

@@ -37,8 +37,8 @@ export class MemberContractService {
     const acc = await this._web3Service.getAccount();
     return this.membersContract.methods.members(acc).call();
   }
-  
 
+  
   // get members mapping for specific member
   async getMember(_account: string): Promise<string> {
     return this.membersContract.methods.members(_account).call();

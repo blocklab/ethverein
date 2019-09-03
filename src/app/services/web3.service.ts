@@ -37,12 +37,14 @@ export class Web3Service {
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof window.web3.currentProvider !== 'undefined') {
       this.web3 = new Web3(window.web3.currentProvider);
+      
   
       return true;
     } else {
       this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545'));
       return false;
     }
+      
 
   }
 
@@ -52,7 +54,7 @@ export class Web3Service {
       if (window.ethereum) {
         try {
           // Request account access if needed
-          //await window.ethereum.enable();
+           await window.ethereum.enable();
            await this.web3.eth.getAccounts();
          
           
