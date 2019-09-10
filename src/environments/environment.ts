@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  hmr: false,
   
 // local Ganache Member Contract Address --> 0x95eC298f1D21ae5E2ffEcf3bf91674B7179d4353
 

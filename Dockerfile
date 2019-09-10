@@ -17,6 +17,7 @@ ENV PATH /ethverein/node_modules/.bin:$PATH
 
 # expose port 
 EXPOSE 4200
+EXPOSE 6545
 
 # install and cache app dependencies
 COPY package.json .
@@ -33,4 +34,4 @@ RUN npm install
 COPY . /ethverein
 
 # start app
-CMD ng serve --host 0.0.0.0
+CMD ng serve --host 0.0.0.0 --configuration=hmr 

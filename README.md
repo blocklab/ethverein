@@ -2,12 +2,58 @@
 
 Smart contracts & UI of [blockLAB](http://site.blocklab.de/) - The first club to be managed on the blockchain.
 
+## Build and run ethverein with docker
+
+### Prerequisites
+
+* [Docker](https://www.docker.com/) Please remind for Windows you will need Hyper-V
+* [MetaMask browser plugin](https://metamask.io/)
+
+1. Clone Repository
+```console
+$ git clone https://github.com/blocklab/ethverein.git
+```
+
+2. Open a new Terminal and cd to /ethverein
+and run :
+```console
+docker-compose up -d --build
+```
+3. (Optional) Open a second Terminal and cd to /ethverein and run :
+```console
+docker exec -ti ethverein /bin/bash
+```
+```console
+cd src/
+```
+```console
+truffle test
+```
+If the tests compile without errors run :
+```console
+exit
+```
+
+4. deploy the contracts to the docker ganache service
+```console
+docker exec -w /ethverein/src -ti ethverein truffle migrate --reset --network dockernache
+```
+
+5. Use your browser and connect to [http://localhost:4201](http://localhost:4201). 
+
+6. Set a custom RPC in Metamask with the URL http://localhost:6545
+
+7. Import Metamask Accounts with the private keys of the docker ganache service (you can find those in your console output)
+
+
+
+
+## Build and run ethverein with Vagrant
+
 ## Prerequisites
 * [MetaMask browser plugin](https://metamask.io/)
 * [Vagrant](https://www.vagrantup.com/downloads.html)
 * [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-
-## Installation (local)
 
 ### Vagrant setup
 
@@ -86,45 +132,3 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 
-## Build and run ethverein with docker
-
-### Prerequisites
-
-* [Docker](https://www.docker.com/)
-* [MetaMask browser plugin](https://metamask.io/)
-
-1. Clone Repository
-```console
-$ git clone https://github.com/blocklab/ethverein.git
-```
-
-2. Open a new Terminal and cd to /ethverein
-and run :
-```console
-docker-compose up -d --build
-```
-3. (Optional) Open a second Terminal and cd to /ethverein and run :
-```console
-docker exec -ti ethverein /bin/bash
-```
-```console
-cd src/
-```
-```console
-truffle test
-```
-If the tests compile without errors run :
-```console
-exit
-```
-
-4. deploy the contracts to the docker ganache service
-```console
-docker exec -w /ethverein/src -ti ethverein truffle migrate --reset --network dockernache
-```
-
-5. Use your browser and connect to [http://localhost:4201](http://localhost:4201). 
-
-6. Set a custom RPC in Metamask with the URL http://localhost:8080
-
-7. Import Metamask Accounts with the private keys of the docker ganache service

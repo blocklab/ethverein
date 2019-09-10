@@ -74,8 +74,16 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "hmr": {
+              "fileReplacements": [{
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.hmr.ts" 
+              }
+                
+              ]
             }
-          }
+          }     
         },
         "serve": {
           "builder": "@angular-builders/dev-server:generic",
@@ -89,12 +97,18 @@
           "configurations": {
             
             "production": {
+              "hmr": false,
               "browserTarget": "BlockLab:build:production"
             },
             "test": {
+              "hmr": false,
               "browserTarget": "BlockLab:build:test"              
+            },
+            "hmr": {
+              "hmr": true,
+              "browserTarget": "BlockLab:build:hmr"
             }
-            
+
           }
         },
         "extract-i18n": {

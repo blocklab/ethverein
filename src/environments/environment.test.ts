@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  hmr: false,
   membersContractAddress: '0x22ad32b66fACCB0b508d26B1FA57DA42a1DA9Db5',
   blockExplorerBaseUrl: 'https://ropsten.etherscan.io/address/'
 };
