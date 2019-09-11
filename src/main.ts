@@ -13,7 +13,7 @@ if (environment.production) {
 window.addEventListener('load', function () {
   
   bootstrap()
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 });
 
 if (environment.hmr) {

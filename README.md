@@ -6,7 +6,8 @@ Smart contracts & UI of [blockLAB](http://site.blocklab.de/) - The first club to
 
 ### Prerequisites
 
-* [Docker](https://www.docker.com/) Please remind for Windows you will need Hyper-V
+* [Docker](https://www.docker.com/) Please remind for Windows you will need Hyper-V. If you have already installed docker on your machine, please make sure to upgrade it to a recent version.
+
 * [MetaMask browser plugin](https://metamask.io/)
 
 1. Clone Repository
@@ -14,7 +15,7 @@ Smart contracts & UI of [blockLAB](http://site.blocklab.de/) - The first club to
 $ git clone https://github.com/blocklab/ethverein.git
 ```
 
-2. Open a new Terminal and cd to /ethverein
+2. Open a Terminal and cd to /ethverein
 and run :
 ```console
 docker-compose up -d --build
@@ -39,11 +40,16 @@ exit
 docker exec -w /ethverein/src -ti ethverein truffle migrate --reset --network dockernache
 ```
 
-5. Use your browser and connect to [http://localhost:4201](http://localhost:4201). 
+5. compose up again to see the logs
+```console
+docker-compose up
+```
 
-6. Set a custom RPC in Metamask with the URL http://localhost:6545
+6. Use your browser and connect to [http://localhost:4201](http://localhost:4201). 
 
-7. Import Metamask Accounts with the private keys of the docker ganache service (you can find those in your console output)
+7. Set a custom RPC in Metamask with the URL http://localhost:6545
+
+8. Import Metamask Accounts with the private keys of the docker ganache service (you can find those in your console output)
 
 
 
