@@ -47,6 +47,20 @@ docker-compose up
 
 6. Use your browser and connect to [http://localhost:4201](http://localhost:4201). 
 
+If you have trouble to connect to the application, you might run
+
+```console
+docker-compose run --service-ports
+```
+
+to use the specified ports and jsut to be sure run
+
+```console
+docker inspect ethverein
+```
+to get the container id and use this instead of localhost.
+
+
 7. Set a custom RPC in Metamask with the URL http://localhost:6545
 
 8. Import Metamask Accounts with the private keys of the docker ganache service (you can find those in your console output)
