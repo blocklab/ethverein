@@ -53,7 +53,7 @@ If you have trouble to connect to the application, you might run
 docker-compose run --service-ports
 ```
 
-to use the specified ports and jsut to be sure run
+to use the specified ports and just to be sure run
 
 ```console
 docker inspect ethverein
