@@ -9,7 +9,7 @@ services:
             - '4201:4200'
     ganachecli:
         image: trufflesuite/ganache-cli:v6.5.0
-        restart: always
+        restart: on-failure
         command: bash "ganache-cli -h 0.0.0.0"  -i "6545" -l "90000000" --allowUnlimitedContractSize --mnemonic "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
         ports:
             - '6545:8545'

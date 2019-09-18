@@ -8,6 +8,8 @@ Smart contracts & UI of [blockLAB](http://site.blocklab.de/) - The first club to
 
 * [Docker](https://www.docker.com/) Please remind for Windows you will need Hyper-V. If you have already installed docker on your machine, please make sure to upgrade it to a recent version.
 
+* [Docker-Compose](https://docs.docker.com/compose/install/)
+
 * [MetaMask browser plugin](https://metamask.io/)
 
 1. Clone Repository
