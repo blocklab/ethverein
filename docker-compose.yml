@@ -7,6 +7,9 @@ services:
             dockerfile: Dockerfile
         ports:
             - '4201:4200'
+        volumes:
+            - '.:/ethverein'
+            - '/ethverein/node_modules'  
     ganachecli:
         image: trufflesuite/ganache-cli:v6.5.0
         restart: on-failure
