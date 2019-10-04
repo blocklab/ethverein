@@ -17,14 +17,13 @@ ENV PATH /ethverein/node_modules/.bin:$PATH
 
 # expose port 
 EXPOSE 4200
-EXPOSE 6545
 
 # install and cache app dependencies
 COPY package.json .
 
 # install global dependencies
 RUN npm install -g node-gyp
-RUN npm install -g ganache-cli --unsafe-perm
+#RUN npm install -g ganache-cli --unsafe-perm
 RUN npm install -g web3-eth-accounts@1.0.0-beta.37 --unsafe-perm --allow-root
 
 # install dependencies

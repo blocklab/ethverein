@@ -13,6 +13,6 @@ services:
     ganachecli:
         image: trufflesuite/ganache-cli:v6.5.0
         restart: on-failure
-        command: bash "ganache-cli -h 0.0.0.0"  -i "6545" -l "90000000" --allowUnlimitedContractSize --mnemonic "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
+        command: bash "ganache-cli -h 0.0.0.0" --db ./ --deterministic -i "6545" -l "90000000" --allowUnlimitedContractSize --mnemonic "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
         ports:
             - '6545:8545'
