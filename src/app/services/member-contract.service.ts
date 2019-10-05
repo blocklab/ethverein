@@ -112,7 +112,6 @@ export class MemberContractService {
   /* Contract Events */
   getMemberAppliedEvent() {
     return this.membersContract.events.MemberApplied({
-      filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
       fromBlock: 0
     }, function (error, event) { console.log(event); })
       .on('data', function (event) {
@@ -125,7 +124,6 @@ export class MemberContractService {
 
   getMemberConfirmedEvent() {
     return this.membersContract.events.MemberConfirmed({
-      filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
     }, function (error, event) { console.log(event); })
       .on('data', function (event) {
         console.log(event);
@@ -138,7 +136,6 @@ export class MemberContractService {
 
   getMemberNameChangedEvent() {
     return this.membersContract.events.MemberNameChanged({
-      filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
       fromBlock: 0
     }, function (error, event) { console.log(event); })
       .on('data', function (event) {
@@ -151,7 +148,6 @@ export class MemberContractService {
 
   getMemberResignedEvent() {
     return this.membersContract.events.MemberResigned({
-      filter: { myIndexedParam: [20, 23], myOtherIndexedParam: '0x123456789...' },
       fromBlock: 0
     }, function (error, event) { console.log(event); })
       .on('data', function (event) {

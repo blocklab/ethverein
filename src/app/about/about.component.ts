@@ -14,7 +14,6 @@ export class AboutComponent implements OnInit {
 
  
 
-  displayedColumns = ['alias', 'status', 'block'];
   dataSource = new MatTableDataSource(aboutList);
   private filter = '';
   ownAddress: string;
