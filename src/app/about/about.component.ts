@@ -1,8 +1,8 @@
 import { ConfirmApplicationDialogComponent } from './../dialogs/confirm-application-dialog/confirm-application-dialog.component';
 import { MemberContractService } from './../services/member-contract.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatDialog, MatDialogConfig } from '@angular/material';
-import { Web3Service } from '../services/web3.service';
+import { Component, OnInit, ViewChild} from '@angular/core';
+import { MatTableDataSource, MatSort} from '@angular/material';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-about',
@@ -18,6 +18,15 @@ export class AboutComponent implements OnInit {
   private filter = '';
   ownAddress: string;
   ownStatus: string;
+  blockExplorerLink: string;
+  memberContractAddress;
+
+  constructor(
+    private memberContractService: MemberContractService)
+    {
+    this.memberContractAddress = this.memberContractService.getAddress();
+    this.blockExplorerLink = environment.blockExplorerBaseUrl + this.memberContractAddress;
+  }
 
   @ViewChild(MatSort) sort: MatSort;
 
