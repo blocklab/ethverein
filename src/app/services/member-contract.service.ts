@@ -38,7 +38,7 @@ export class MemberContractService {
     return this.membersContract.methods.members(acc).call();
   }
 
-  
+
   // get members mapping for specific member
   async getMember(_account: string): Promise<string> {
     return this.membersContract.methods.members(_account).call();
@@ -72,7 +72,7 @@ export class MemberContractService {
 
   // check if board member has already confirmed applicant
   async hasConfirmedApplicant(_boardMemberAddress: string, _applicantAddress: string): Promise<boolean> {
-  return this.membersContract.methods.hasConfirmedApplicant(_boardMemberAddress, _applicantAddress).call();
+    return this.membersContract.methods.hasConfirmedApplicant(_boardMemberAddress, _applicantAddress).call();
   }
 
   /* Contract Transactions */
@@ -80,81 +80,58 @@ export class MemberContractService {
   // apply for Membership
   async applyForMembership(_name: string) {
     const acc = await this._web3Service.getAccount();
-    this.membersContract.methods.applyForMembership(_name).send({from: acc});
+    this.membersContract.methods.applyForMembership(_name).send({ from: acc });
   }
 
   // change Name
   async changeName(_newName: string) {
     const acc = await this._web3Service.getAccount();
-    this.membersContract.methods.changeName(_newName).send({from: acc});
+    this.membersContract.methods.changeName(_newName).send({ from: acc });
   }
 
   // confirm Application of applicant
   async confirmApplication(_applicantAddress: string, callback: Function) {
     const acc = await this._web3Service.getAccount();
-    this.membersContract.methods.confirmApplication(_applicantAddress).send({from: acc}, callback);
+    this.membersContract.methods.confirmApplication(_applicantAddress).send({ from: acc }, callback);
   }
 
   // resign membership of logged in member
   async resignOwnMembership() {
     const acc = await this._web3Service.getAccount();
-    this.membersContract.methods.resignOwnMembership().send({from:acc});
+    this.membersContract.methods.resignOwnMembership().send({ from: acc });
   }
 
   // Initially set voting contract address
-  async setVotingContractAddress(_votingContractAdrres: string) {
+  async setVotingContractAddress(_votingContractAddress: string) {
     const acc = await this._web3Service.getAccount();
-    this.membersContract.methods.setVotingContractAddress(_votingContractAdrres).send({from: acc})
+    this.membersContract.methods.setVotingContractAddress(_votingContractAddress).send({ from: acc })
   }
 
   /* /Contract Functions */
 
   /* Contract Events */
-  getMemberAppliedEvent() {
-    return this.membersContract.events.MemberApplied({
+  addMemberAppliedCallback(callback) {
+    this.membersContract.events.MemberApplied({
       fromBlock: 0
-    }, function (error, event) { console.log(event); })
-      .on('data', function (event) {
-        console.log(event);
-      })
-      .on('changed', function (event) {
-      })
-      .on('error', console.error);
+    }, callback);
   }
 
-  getMemberConfirmedEvent() {
-    return this.membersContract.events.MemberConfirmed({
-    }, function (error, event) { console.log(event); })
-      .on('data', function (event) {
-        console.log(event);
-      })
-      .on('changed', function (event) {
-      })
-      .on('error', console.error);
+  addMemberConfirmedCallback(confirmedCallback) {
+    this.membersContract.events.MemberConfirmed({
+      fromBlock: 0,
+    }, confirmedCallback);
 
   }
 
-  getMemberNameChangedEvent() {
-    return this.membersContract.events.MemberNameChanged({
+  addMemberNameChangedCallback(callback) {
+     this.membersContract.events.MemberNameChanged({
       fromBlock: 0
-    }, function (error, event) { console.log(event); })
-      .on('data', function (event) {
-        console.log(event);
-      })
-      .on('changed', function (event) {
-      })
-      .on('error', console.error);
+    }, callback);
   }
 
-  getMemberResignedEvent() {
-    return this.membersContract.events.MemberResigned({
+  addMemberResginedCallback(callback) {
+     this.membersContract.events.MemberResigned({
       fromBlock: 0
-    }, function (error, event) { console.log(event); })
-      .on('data', function (event) {
-        console.log(event);
-      })
-      .on('changed', function (event) {
-      })
-      .on('error', console.error);
+    }, callback);
   }
 }
