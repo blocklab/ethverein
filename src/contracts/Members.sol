@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.5.0;
 
 contract Members {
 
@@ -35,7 +35,7 @@ contract Members {
 
     address public votingContractAddress;
 
-    constructor(address[] initialMemberAddresses) public {
+    constructor(address[] memory initialMemberAddresses) public {
         for (uint index = 0; index < initialMemberAddresses.length; index++) {
             // all initial members are board members
             members[initialMemberAddresses[index]] = Member({name: "???", status: MemberStatus.BOARD, entryBlock: block.number});
@@ -58,7 +58,7 @@ contract Members {
         return memberAddresses.length;
     }
 
-    function applyForMembership(string memberName) public {
+    function applyForMembership(string memory memberName) public {
         require (members[msg.sender].status == MemberStatus.NONE, "Sender seems to be a member already.");
         members[msg.sender] = Member({name: memberName, status: MemberStatus.APPLIED, entryBlock: 0});
         memberAddresses.push(msg.sender);
@@ -93,9 +93,10 @@ contract Members {
         return false;
     }
 
-    function changeName(string newName) public {
+    function changeName(string memory newName) public {
         members[msg.sender].name = newName;
         emit MemberNameChanged(msg.sender, newName);
+        
     }
 
     function isRegularOrBoardMember(address memberAddress) public view returns (bool) {
@@ -137,7 +138,7 @@ contract Members {
     /**
      * Instantiates new board members.
      */
-    function replaceBoardMembers(address[] newBoardMembers) public onlyVotingContract {
+    function replaceBoardMembers(address[] memory newBoardMembers) public onlyVotingContract {
 
         // this is redundant:
         // It should not even be possible to have a board member vote with no board members to be instantiated
@@ -153,7 +154,7 @@ contract Members {
         }
 
         // reset board members to regular members
-        for (i = 0; i != memberAddresses.length; ++i) {
+        for (uint i = 0; i != memberAddresses.length; ++i) {
             Member storage member = members[memberAddresses[i]];
             if (member.status == MemberStatus.BOARD) {
                 member.status = MemberStatus.REGULAR;
@@ -161,7 +162,7 @@ contract Members {
         }   
 
         // instantiate new board members
-        for (i = 0; i != newBoardMembers.length; ++i) {
+        for (uint i = 0; i != newBoardMembers.length; ++i) {
             members[newBoardMembers[i]].status = MemberStatus.BOARD;
         }
 
@@ -204,7 +205,7 @@ contract Members {
      * Kill switch.
      */
     function kill() public onlyOwner {
-        selfdestruct(owner);
+        selfdestruct(msg.sender);
     }
 
     /**

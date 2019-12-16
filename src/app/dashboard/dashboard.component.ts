@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit {
 
     // event listeners
     if (this.status === 'board') {
-      _memberContractService.getMemberAppliedEvent().watch(() => {
+      _memberContractService.addMemberAppliedCallback (() => {
         this.getPendingMembers();
       });
     }

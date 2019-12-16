@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { MembersComponent } from './members/members.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { VotesComponent } from './votes/votes.component';
+import { AboutComponent } from './about/about.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -32,6 +33,7 @@ import { NewsfeedComponent } from './newsfeed/newsfeed.component';
     MembersComponent,
     DashboardComponent,
     VotesComponent,
+    AboutComponent,
     NotFoundComponent,
     MetaMaskComponent,
     ConfirmApplicationDialogComponent,

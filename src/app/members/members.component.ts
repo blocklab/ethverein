@@ -18,30 +18,30 @@ export class MembersComponent implements OnInit {
     private _memberContractService: MemberContractService
   ) {
     // register event listeners
-    this._memberContractService.getMemberAppliedEvent().watch((err, res) => {
-      if (res && res.args.applicantAddress && !membersList.some(m => m.address === res.args.applicantAddress)) {
-        membersList.push({ alias: res.args.applicantName, status: 'Pending', block: 0, address: res.args.applicantAddress});
+    this._memberContractService.addMemberAppliedCallback ((err, res) => {
+      if (res && res.returnValues.applicantAddress && !membersList.some(m => m.address === res.returnValues.applicantAddress)) {
+        membersList.push({ alias: res.returnValues.applicantName, status: 'Pending', block: 0, address: res.returnValues.applicantAddress});
         this.dataSource.sort = this.sort;
         this.dataSource.filter = this.filter;
       }
     });
-    this._memberContractService.getMemberConfirmedEvent().watch((err, res) => {
+    this._memberContractService.addMemberConfirmedCallback ((err, res) => {
       if (res) {
-        membersList.filter(m => m.address === res.args.memberAddress).map(m => m.status = 'Member');
+        membersList.filter(m => m.address === res.returnValues.memberAddress).map(m => m.status = 'Member');
         this.dataSource.sort = this.sort;
         this.dataSource.filter = this.filter;
       }
     });
-    this._memberContractService.getMemberNameChangedEvent().watch((err, res) => {
+    this._memberContractService.addMemberNameChangedCallback ((err, res) => {
       if (res) {
-        membersList.filter(m => m.address === res.args.memberAddress).map(m => m.alias = res.args.newMemberName);
+        membersList.filter(m => m.address === res.returnValues.memberAddress).map(m => m.alias = res.returnValues.newMemberName);
         this.dataSource.sort = this.sort;
         this.dataSource.filter = this.filter;
       }
     });
-    this._memberContractService.getMemberResignedEvent().watch((err, res) => {
+    this._memberContractService.addMemberResginedCallback ((err, res) => {
       if (res) {
-        let indexOfResignedMember = membersList.findIndex(m => m.address === res.args.memberAddress);
+        let indexOfResignedMember = membersList.findIndex(m => m.address === res.returnValues.memberAddress);
         if (indexOfResignedMember !== -1) {
           membersList.splice(indexOfResignedMember, 1);
         }

@@ -26,92 +26,52 @@ export class VotingContractService {
 
   async getContract() {
     let votingContractAddress = await this._memberContractService.getVotingContractAddress();
-    this.votingContract = await this.web3.eth.contract(VotingAbi.abi).at(votingContractAddress);
+    console.log('voting contract ' + votingContractAddress);
+    this.votingContract = await new this.web3.eth.Contract(VotingAbi.abi, votingContractAddress);
   }
   
   /* Contract Functions */
   /* Contract Calls */
 
   async getVoteDetails(_index): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.votingContract.getVoteDetails.call(_index, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<string>;
+    return this.votingContract.methods.getVoteDetails(_index).call();
   }
 
   async getNumberOfVotes(): Promise<number> {
-    return new Promise((resolve, reject) => {
-      this.votingContract.getNumberOfVotes.call(function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<number>;
+    return this.votingContract.methods.getNumberOfVotes().call();
   }
 
   async computeVoteOutcome(_voteID): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.votingContract.computeVoteOutcome.call(_voteID, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<any>;
+    return this.votingContract.methods.computeVoteOutcome(_voteID).call();
   }
 
   /* Contract Transactions */
 
   async initiateDocumentVote(_name: string, _documentHash) {
     const bytes32Hash = '0x'.concat(_documentHash);
-    return new Promise((resolve, reject) => {
-      this.votingContract.initiateDocumentVote.sendTransaction(_name, bytes32Hash, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<number>;
+    const acc = await this._web3Service.getAccount();
+    return this.votingContract.methods.initiateDocumentVote(_name, bytes32Hash).send({from: acc});
   }
 
   async initiateVotingContractUpdateVote(_name: string, _address: string): Promise<number> {
-    return new Promise((resolve, reject) => {
-      this.votingContract.initiateVotingContractUpdateVote.sendTransaction(_name, _address, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<number>;
+    const acc = await this._web3Service.getAccount();
+    return this.votingContract.methods.initiateVotingContractUpdateVote(_name, _address).send({from: acc});
   }
 
   async initiateBoardMemberVote(_name: string, _documentHash: string, _addresses: string[]): Promise<number> {
     const bytes32Hash = '0x'.concat(_documentHash);
-    return new Promise((resolve, reject) => {
-      this.votingContract.initiateBoardMemberVote.sendTransaction(_name, bytes32Hash, _addresses, function (err, res) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    }) as Promise<number>;
+    const acc = await this._web3Service.getAccount();
+    return this.votingContract.methods.initiateBoardMemberVote(_name, _documentHash, _addresses).send({from: acc});
   }
 
   async castVote(_voteID: number, _decision: boolean, callback: Function) {
-    this.votingContract.castVote.sendTransaction(_voteID, _decision, callback);
+    const acc = await this._web3Service.getAccount();
+    this.votingContract.methods.castVote(_voteID, _decision).send({from: acc} , callback);
   }
 
   async closeVote(_voteID: number) {
-    this.votingContract.closeVote.sendTransaction(_voteID, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    const acc = await this._web3Service.getAccount();
+    this.votingContract.methods.closeVote(_voteID).send({from: acc});
   }
-
+    
 }

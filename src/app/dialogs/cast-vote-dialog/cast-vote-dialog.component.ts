@@ -43,6 +43,7 @@ export class CastVoteDialogComponent implements OnInit {
     this.votingContractService.castVote(this.vote.id, true, (err) => {
       this.voting = false;
       if (err) {
+        console.log(err);
         this.snackBar.open('Error casting vote', 'What happened?', { duration: 2000 });  
       } else {
         this.snackBar.open('Casted Vote with yes', 'Excellent!', { duration: 2000 });

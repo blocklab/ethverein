@@ -66,13 +66,13 @@
             Contract Update
         </ng-template>
         <div class="tab-content">
-            <p>Provide the Address of the new Voting Contratc's address.
+            <p>Provide the Address of the new Voting Contract's address.
             </p>
             <mat-horizontal-stepper [linear]="true" #stepper2>
 
                 <mat-step [stepControl]="formGroup2" [editable]="true">
                     <form [formGroup]="formGroup2">
-                        <ng-template matStepLabel>Insert Contract Adrress</ng-template>
+                        <ng-template matStepLabel>Insert Contract Address</ng-template>
                         <mat-form-field class="input-full-width">
                             <input formControlName="name" matInput placeholder="Vote Name">
                         </mat-form-field>
@@ -115,8 +115,8 @@
         <!-- Tab 3 -->
         <div class="tab-content">
 
-            <p>Upload any file and the three new board memebers addresses to start a Board Member Vote. The other members will
-                verify the docuemnt-hash and the addresses when they vote.
+            <p>Upload any file and the three new board members addresses to start a Board Member Vote. The other members will
+                verify the document-hash and the addresses when they vote.
             </p>
             <mat-horizontal-stepper [linear]="true" #stepper3>
 

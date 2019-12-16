@@ -2,6 +2,7 @@ import { MetaMaskComponent } from './meta-mask/meta-mask.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { VotesComponent } from './votes/votes.component';
+import { AboutComponent } from './about/about.component';
 import { MembersComponent } from './members/members.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -13,8 +14,10 @@ const routes: Routes = [
   { path: 'newVote', component: VotesComponent },
   { path: 'myVerein', component: DashboardComponent },
   { path: 'MetaMask', component: MetaMaskComponent },
-  { path: 'votes', component: VoteListComponent },  
-  { path: '**', component: NotFoundComponent }
+  { path: 'votes', component: VoteListComponent },
+  { path: 'about', component: AboutComponent, }, 
+  { path: '*', component: NotFoundComponent }
+  
 ];
 
 @NgModule({
@@ -27,6 +30,7 @@ export const routingComponents = [
   VotesComponent,
   DashboardComponent,
   MetaMaskComponent,
+  AboutComponent,
   NotFoundComponent
 ];
 
