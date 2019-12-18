@@ -35,3 +35,45 @@ mat-icon {
 .open {
   cursor: pointer;
 }
+
+.mat-column-cancel {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 10% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-name {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 8% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+button {
+  border-radius: 7px;
+  border: 2px solid #fbe3d3;
+  height: 37px;
+  padding: 0px 5px 0px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  outline: none;
+}

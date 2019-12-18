@@ -1,0 +1,115 @@
+<!-- <h2 mat-dialog-title dialog-title></h2> -->
+<div class="col-12" style="padding-left: 5px; padding-right: 5px">
+    <div class="dialog-title">
+        <h3 class="text-margin">
+            <b>
+                {{ voteName }}
+            </b>
+        </h3>
+
+    </div>
+</div>
+
+<mat-dialog-content>
+    <div>
+        <div class="row" *ngIf="voteType === 'Document Vote'">
+            <br>
+            <div class="col-12" style="padding:20px">
+                <div class="subject">
+                    <br>
+                    <div class="container">
+                        <b>Subject</b>: Document specific! <br>
+                    </div>
+
+                    <br>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="voteType === 'Voting Contract Vote'">
+            <br>
+
+            <div class="col-12" style="padding:20px">
+                <div class="subject">
+                    <div class="container">
+                        <br>
+                        <b>Subject</b>: new Voting Contract
+                        <br>
+                        <b>Contract Address</b>: {{voteNewVotingContractAddress}} <br>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="voteType === 'Board Member Vote'">
+            <br>
+            <div class="col-12" style="padding:20px">
+                <div class="subject">
+                    <div class="container">
+                        <br>
+                        <b>Subject</b>: new Board Members
+                        <hr>
+                        <br>
+                        <b>new Members</b>: {{voteNewBoardMembers}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-5">
+                    <div class="row">
+                        <div class="col-6">
+                            <b>Type</b>: <br>
+                            <b>Status</b>: <br>
+                            <b>Initiation Date</b>:
+                        </div>
+                        <div class="col-6">
+                            {{voteType}}
+                            <br>
+                            {{voteStatus}}
+                            <br>
+                            {{voteInitiatonDate | date}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-7 ">
+                    <div class="container">
+                        <div class="row ">
+                            <div class="col-12 border-left">
+                                <b>Originator Name</b>: {{voteOriginator}}
+                            </div>
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 border-left">
+                                <b>Originator Address</b>: {{voteInitiator}} <br>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row ">
+                <div class="col-12">
+                    <div class="border-top">
+                        <br>
+                            <b>Document Hash</b>: {{voteDocumentHash}}
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+</mat-dialog-content>
+
+<mat-dialog-actions >
+    <div class="container" style="padding-left: 5px;">
+            <button class="mat-button"  (click)="cancel()">Close</button>
+    </div>
+</mat-dialog-actions>
