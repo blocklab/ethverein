@@ -1,6 +1,6 @@
 import { ConfirmApplicationDialogComponent } from './../dialogs/confirm-application-dialog/confirm-application-dialog.component';
 import { MemberContractService } from './../services/member-contract.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog, MatDialogConfig } from '@angular/material';
 import { Web3Service } from '../services/web3.service';
 
@@ -15,7 +15,8 @@ export class MembersComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private _web3Service: Web3Service,
-    private _memberContractService: MemberContractService
+    private _memberContractService: MemberContractService,
+    private changeDetectorRefs: ChangeDetectorRef,
   ) {
     // register event listeners
     this._memberContractService.addMemberAppliedCallback ((err, res) => {
@@ -30,6 +31,7 @@ export class MembersComponent implements OnInit {
         membersList.filter(m => m.address === res.returnValues.memberAddress).map(m => m.status = 'Member');
         this.dataSource.sort = this.sort;
         this.dataSource.filter = this.filter;
+        this.changeDetectorRefs.detectChanges();
       }
     });
     this._memberContractService.addMemberNameChangedCallback ((err, res) => {
@@ -37,6 +39,7 @@ export class MembersComponent implements OnInit {
         membersList.filter(m => m.address === res.returnValues.memberAddress).map(m => m.alias = res.returnValues.newMemberName);
         this.dataSource.sort = this.sort;
         this.dataSource.filter = this.filter;
+        this.changeDetectorRefs.detectChanges();
       }
     });
     this._memberContractService.addMemberResginedCallback ((err, res) => {

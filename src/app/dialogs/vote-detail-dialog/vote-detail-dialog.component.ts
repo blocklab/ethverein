@@ -20,6 +20,7 @@ export class VoteDetailDialogComponent implements OnInit {
     voteBlockNumAtInit;
     voteOriginator;
     voteInitiatonDate;
+    voteOutcome;
 
 
     constructor(
@@ -41,6 +42,7 @@ export class VoteDetailDialogComponent implements OnInit {
         this.voteBlockNumAtInit = data.voteBlockNumAtInit;
         this.voteOriginator = data.voteOriginator;
         this.voteInitiatonDate = data.voteInitiatonDate;
+        this.voteOutcome = data.voteOutcome;
     }
 
     ngOnInit() {

@@ -59,7 +59,7 @@
 
   <ng-container mat-column-cancel matColumnDef="cancel">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
-    <td mat-cell *matCellDef="let element" class="text-center">
+    <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
 
   <ng-container *ngIf="element.outcome == 'Declined' || element.outcome == 'Accepted' && element.status != 'Closed'">
       <button mat-raised-button (click)="closeVote(element)">close</button>

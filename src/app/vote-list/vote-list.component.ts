@@ -1,7 +1,7 @@
 import { MemberContractService } from './../services/member-contract.service';
 import { VotingContractService } from './../services/voting-contract.service';
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-import { MatTableDataSource, MatSort, MatDialogConfig, MatDialog, MatSnackBar } from '@angular/material';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { MatTableDataSource, MatSort, MatDialogConfig, MatDialog, MatSnackBar, MatTable } from '@angular/material';
 import { Web3Service } from '../services/web3.service';
 import { VoteDetailDialogComponent } from '../dialogs/vote-detail-dialog/vote-detail-dialog.component';
 
@@ -20,6 +20,7 @@ export class VoteListComponent implements OnInit {
     private memberContractService: MemberContractService,
     private _web3Service: Web3Service,
     private snackbar: MatSnackBar,
+    private changeDetectorRefs: ChangeDetectorRef,
 
   ) {
     this.memberContractService.getThisMember().then(() => {
@@ -29,17 +30,20 @@ export class VoteListComponent implements OnInit {
 
   displayedColumns = ['nr', 'name', 'originator', 'dateOfVote', 'type', 'status', 'outcome', 'cancel'];
   dataSource = new MatTableDataSource(voteList);
+  updatedSource = new MatTableDataSource();
   private filter = '';
   acc = this._web3Service.getAccount()
 
   @ViewChild(MatSort) sort: MatSort;
+
+  @ViewChild(MatTable) table: MatTable<any>;
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-
+  
   ngOnInit() {
   }
 
@@ -129,41 +133,42 @@ export class VoteListComponent implements OnInit {
     return vote.isInitiator = false;
   }
 
-  async getAlias(vote){
+  async getAlias(vote) {
     let alias = await this.memberContractService.getMember(vote[7])
     return alias[0]
   }
 
-  async getBlockTimestamp(voteBlock: string){
+  async getBlockTimestamp(voteBlock: string) {
     let blockInfo = await this.votingContractService.getBlockInfo(voteBlock)
     let initiatonDate = blockInfo.timestamp * 1000
     return initiatonDate;
   }
 
-  showDetails(vote){
+  showDetails(vote) {
     console.log("dialog", vote)
     const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = {
-        voteID: vote.nr,
-        voteName: vote.name,
-        voteType: vote.type,
-        voteDocumentHash: vote.docHash,
-        voteStatus: vote.status,
-        voteNewBoardMembers: vote.newBoardMembers,
-        voteNewVotingContractAddress: vote.newVotingContractAddress,
-        voteVoters: vote.voters,
-        voteInitiator: vote.initiator,
-        voteBlockNumAtInit: vote.blockNumAtInit,
-        voteOriginator: vote.originator,
-        voteInitiatonDate: vote.initiatonDate
-      };
+    dialogConfig.data = {
+      voteID: vote.nr,
+      voteName: vote.name,
+      voteType: vote.type,
+      voteDocumentHash: vote.docHash,
+      voteStatus: vote.status,
+      voteNewBoardMembers: vote.newBoardMembers,
+      voteNewVotingContractAddress: vote.newVotingContractAddress,
+      voteVoters: vote.voters,
+      voteInitiator: vote.initiator,
+      voteBlockNumAtInit: vote.blockNumAtInit,
+      voteOriginator: vote.originator,
+      voteInitiatonDate: vote.initiatonDate,
+      voteOutcome: vote.outcome
+    };
     this.dialog.open(VoteDetailDialogComponent, dialogConfig)
   }
 
   closeVote(_vote) {
     if (_vote.outcome === 'Undecided') {
       this.snackbar.open('Undecided votes cannot be closed!', 'Alright...', { duration: 2000 });
-    } 
+    }
     if (_vote.status === 'Closed') {
       this.snackbar.open('Vote already closed!', 'Okay...', { duration: 2000 })
     }
@@ -178,7 +183,7 @@ export class VoteListComponent implements OnInit {
 
   }
 
-  async cancelVote(vote: any) {
+  cancelVote(vote: any) {
     if (vote.status != 'Canceled') {
       this.votingContractService.cancelVote(vote.nr, (err, res) => {
         if (err) {
@@ -186,31 +191,25 @@ export class VoteListComponent implements OnInit {
         }
         else {
           this.snackbar.open('Canceled Vote sucessfully', 'Excellent!', { duration: 2000 });
-        } 
+          this.voteCanceled();
+        }
       });
     } else if (vote.status === 'Canceled') {
       this.snackbar.open('Vote already canceled', 'Alright...', { duration: 2000 });
     }
-    // await this.voteCanceled();
+
   }
 
-
-
-  // async voteCanceled(){
-  //   this.votingContractService.addVoteCanceledCallback ((err, res) => {
-  //     if (res) {
-  //       const vote = voteList.filter(v => v.nr == res.returnValues.voteId);
-  //       vote.map(v => v.status.replace("Open", "Canceled"))
-
-  //       // vote.forEach((vote : any, key: number) => {
-  //       // vote.status})
-  //       this.dataSource.sort = this.sort;
-  //       this.dataSource.filter = this.filter;
-        
-  //     }
-  //   });
-  // }
-
+  voteCanceled() {
+    this.votingContractService.addVoteCanceledCallback((err, res) => {
+      if (res) {
+        voteList.filter(v => v.nr == res.returnValues.voteId).map(v => v.status = 'Canceled');
+        this.dataSource.sort = this.sort;
+        this.dataSource.filter = this.filter;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
+  }
 }
 
 export interface PeriodicElement {
@@ -226,7 +225,7 @@ export interface PeriodicElement {
   docHash: string;
   initiator: string;
   newBoardMembers: string;
-  newVotingContractAddress: string; 
+  newVotingContractAddress: string;
   voters: string;
   blockNumAtInit: number;
 }
