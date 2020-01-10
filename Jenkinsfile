@@ -2,11 +2,6 @@ pipeline {
     agent any 
 
     stages {
-        stage("cd into ethverein") {
-            steps {
-                sh "cd /ethverein"
-            }
-        }
 
         stage("Compose up") {
             steps {
