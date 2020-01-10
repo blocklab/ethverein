@@ -2,9 +2,8 @@ pipeline {
     agent any 
 
     stages {
-        stage("Clone Project") {
+        stage("cd into ethverein") {
             steps {
-                sh "git clone https://github.com/blocklab/ethverein.git"
                 sh "cd /ethverein"
             }
         }
