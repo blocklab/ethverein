@@ -1,6 +1,6 @@
 import { MemberContractService } from './../services/member-contract.service';
 import { VotingContractService } from './../services/voting-contract.service';
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialogConfig, MatDialog, MatSnackBar, MatTable } from '@angular/material';
 import { Web3Service } from '../services/web3.service';
 import { VoteDetailDialogComponent } from '../dialogs/vote-detail-dialog/vote-detail-dialog.component';
@@ -9,7 +9,6 @@ import { VoteDetailDialogComponent } from '../dialogs/vote-detail-dialog/vote-de
   selector: 'app-vote-list',
   templateUrl: './vote-list.component.html',
   styleUrls: ['./vote-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class VoteListComponent implements OnInit {
@@ -23,6 +22,14 @@ export class VoteListComponent implements OnInit {
     private changeDetectorRefs: ChangeDetectorRef,
 
   ) {
+    this.votingContractService.addVoteCanceledCallback((err, res) => {
+      if (res) {
+        voteList.filter(v => v.nr == res.returnValues.voteId).map(v => v.status = 'Canceled');
+        this.dataSource.sort = this.sort;
+        this.dataSource.filter = this.filter;
+        this.changeDetectorRefs.detectChanges();
+      }
+    });
     this.memberContractService.getThisMember().then(() => {
       this.getVotes();
     });
@@ -43,7 +50,7 @@ export class VoteListComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-  
+
   ngOnInit() {
   }
 
@@ -73,9 +80,9 @@ export class VoteListComponent implements OnInit {
           }
 
           const isCancelableByMemberResult = await this.checkCancel(vote);
-          const isInitiatorResult = await this.checkIninitator(vote);
+          const isInitiatorResult = await this.checkInitiator(vote);
           const aliasResult = await this.getAlias(vote);
-          const dateResult = await this.getBlockTimestamp(vote[8]);
+          const dateResult = await this.getBlockTimestamp(vote);
 
           voteObj = {
             id: i,
@@ -91,7 +98,7 @@ export class VoteListComponent implements OnInit {
             isCancelableByMember: isCancelableByMemberResult,
             isInitiator: isInitiatorResult,
             originator: aliasResult,
-            initiatonDate: dateResult
+            initiationDate: dateResult
 
           };
           return voteObj;
@@ -105,7 +112,7 @@ export class VoteListComponent implements OnInit {
               case 2: voteObj.outcome = 'Declined'; break;
               default: break;
             }
-            voteList[i] = ({ nr: voteObj.id, name: voteObj.name, type: voteObj.type, status: voteObj.status, outcome: voteObj.outcome, isInitiator: voteObj.isInitiator, isCancelableByMember: voteObj.isCancelableByMember, originator: voteObj.originator, initiatonDate: voteObj.initiatonDate, docHash: voteObj.docHash, initiator: voteObj.initiator, newBoardMembers: voteObj.newBoardMembers, newVotingContractAddress: voteObj.newVotingContractAddress, voters: voteObj.voters, blockNumAtInit: voteObj.blockNumAtInit});
+            voteList[i] = ({ nr: voteObj.id, name: voteObj.name, type: voteObj.type, status: voteObj.status, outcome: voteObj.outcome, isInitiator: voteObj.isInitiator, isCancelableByMember: voteObj.isCancelableByMember, originator: voteObj.originator, initiationDate: voteObj.initiationDate, docHash: voteObj.docHash, initiator: voteObj.initiator, newBoardMembers: voteObj.newBoardMembers, newVotingContractAddress: voteObj.newVotingContractAddress, voters: voteObj.voters, blockNumAtInit: voteObj.blockNumAtInit });
             this.dataSource.sort = this.sort;
           });
         });
@@ -117,15 +124,10 @@ export class VoteListComponent implements OnInit {
     const currentBlock = await this.votingContractService.getCurrentBlock()
     const blocksPassed = currentBlock - vote[8]
 
-    if (blocksPassed < 172800 && this.acc != vote[7]) {
-      return vote.isCancelableByMember = false;
-    }
-    else {
-      return vote.isCancelableByMember = true;
-    }
+    return (blocksPassed < 172800 && this.acc != vote[7]) ? false : true;
   }
 
-  async checkIninitator(vote: any) {
+  async checkInitiator(vote: any) {
     const account = await this.acc;
     if (account === vote[7]) {
       return vote.isInitiator = true;
@@ -133,65 +135,45 @@ export class VoteListComponent implements OnInit {
     return vote.isInitiator = false;
   }
 
-  async getAlias(vote) {
+  async getAlias(vote: any) {
     let alias = await this.memberContractService.getMember(vote[7])
     return alias[0]
   }
 
-  async getBlockTimestamp(voteBlock: string) {
-    let blockInfo = await this.votingContractService.getBlockInfo(voteBlock)
-    let initiatonDate = blockInfo.timestamp * 1000
-    return initiatonDate;
+  async getBlockTimestamp(vote: any) {
+    let blockInfo = await this.votingContractService.getBlockInfo(vote[8])
+    let initiationDate = blockInfo.timestamp * 1000
+    return initiationDate;
   }
 
-  showDetails(vote) {
-    console.log("dialog", vote)
+  showDetails(vote: any) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      voteID: vote.nr,
-      voteName: vote.name,
-      voteType: vote.type,
-      voteDocumentHash: vote.docHash,
-      voteStatus: vote.status,
-      voteNewBoardMembers: vote.newBoardMembers,
-      voteNewVotingContractAddress: vote.newVotingContractAddress,
-      voteVoters: vote.voters,
-      voteInitiator: vote.initiator,
-      voteBlockNumAtInit: vote.blockNumAtInit,
-      voteOriginator: vote.originator,
-      voteInitiatonDate: vote.initiatonDate,
-      voteOutcome: vote.outcome
-    };
+    dialogConfig.data = vote;
     this.dialog.open(VoteDetailDialogComponent, dialogConfig)
   }
 
-  closeVote(_vote) {
-    if (_vote.outcome === 'Undecided') {
+  closeVote(vote: any) {
+    if (vote.outcome === 'Undecided') {
       this.snackbar.open('Undecided votes cannot be closed!', 'Alright...', { duration: 2000 });
     }
-    if (_vote.status === 'Closed') {
+    if (vote.status === 'Closed') {
       this.snackbar.open('Vote already closed!', 'Okay...', { duration: 2000 })
     }
-    else if (_vote.outcome === 'Closed') {
-      this.snackbar.open('Vote already closed!', 'Okay...', { duration: 2000 })
-    }
-
-    if (_vote.status != 'Closed' && _vote.outcome != 'Undecided') {
-      this.votingContractService.closeVote(_vote.nr);
+    if (vote.status != 'Closed' && vote.outcome != 'Undecided') {
+      this.votingContractService.closeVote(vote.nr);
     }
 
 
   }
 
   cancelVote(vote: any) {
-    if (vote.status != 'Canceled') {
+    if (vote.status === 'Open') {
       this.votingContractService.cancelVote(vote.nr, (err, res) => {
         if (err) {
           this.snackbar.open('Error canceling vote', 'What happened?', { duration: 2000 });
         }
         else {
           this.snackbar.open('Canceled Vote sucessfully', 'Excellent!', { duration: 2000 });
-          this.voteCanceled();
         }
       });
     } else if (vote.status === 'Canceled') {
@@ -200,19 +182,9 @@ export class VoteListComponent implements OnInit {
 
   }
 
-  voteCanceled() {
-    this.votingContractService.addVoteCanceledCallback((err, res) => {
-      if (res) {
-        voteList.filter(v => v.nr == res.returnValues.voteId).map(v => v.status = 'Canceled');
-        this.dataSource.sort = this.sort;
-        this.dataSource.filter = this.filter;
-        this.changeDetectorRefs.detectChanges();
-      }
-    });
-  }
 }
 
-export interface PeriodicElement {
+export interface Vote {
   nr: number;
   name: string;
   type: string;
@@ -221,7 +193,7 @@ export interface PeriodicElement {
   isInitiator: boolean;
   isCancelableByMember: boolean;
   originator: string;
-  initiatonDate: string;
+  initiationDate: string;
   docHash: string;
   initiator: string;
   newBoardMembers: string;
@@ -230,7 +202,7 @@ export interface PeriodicElement {
   blockNumAtInit: number;
 }
 
-const voteList: PeriodicElement[] = [];
+const voteList: Vote[] = [];
 
 function compare(a, b, isAsc) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
