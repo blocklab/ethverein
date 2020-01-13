@@ -26,6 +26,7 @@ import { VoteListComponent } from './vote-list/vote-list.component';
 import { ConfirmCloseVoteDialogComponent } from './dialogs/confirm-close-vote-dialog/confirm-close-vote-dialog.component';
 import { ConfirmResignDialogComponent } from './dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
 import { NewsfeedComponent } from './newsfeed/newsfeed.component';
+import { VoteDetailDialogComponent } from './dialogs/vote-detail-dialog/vote-detail-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { NewsfeedComponent } from './newsfeed/newsfeed.component';
     CastVoteDialogComponent,
     VoteListComponent,
     ConfirmCloseVoteDialogComponent,
+    VoteDetailDialogComponent,
     ConfirmResignDialogComponent,
     NewsfeedComponent,
   ],
@@ -77,6 +79,7 @@ import { NewsfeedComponent } from './newsfeed/newsfeed.component';
   entryComponents: [
     ConfirmApplicationDialogComponent,
     ConfirmCloseVoteDialogComponent,
+    VoteDetailDialogComponent,
     CastVoteDialogComponent,
     ConfirmResignDialogComponent
   ]

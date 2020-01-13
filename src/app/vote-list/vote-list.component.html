@@ -18,13 +18,28 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="originator">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Originator </th>
+    <td mat-cell *matCellDef="let element">
+      {{element.originator}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dateOfVote">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Initiation Date </th>
+    <td mat-cell *matCellDef="let element">
+      {{element.initiatonDate | date}}
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="type">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
     <td mat-cell *matCellDef="let element">
       <mat-icon *ngIf="element.type == 'Document Vote'">description</mat-icon>
       <mat-icon *ngIf="element.type == 'Voting Contract Vote'">swap_horiz</mat-icon>
       <mat-icon *ngIf="element.type == 'Board Member Vote'">people</mat-icon>
-      {{element.type}} </td>
+      {{element.type}}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="status">
@@ -38,10 +53,26 @@
       <mat-icon *ngIf="element.outcome == 'Undecided'" class="icon-yellow">help_outline</mat-icon>
       <mat-icon *ngIf="element.outcome == 'Accepted'" class="icon-green">check_circle_outline</mat-icon>
       <mat-icon *ngIf="element.outcome == 'Declined'" class="icon-red">block</mat-icon>
-      {{element.outcome}}</td>
+      {{element.outcome}}
+    </td>
   </ng-container>
 
+  <ng-container mat-column-cancel matColumnDef="cancel">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+    <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+
+  <ng-container *ngIf="element.outcome == 'Declined' || element.outcome == 'Accepted' && element.status != 'Closed'">
+      <button mat-raised-button (click)="closeVote(element)">close</button>
+    </ng-container>
+      <ng-container
+        *ngIf="element.outcome == 'Undecided' && element.status === 'Open' && element.isInitiator || element.isCancelableByMember">
+        <button mat-raised-button (click)="cancelVote(element)">cancel</button>
+      </ng-container>
+    </td>
+  </ng-container>
+
+
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let vote; columns: displayedColumns;" [ngClass]="vote.status == 'Open' ? 'open' : 'closed'" (click)="closeVote(vote)">
+  <tr mat-row *matRowDef="let vote; columns: displayedColumns;" [ngClass]="vote.status ? 'open' : 'closed'" (click)="showDetails(vote)">
   </tr>
 </table>

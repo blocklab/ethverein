@@ -45,6 +45,14 @@ export class VotingContractService {
     return this.votingContract.methods.computeVoteOutcome(_voteID).call();
   }
 
+  async getCurrentBlock(): Promise<any>{
+    return this.web3.eth.getBlockNumber(function (err, blockNumber) {});
+  }
+
+  async getBlockInfo(blockNumber): Promise<any>{
+    return this.web3.eth.getBlock(blockNumber);
+  }
+
   /* Contract Transactions */
 
   async initiateDocumentVote(_name: string, _documentHash) {
@@ -73,5 +81,16 @@ export class VotingContractService {
     const acc = await this._web3Service.getAccount();
     this.votingContract.methods.closeVote(_voteID).send({from: acc});
   }
-    
+
+  async cancelVote(_voteID: number, callback: Function) {
+    const acc = await this._web3Service.getAccount();
+    this.votingContract.methods.cancelVote(_voteID).send({from: acc}, callback);
+  }
+
+    /* Contract Events */
+    addVoteCanceledCallback(callback) {
+      this.votingContract.events.VoteCanceled({
+        fromBlock: 0
+      }, callback);
+    }
 }

@@ -1,0 +1,107 @@
+<div class="col-12 pl-0 pr-0">
+    <div class="dialog-title">
+        <h3 class="text-margin">
+            <b>
+                {{ vote.name }}
+            </b>
+        </h3>
+    </div>
+</div>
+<mat-dialog-content>
+    <div class="container subject pt-2 pb-2">
+        <div class="row p-20">
+            <div class="col-5">
+                <div class="row">
+                    <div class="col-5">
+                        <b>Type</b>: <br>
+                        <b>Status</b>: <br>
+                        <b>Initiation Date</b>: <br>
+                        <b>Outcome</b>:
+                    </div>
+                    <div class="col-7">
+                        <span>
+                            <span>
+                                <mat-icon [inline]="true" *ngIf="vote.type == 'Document Vote'">description</mat-icon>
+
+                            </span>
+                            <span>
+                                <mat-icon [inline]="true" *ngIf="vote.type == 'Voting Contract Vote'">swap_horiz
+                                </mat-icon>
+
+                            </span>
+                            <span>
+                                <mat-icon [inline]="true" *ngIf="vote.type == 'Board Member Vote'">people</mat-icon>
+                            </span>
+                            {{vote.type}}
+                        </span>
+                        <br>
+                        {{vote.status}}
+                        <br>
+                        {{vote.initiationDate | date}}
+                        <br>
+                        <span>
+                            <span>
+                                <mat-icon [inline]="true" *ngIf="vote.outcome == 'Undecided'" class="icon-yellow">
+                                    help_outline</mat-icon>
+                            </span>
+                            <span>
+                                <mat-icon [inline]="true" *ngIf="vote.outcome == 'Accepted'" class="icon-green">
+                                    check_circle_outline</mat-icon>
+                            </span>
+                            <span>
+                                <mat-icon [inline]="true" *ngIf="vote.outcome == 'Declined'" class="icon-red">block
+                                </mat-icon>
+                            </span>
+                            {{vote.outcome}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <b>Originator Name</b>: {{vote.originator}}
+                        </div>
+                        <br>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <b>Originator Address</b>: {{vote.initiator}} <br>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container subject pt-2 pb-2">
+        <div class="row">
+            <div class="col-2 p-20 pt-0 pr-0">
+                <span *ngIf="vote.type == 'Document Vote' || vote.type == 'Board Member Vote'">
+                    <br>
+                    <b>Document Hash</b>:
+                </span>
+                <br>
+                <span *ngIf="vote.type == 'Voting Contract Vote'">
+                    <b>Contract Address</b>:
+                </span>
+            </div>
+            <div class="col-10 p-20 pt-0 pl-3">
+                <br>
+                <span *ngIf="vote.type == 'Document Vote' || vote.type == 'Board Member Vote'">
+                    {{vote.docHash}}</span>
+
+                <span *ngIf="vote.type == 'Voting Contract Vote'">
+                    {{vote.newVotingContractAddress}}</span>
+                <br>
+            </div>
+            <br>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div class="container pl-0">
+        <button class="mat-button" (click)="cancel()">Close</button>
+    </div>
+</mat-dialog-actions>
