@@ -26,6 +26,9 @@ RUN npm install -g node-gyp
 #RUN npm install -g ganache-cli --unsafe-perm
 RUN npm install -g web3-eth-accounts@1.0.0-beta.37 --unsafe-perm --allow-root
 
+# Expand node RAM
+CMD node --max_old_space_size=4096
+
 # install dependencies
 RUN npm install
 
