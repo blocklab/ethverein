@@ -1,10 +1,12 @@
 import { ConfirmResignDialogComponent } from './../dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
 import { ConfirmApplicationDialogComponent } from './../dialogs/confirm-application-dialog/confirm-application-dialog.component';
 import { CastVoteDialogComponent } from './../dialogs/cast-vote-dialog/cast-vote-dialog.component';
+import { ConsentDialogComponent } from './../dialogs/declaration-of-consent-dialog/declaration-of-consent-dialog.component';
 import { VotingContractService } from './../services/voting-contract.service';
 import { MemberContractService } from '../services/member-contract.service';
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Web3Service } from '../services/web3.service';
 
 
@@ -25,6 +27,7 @@ export class DashboardComponent implements OnInit {
   isCopied;
   openVotes = [];
   pendingMembers = [];
+  declarationHash;
 
   constructor(
     public _snackBar: MatSnackBar,
@@ -47,12 +50,12 @@ export class DashboardComponent implements OnInit {
         case 2:
           this.status = 'member';
           this.aliasInputDisabled = false;
-          this.resignBTNDisabled = false;          
+          this.resignBTNDisabled = false;
           break;
         case 3:
           this.status = 'board';
           this.aliasInputDisabled = false;
-          this.resignBTNDisabled = false;          
+          this.resignBTNDisabled = false;
           break;
         default:
           this.status = 'none';
@@ -70,11 +73,10 @@ export class DashboardComponent implements OnInit {
 
     // event listeners
     if (this.status === 'board') {
-      _memberContractService.addMemberAppliedCallback (() => {
+      _memberContractService.addMemberAppliedCallback(() => {
         this.getPendingMembers();
       });
     }
-    
 
   }
 
@@ -88,7 +90,7 @@ export class DashboardComponent implements OnInit {
   }
 
   changeAlias() {
-    this._memberContractService.changeName(this.alias);
+    this._memberContractService.changeName(this.alias, this.declarationHash);
     this.changeBTNDisabled = true;
   }
 
@@ -100,7 +102,7 @@ export class DashboardComponent implements OnInit {
 
   apply() {
     if (this.alias !== '') {
-      this._memberContractService.applyForMembership(this.alias).then(() => {
+      this._memberContractService.applyForMembership(this.alias, this.declarationHash).then(() => {
         this.applyBTNDisabled = true;
         this.aliasInputDisabled = true;
       });
@@ -204,6 +206,28 @@ export class DashboardComponent implements OnInit {
         }
       }
     }
+  }
+
+  showDeclaration(action) {
+    const dialogConfig = new MatDialogConfig();
+    const declRef = this.dialog.open(ConsentDialogComponent, dialogConfig);
+
+    declRef.afterClosed().subscribe(result => {
+      this.declarationHash = result.fileHash;
+
+      if (result.confirmation == true) {
+
+        if (action == 'apply') {
+          this.apply()
+        }
+        else if (action == 'changeAlias'){
+          this.changeAlias()
+        }
+      }
+      else {
+        this._snackBar.open('You must consent to execute this action.', 'Failed!', { duration: 2000 });
+      }
+    });
   }
 
 }

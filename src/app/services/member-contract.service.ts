@@ -78,15 +78,15 @@ export class MemberContractService {
   /* Contract Transactions */
 
   // apply for Membership
-  async applyForMembership(_name: string) {
+  async applyForMembership(_name: string, _declarationHash) {
     const acc = await this._web3Service.getAccount();
-    this.membersContract.methods.applyForMembership(_name).send({ from: acc });
+    this.membersContract.methods.applyForMembership(_name, _declarationHash).send({ from: acc });
   }
 
   // change Name
-  async changeName(_newName: string) {
+  async changeName(_newName: string, _declarationHash) {
     const acc = await this._web3Service.getAccount();
-    this.membersContract.methods.changeName(_newName).send({ from: acc });
+    this.membersContract.methods.changeName(_newName, _declarationHash).send({ from: acc });
   }
 
   // confirm Application of applicant

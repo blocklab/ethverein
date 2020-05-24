@@ -36,8 +36,8 @@
     <br>
     <br> Actions
     <br>
-    <button mat-raised-button (click)="apply()" disabled="{{ applyBTNDisabled }}">Apply</button>
-    <button mat-raised-button (click)="changeAlias()" disabled="{{ changeBTNDisabled }}">Change Alias</button>
+    <button mat-raised-button (click)="showDeclaration('apply')" disabled="{{ applyBTNDisabled }}">Apply</button>
+    <button mat-raised-button (click)="showDeclaration('changeAlias')" disabled="{{ changeBTNDisabled }}">Change Alias</button>
     <button mat-raised-button (click)="resign()" disabled="{{ resignBTNDisabled }}">Resign</button>
 
   </div>

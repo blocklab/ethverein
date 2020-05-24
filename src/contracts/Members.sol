@@ -26,6 +26,7 @@ contract Members {
         string name;
         MemberStatus status;
         uint entryBlock;
+        bytes32 declarationHash; 
     }
 
     mapping (address => Member) public members;
@@ -38,7 +39,7 @@ contract Members {
     constructor(address[] memory initialMemberAddresses) public {
         for (uint index = 0; index < initialMemberAddresses.length; index++) {
             // all initial members are board members
-            members[initialMemberAddresses[index]] = Member({name: "???", status: MemberStatus.BOARD, entryBlock: block.number});
+            members[initialMemberAddresses[index]] = Member({name: "???", status: MemberStatus.BOARD, entryBlock: block.number, declarationHash: ''});
             memberAddresses.push(initialMemberAddresses[index]);
         }
         owner = msg.sender;
@@ -58,9 +59,9 @@ contract Members {
         return memberAddresses.length;
     }
 
-    function applyForMembership(string memory memberName) public {
+    function applyForMembership(string memory memberName, bytes32 documentHash) public {
         require (members[msg.sender].status == MemberStatus.NONE, "Sender seems to be a member already.");
-        members[msg.sender] = Member({name: memberName, status: MemberStatus.APPLIED, entryBlock: 0});
+        members[msg.sender] = Member({name: memberName, status: MemberStatus.APPLIED, entryBlock: 0, declarationHash: documentHash});
         memberAddresses.push(msg.sender);
         emit MemberApplied(msg.sender, memberName);
     }
@@ -93,8 +94,9 @@ contract Members {
         return false;
     }
 
-    function changeName(string memory newName) public {
+    function changeName(string memory newName, bytes32 documentHash) public {
         members[msg.sender].name = newName;
+        members[msg.sender].declarationHash = documentHash;
         emit MemberNameChanged(msg.sender, newName);
         
     }

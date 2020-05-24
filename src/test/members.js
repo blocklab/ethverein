@@ -1,4 +1,5 @@
 var Members = artifacts.require("./Members.sol");
+const keccak_256 = require('js-sha3').keccak_256;
 
 require("babel-polyfill");
 
@@ -22,6 +23,7 @@ contract('Members', function(accounts) {
   let APPLIED_MEMBER = accounts[3];
   let NEW_CONTRACT_ADDRESS = accounts[7];
   let FIRST_FOUNDER_AND_BOARD_MEMBER_NEW_ADDRESS = accounts[8];
+  let MEMBER_DECLARATION_HASH = "0x" + keccak_256("dscsdsc");
 
   it("prepare members", async function() {
     membersContract = await Members.deployed();
@@ -41,7 +43,7 @@ contract('Members', function(accounts) {
   });
 
   it("should throw if founder wants to apply again", function() {
-    membersContract.applyForMembership.call("Michael", {from: SECOND_FOUNDER_AND_BOARD_MEMBER}).then(function(res) {
+    membersContract.applyForMembership.call("Michael", MEMBER_DECLARATION_HASH, {from: SECOND_FOUNDER_AND_BOARD_MEMBER}).then(function(res) {
       assert(false, "Supposed to throw");
     }).catch(function(err) {
       assertException(err);
@@ -49,7 +51,7 @@ contract('Members', function(accounts) {
   });
 
   it("should allow other account to apply", async function() {
-    let applyEvent = await membersContract.applyForMembership("Michael", {from: APPLIED_MEMBER});
+    let applyEvent = await membersContract.applyForMembership("Michael",MEMBER_DECLARATION_HASH, {from: APPLIED_MEMBER});
     assert.equal(applyEvent.logs.length, 1, "an event was triggered for apply membership");
     assert.equal(applyEvent.logs[0].event, "MemberApplied", "the event type is correct");
     assert.equal(applyEvent.logs[0].args.applicantAddress, APPLIED_MEMBER, "the address of the applicant in the event is correct");
@@ -91,7 +93,7 @@ contract('Members', function(accounts) {
   });
 
   it("should correctly change name of first founder", async function() {
-    let nameChangeEvent = await membersContract.changeName("Horst", {from: FIRST_FOUNDER_AND_BOARD_MEMBER}); 
+    let nameChangeEvent = await membersContract.changeName("Horst",MEMBER_DECLARATION_HASH, {from: FIRST_FOUNDER_AND_BOARD_MEMBER}); 
     assert.equal(nameChangeEvent.logs.length, 1, "no event was triggered for change name");
     assert.equal(nameChangeEvent.logs[0].event, "MemberNameChanged", "the event type is correct");
     assert.equal(nameChangeEvent.logs[0].args.memberAddress, FIRST_FOUNDER_AND_BOARD_MEMBER, "the address of the member in the event is correct");

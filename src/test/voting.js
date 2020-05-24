@@ -11,6 +11,7 @@ let BOARD_MEMBER_VOTE_HASH = "0x" + keccak_256("abcdefghijklmnopqrstuvwxyz");
 let DOCUMENT_VOTE_NAME = "Any document vote";
 let DOCUMENT_VOTE_HASH = "0x" + keccak_256("xxyyzz");
 let VOTING_CONTRACT_UPDATE_VOTE_NAME = "Contract Update Vote";
+let MEMBER_DECLARATION_HASH = "0x" + keccak_256("dscsdsc");
 
 let VOTE_TYPE_DOCUMENT = 1;
 let VOTE_TYPE_BOARD_MEMBER = 2;
@@ -63,14 +64,14 @@ contract('Voting', function(accounts) {
   it("prepare members", async function () {
     membersContract = await Members.deployed();
     // regular member
-    await membersContract.applyForMembership("John Confirmed", {from: ACCOUNT_REGULAR_MEMBER})
+    await membersContract.applyForMembership("John Confirmed",MEMBER_DECLARATION_HASH, {from: ACCOUNT_REGULAR_MEMBER})
     await membersContract.confirmApplication(ACCOUNT_REGULAR_MEMBER, {from: ACCOUNT_FIRST_BOARD_MEMBER});
     await membersContract.confirmApplication(ACCOUNT_REGULAR_MEMBER, {from: ACCOUNT_SECOND_BOARD_MEMBER});
     await membersContract.confirmApplication(ACCOUNT_REGULAR_MEMBER, {from: ACCOUNT_THIRD_BOARD_MEMBER});
     let afterThirdConfirmation = await membersContract.members.call(ACCOUNT_REGULAR_MEMBER);
     assert.equal(afterThirdConfirmation[1], STATUS_REGULAR, "Wrong status for confirmed member");
     // applied member
-    await membersContract.applyForMembership("Thomas Applicant", {from: ACCOUNT_APPLIED_MEMBER})
+    await membersContract.applyForMembership("Thomas Applicant",MEMBER_DECLARATION_HASH, {from: ACCOUNT_APPLIED_MEMBER})
     let appliedMember = await membersContract.members.call(ACCOUNT_APPLIED_MEMBER);
     assert.equal(appliedMember[1], STATUS_APPLIED, "Wrong status for applied member");
   });

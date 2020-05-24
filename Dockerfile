@@ -23,11 +23,16 @@ COPY package.json .
 
 # install global dependencies
 RUN npm install -g node-gyp
-#RUN npm install -g ganache-cli --unsafe-perm
 RUN npm install -g web3-eth-accounts@1.0.0-beta.37 --unsafe-perm --allow-root
 
+# running preinstall for minimist security vulnerability resolution
+CMD npm run preinstall --unsafe-perm
+
 # install dependencies
-RUN npm install
+RUN npm install 
+
+RUN npm install ng2-pdf-viewer@5.2.3
+RUN npm install pdfjs-dist@2.0.943 
 
 # add app
 COPY . /ethverein

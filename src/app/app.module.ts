@@ -27,6 +27,9 @@ import { ConfirmCloseVoteDialogComponent } from './dialogs/confirm-close-vote-di
 import { ConfirmResignDialogComponent } from './dialogs/confirm-resign-dialog/confirm-resign-dialog.component';
 import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 import { VoteDetailDialogComponent } from './dialogs/vote-detail-dialog/vote-detail-dialog.component';
+import { ConsentDialogComponent } from './dialogs/declaration-of-consent-dialog/declaration-of-consent-dialog.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -42,6 +45,7 @@ import { VoteDetailDialogComponent } from './dialogs/vote-detail-dialog/vote-det
     VoteListComponent,
     ConfirmCloseVoteDialogComponent,
     VoteDetailDialogComponent,
+    ConsentDialogComponent,
     ConfirmResignDialogComponent,
     NewsfeedComponent,
   ],
@@ -70,7 +74,9 @@ import { VoteDetailDialogComponent } from './dialogs/vote-detail-dialog/vote-det
     MatDialogModule,
     MatSelectModule,
     MatOptionModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    PdfViewerModule,
+    MatCheckboxModule,
   ],
   providers: [
     Web3Service,
@@ -81,7 +87,8 @@ import { VoteDetailDialogComponent } from './dialogs/vote-detail-dialog/vote-det
     ConfirmCloseVoteDialogComponent,
     VoteDetailDialogComponent,
     CastVoteDialogComponent,
-    ConfirmResignDialogComponent
+    ConfirmResignDialogComponent,
+    ConsentDialogComponent
   ]
 })
 export class AppModule {

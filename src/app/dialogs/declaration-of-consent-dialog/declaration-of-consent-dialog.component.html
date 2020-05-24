@@ -1,0 +1,19 @@
+<mat-dialog-content>
+    <h2>Declaration of Consent</h2>
+    <hr>
+    <div class="container">
+        <pdf-viewer [src]="src" [original-size]="false"></pdf-viewer>
+    </div>
+</mat-dialog-content>
+<hr>
+<mat-checkbox (change)="checkCheckBoxvalue($event)">I consent to the declaration above.</mat-checkbox>
+<mat-dialog-actions>
+    <div class="container pl-0">
+        <div class="row ">
+            <div class="col-sm"> <button class="mat-button" (click)="cancel()">Close</button>
+            </div>
+            <div class="col-sm text-right"> <button class="mat-button" (click)="confirm()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</mat-dialog-actions>
