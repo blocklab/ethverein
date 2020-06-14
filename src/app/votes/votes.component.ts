@@ -84,7 +84,7 @@ export class VotesComponent implements OnInit {
 
   handleMemberFiles(_files: FileList) {
     this._hashFile.getHash(_files[0]).then(res => {
-      this.memberDocHash = res;
+      this.memberDocHash = '0x' + res;
     });
 
     this.memberDocName = _files[0].name;

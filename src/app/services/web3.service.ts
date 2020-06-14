@@ -5,8 +5,8 @@ import { equal } from 'assert';
 const Web3 = require('web3');
 
 declare global {
-  interface Window { 
-    web3: any; 
+  interface Window {
+    web3: any;
     ethereum: any;
   }
 }
@@ -20,6 +20,7 @@ window.web3 = window.web3 || {};
 export class Web3Service {
   web3: any;
   account;
+  network;
 
   constructor() {
     if (window.ethereum) {
@@ -28,23 +29,31 @@ export class Web3Service {
       this.web3 = window.web3;
     }
   }
-  
+
   getWeb3() {
     return this.web3;
   }
- 
+
   public checkWeb3() {
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof window.web3.currentProvider !== 'undefined') {
       this.web3 = new Web3(window.web3.currentProvider);
-      
-  
+
+
       return true;
     } else {
       this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545'));
       return false;
     }
-      
+
+
+  }
+
+  // get the current NetworkId
+  public async getNetworkId() {
+    this.network = this.web3.eth.net.getId()
+
+    return Promise.resolve(this.network);
 
   }
 
@@ -56,18 +65,15 @@ export class Web3Service {
           // Request account access if needed
            await window.ethereum.enable();
            await this.web3.eth.getAccounts();
-         
-          
         } catch (error) {
           alert('Please allow this app access to MetaMask.');
-          return; 
+          return;
         }
       }
 
       let accounts = await this.web3.eth.getAccounts();
       this.account = accounts[0];
 
-      
       if (!this.account) {
         alert(
           'Could not get any accounts! Make sure you are correctly logged in to MetaMask.'
@@ -75,9 +81,8 @@ export class Web3Service {
         return Promise.reject("No account found");
       }
       this.web3.eth.defaultAccount = this.account;
-    }  
+    }
     return Promise.resolve(this.account);
 
   }
-  
 }

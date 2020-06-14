@@ -7,6 +7,6 @@ export class PdfService{
     constructor() {}
 
     getPDF():string {
-        return '/assets/declaration/pdf-test.pdf'
+        return '/assets/declaration/declaration-of-consent-ethverein.pdf'
     }
 }
