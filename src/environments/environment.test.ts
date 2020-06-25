@@ -5,11 +5,9 @@
 export const environment = {
   production: false,
   hmr: false,
-  membersContractAddress: '0x22ad32b66fACCB0b508d26B1FA57DA42a1DA9Db5',
+  membersContractAddress: '0x22ad32b66fACCB0b508d26B1FA57DA42a1DA9Db5', //0xac2936b90e45498b1e847623cf807befbc308503
   blockExplorerBaseUrl: 'https://ropsten.etherscan.io/address/'
 };
-         
-             
 /*
  * In development mode, to ignore zone related error stack frames such as
  * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
