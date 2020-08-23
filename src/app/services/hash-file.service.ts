@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SHA256 } from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 
 
 @Injectable({
@@ -12,13 +12,16 @@ export class HashFileService {
   getHash(_file): Promise<string> {
     const fileReader = new FileReader();
 
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<string>((resolve, _) => {
 
-      fileReader.onloadend = (e) => {
-        const res = (SHA256(fileReader.result).toString());
-        resolve(res);
+      fileReader.onloadend = (evt) => {
+        if (evt.target.readyState === FileReader.DONE) { // DONE == 2
+          const wordArray = CryptoJS.lib.WordArray.create(evt.target.result);
+          const hash = CryptoJS.SHA256(wordArray);
+          resolve(hash);
+        }
       };
-      fileReader.readAsBinaryString(_file);
+      fileReader.readAsArrayBuffer(_file);
     });
 
   }
